@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\inaka\source\repos\DX12_test\x64\Debug\DX12_test.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\inaka\source\repos\DX12_test\DX12_test\shaders.hlsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\inaka\source\repos\DX12_test\x64\Debug\shaders.hlsl</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
