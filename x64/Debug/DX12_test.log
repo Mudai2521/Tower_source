@@ -1,19 +1,4 @@
-﻿  stdafx.cpp
-  D3D12Application.cpp
-C:\Users\inaka\source\repos\DX12_test\DX12_test\D3D12Application.cpp(270,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/D3D12Application.cpp' をコンパイルしています)
-  
-  main.cpp
-  Modeldata.cpp
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Modeldata.cpp(17,37): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
-  
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Modeldata.cpp(18,33): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
-  
-  Win32Application.cpp
-  コードを生成中...
-libfbxsdk-md.lib(fbxdebug.obj) : warning LNK4099: PDB '' が 'libfbxsdk-md.lib(fbxdebug.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+﻿libfbxsdk-md.lib(fbxdebug.obj) : warning LNK4099: PDB '' が 'libfbxsdk-md.lib(fbxdebug.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 libfbxsdk-md.lib(fbxalloc.obj) : warning LNK4099: PDB '' が 'libfbxsdk-md.lib(fbxalloc.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 libfbxsdk-md.lib(fbxstring.obj) : warning LNK4099: PDB '' が 'libfbxsdk-md.lib(fbxstring.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 libfbxsdk-md.lib(fbxutils.obj) : warning LNK4099: PDB '' が 'libfbxsdk-md.lib(fbxutils.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。

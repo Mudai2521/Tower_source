@@ -341,7 +341,19 @@ void D3D12Application::LoadAssets()
     // Create the vertex buffer.
     {
         
-        Model_Data modeldata;
+        Mesh modeldata();
+
+        std::wstring path;
+        if (!SearchFilePath(L"res/teapot/teapot.obj", path))
+        { return false; }
+        
+        if (!LoadMesh(path.c_str(), m_Meshes, m_Materials))
+        { return false; }
+        
+        // このサンプルでは，メッシュが1つのみとします.
+        assert(m_Meshes.size() == 1);
+
+        
 
         const UINT vertexBufferSize = modeldata.GetVertexBufferSize();
         const UINT indexBufferSize = modeldata.GetIndexBufferSize();
