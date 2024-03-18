@@ -6,6 +6,12 @@
 #include <assimp/postprocess.h>
 #include <codecvt>
 #include <cassert>
+#include "FileUtil.h"
+#include "ResourceUploadBatch.h"    
+#include "DDSTextureLoader.h"       
+#include "VertexTypes.h"         
+
+#pragma comment( lib, "dxguid.lib" )
 
 
 using namespace DirectX;
@@ -51,6 +57,13 @@ struct MeshData
     uint32_t MaterialId;
 };
 
+struct Texture
+{
+    ComPtr<ID3D12Resource> m_Resource;
+    D3D12_CPU_DESCRIPTOR_HANDLE HandleCPU;
+    D3D12_GPU_DESCRIPTOR_HANDLE HandleGPU;
+};
+
 bool LoadMesh(
     const wchar_t* filename,
     std::vector<MeshData>& meshes,
@@ -59,23 +72,29 @@ bool LoadMesh(
 class Mesh
 {
 public:
-    Mesh(std::wstring path);
+    Mesh();
 	~Mesh();
+    bool Init(std::wstring path);
     UINT GetVertexBufferSize() { return VertexBufferSize; };
     UINT GetIndexBufferSize() { return IndexBufferSize; };
+    UINT GetIndexCount() { return IndexCount; };
     void CopyVertices(Vertex* pVertexDataBegin);
     void CopyIndex(UINT* pIndexDataBegin);
     Mesh(const Mesh&) = delete;
     Mesh& operator=(const Mesh&) = delete;
+    bool Isvalid();
 private:
     
-
-    MeshData m_Meshdata;
-    Material m_Material;
-    
+    bool m_Isvalid = false;
+    std::vector <MeshData> m_Meshdata;
+    std::vector <Material> m_Material;
+    Texture m_Texture;
    
     UINT VertexBufferSize;
     UINT IndexBufferSize;
+    UINT IndexCount;
+
+    bool GetTexture(std::wstring path);
 };
 
 class ModelLoader

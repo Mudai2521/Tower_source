@@ -1,4 +1,8 @@
 
+SamplerState ColorSmp : register(s0);
+ 
+Texture2D ColorMap : register(t0);
+
 
 cbuffer Transform : register(b0)
 {
@@ -20,6 +24,7 @@ struct PSInput
 {
     float4 position : SV_POSITION;
     float4 color : COLOR;
+    float2 uv : TEXCOORD; 
 };
 
 PSInput VSMain(VSInput input)
@@ -29,11 +34,19 @@ PSInput VSMain(VSInput input)
     result.position = input.position;
     result.position = mul(Proj, mul(View, mul(World, result.position)));
     result.color = input.color;
+    result.uv = input.uv;
 
     return result;
 }
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
+    float4 result;
+    
+    
+    result = ColorMap.Sample(ColorSmp, input.uv);
+
+    
+    
     return input.color;
 }

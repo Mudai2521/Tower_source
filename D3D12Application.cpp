@@ -262,8 +262,18 @@ void D3D12Application::LoadAssets()
         flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS;
         flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-        CD3DX12_ROOT_PARAMETER rootParam[1];
+        //修正中
+        CD3DX12_ROOT_PARAMETER rootParam[2] = {};
         rootParam[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
+
+        D3D12_DESCRIPTOR_RANGE range = {};
+        range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+        range.NumDescriptors = 1;
+        range.BaseShaderRegister = 0;
+        range.RegisterSpace = 0;
+        range.OffsetInDescriptorsFromTableStart = 0;
+
+        rootParam[1].InitAsDescriptorTable(1, &range, D3D12_SHADER_VISIBILITY_ALL);
         D3D12_STATIC_SAMPLER_DESC sampler = CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR);
 
         CD3DX12_ROOT_SIGNATURE_DESC desc = {};
@@ -341,17 +351,9 @@ void D3D12Application::LoadAssets()
     // Create the vertex buffer.
     {
         
-        Mesh modeldata();
+        modeldata.Init(L"DX12_test\\Untitled.fbx");
 
-        std::wstring path;
-        if (!SearchFilePath(L"res/teapot/teapot.obj", path))
-        { return false; }
-        
-        if (!LoadMesh(path.c_str(), m_Meshes, m_Materials))
-        { return false; }
-        
-        // このサンプルでは，メッシュが1つのみとします.
-        assert(m_Meshes.size() == 1);
+        if (!modeldata.Isvalid())throw std::exception();
 
         
 
@@ -444,7 +446,7 @@ void D3D12Application::LoadAssets()
     {
         const UINT constantBufferSize = sizeof(Transform);    // CB size is required to be 256-byte aligned.
 
-        XMVECTOR eyePos = XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f); // 視点の位置
+        XMVECTOR eyePos = XMVectorSet(0.0f, 0.0f, 500.0f, 0.0f); // 視点の位置
         XMVECTOR targetPos = XMVectorZero(); // 視点を向ける座標
         XMVECTOR upward = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // 上方向を表すベクトル
         constexpr float fov = XMConvertToRadians(37.5); // 視野角
@@ -558,7 +560,7 @@ void D3D12Application::PopulateCommandList()
     m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
     m_commandList->IASetIndexBuffer(&m_indexBufferView);
-    m_commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
+    m_commandList->DrawIndexedInstanced(modeldata.GetIndexCount(), 1, 0, 0, 0);
 
 
 

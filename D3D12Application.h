@@ -15,7 +15,10 @@
 #include "DXHelper.h"
 #include "Win32Application.h"
 #include "Modeldata.h"
+
 #include <stdexcept>
+
+
 
 using namespace DirectX;
 
@@ -109,6 +112,8 @@ private:
     ComPtr<ID3D12Resource> m_constantBuffer[FrameCount];
     Transform m_constantBufferData[FrameCount];
     UINT8* m_pCbvDataBegin[FrameCount];
+
+    Mesh modeldata;
 
     // Synchronization objects.
     UINT m_frameIndex;

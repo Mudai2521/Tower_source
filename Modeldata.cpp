@@ -43,11 +43,14 @@ bool LoadMesh
 }
 	
 
-Mesh::Mesh(std::wstring path)
+Mesh::Mesh()
 {
 	
+	
+	
+	//assert(m_Meshdata.size() == 1);
 
-
+	/*
 	m_Meshdata.Vertices = {
 		{ { 0.25f, 0.25f, 0.0f }, {0.0f,0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f,0.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
 			{ { -0.25f, 0.25f, 0.0f },{0.0f,0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f,0.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
@@ -57,24 +60,61 @@ Mesh::Mesh(std::wstring path)
 		2,1,0,
 		1,2,3
 	};
-	VertexBufferSize = m_Meshdata.Vertices.size() * sizeof(Vertex);
-	IndexBufferSize = m_Meshdata.Index.size() * sizeof(UINT);
+	*/
+	
 }
 
 Mesh::~Mesh()
 {
 }
 
+bool Mesh::GetTexture(std::wstring path)
+{
+	if (!SearchFilePath(path.c_str(), path))return false;
+	ResourceUploadBatch batch( );
+}
+
+bool Mesh::Init(std::wstring path) 
+{
+	if (SearchFilePath(path.c_str(), path))
+	{
+		if (LoadMesh(path.c_str(), m_Meshdata, m_Material))
+		{
+			VertexBufferSize = m_Meshdata[0].Vertices.size() * sizeof(Vertex);
+			IndexBufferSize = m_Meshdata[0].Index.size() * sizeof(UINT);
+			IndexCount = m_Meshdata[0].Index.size();
+			m_Isvalid = true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else 
+	{
+		return false;
+	}
+
+	GetTexture(L"2024_2_22_1.dds");
+
+	return true;
+}
+
 void Mesh::CopyVertices(Vertex* pVertexDataBegin)
 {
-	std::copy(std::begin(m_Meshdata.Vertices), std::end(m_Meshdata.Vertices), pVertexDataBegin);
+	std::copy(std::begin(m_Meshdata[0].Vertices), std::end(m_Meshdata[0].Vertices), pVertexDataBegin);
 	return;
 }
 
 void Mesh::CopyIndex(UINT* pIndexDataBegin)
 {
-	std::copy(std::begin(m_Meshdata.Index), std::end(m_Meshdata.Index), pIndexDataBegin);
+	std::copy(std::begin(m_Meshdata[0].Index), std::end(m_Meshdata[0].Index), pIndexDataBegin);
 	return;
+}
+
+bool Mesh::Isvalid() 
+{
+	return m_Isvalid;
 }
 
 ModelLoader::ModelLoader() 
@@ -141,9 +181,7 @@ bool ModelLoader::Load
 	return true;
 }
 
-//-----------------------------------------------------------------------------
-//      メッシュデータを解析します.
-//-----------------------------------------------------------------------------
+
 void ModelLoader::ParseMesh(MeshData& dstMesh, const aiMesh* pSrcMesh)
 {
 	// マテリアル番号を設定.
@@ -187,9 +225,7 @@ void ModelLoader::ParseMesh(MeshData& dstMesh, const aiMesh* pSrcMesh)
 
 }
 
-//-----------------------------------------------------------------------------
-//      マテリアルデータを解析します.
-//-----------------------------------------------------------------------------
+
 void ModelLoader::ParseMaterial(Material& dstMaterial, const aiMaterial* pSrcMaterial)
 {
 	// 拡散反射成分.
