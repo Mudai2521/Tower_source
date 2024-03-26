@@ -229,10 +229,10 @@ void D3D12Application::LoadPipeline()
         m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
         D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
-        cbvHeapDesc.NumDescriptors = 1;
+        cbvHeapDesc.NumDescriptors = 2*FrameCount;
         cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-        ThrowIfFailed(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbvHeap)));
+        ThrowIfFailed(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_uav_Heap)));
     }
 
     // Create frame resources.
@@ -262,7 +262,7 @@ void D3D12Application::LoadAssets()
         flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS;
         flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 
-        //修正中
+       
         CD3DX12_ROOT_PARAMETER rootParam[2] = {};
         rootParam[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 
@@ -274,6 +274,8 @@ void D3D12Application::LoadAssets()
         range.OffsetInDescriptorsFromTableStart = 0;
 
         rootParam[1].InitAsDescriptorTable(1, &range, D3D12_SHADER_VISIBILITY_ALL);
+
+
         D3D12_STATIC_SAMPLER_DESC sampler = CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR);
 
         CD3DX12_ROOT_SIGNATURE_DESC desc = {};
@@ -351,7 +353,7 @@ void D3D12Application::LoadAssets()
     // Create the vertex buffer.
     {
         
-        modeldata.Init(L"DX12_test\\Untitled.fbx");
+        modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_commandQueue.Get(), m_cbv_srv_uav_Heap.Get());
 
         if (!modeldata.Isvalid())throw std::exception();
 
@@ -446,7 +448,7 @@ void D3D12Application::LoadAssets()
     {
         const UINT constantBufferSize = sizeof(Transform);    // CB size is required to be 256-byte aligned.
 
-        XMVECTOR eyePos = XMVectorSet(0.0f, 0.0f, 500.0f, 0.0f); // 視点の位置
+        XMVECTOR eyePos = XMVectorSet(700.0f, 0.0f, 700.0f, 0.0f); // 視点の位置
         XMVECTOR targetPos = XMVectorZero(); // 視点を向ける座標
         XMVECTOR upward = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // 上方向を表すベクトル
         constexpr float fov = XMConvertToRadians(37.5); // 視野角
@@ -465,7 +467,7 @@ void D3D12Application::LoadAssets()
             D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
             cbvDesc.BufferLocation = m_constantBuffer[i]->GetGPUVirtualAddress();
             cbvDesc.SizeInBytes = constantBufferSize;
-            m_device->CreateConstantBufferView(&cbvDesc, m_cbvHeap->GetCPUDescriptorHandleForHeapStart());
+            m_device->CreateConstantBufferView(&cbvDesc, m_cbv_srv_uav_Heap->GetCPUDescriptorHandleForHeapStart());
 
             // Map and initialize the constant buffer. We don't unmap this until the
             // app closes. Keeping things mapped for the lifetime of the resource is okay.
@@ -541,8 +543,10 @@ void D3D12Application::PopulateCommandList()
 
     // Set necessary state.
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
+    m_commandList->SetDescriptorHeaps(1, m_cbv_srv_uav_Heap.GetAddressOf());
     m_commandList->SetPipelineState(m_pipelineState.Get());
     m_commandList->SetGraphicsRootConstantBufferView(0, m_constantBuffer[m_frameIndex]->GetGPUVirtualAddress());
+    m_commandList->SetGraphicsRootDescriptorTable(1, modeldata.GetGPUHandle());
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
 

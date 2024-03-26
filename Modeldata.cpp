@@ -68,13 +68,43 @@ Mesh::~Mesh()
 {
 }
 
-bool Mesh::GetTexture(std::wstring path)
+bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap)
 {
 	if (!SearchFilePath(path.c_str(), path))return false;
-	ResourceUploadBatch batch( );
+	ResourceUploadBatch batch(pDevice);
+	batch.Begin();
+	ThrowIfFailed(CreateDDSTextureFromFile(pDevice, batch, path.c_str(), m_Texture.m_Resource.GetAddressOf(), true));
+	auto future = batch.End(pQueue);
+	future.wait();
+
+	auto incrementSize = pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	auto handleCPU = pHeap->GetCPUDescriptorHandleForHeapStart();
+	auto handleGPU = pHeap->GetGPUDescriptorHandleForHeapStart();
+
+	handleCPU.ptr += incrementSize * 2;
+	handleGPU.ptr += incrementSize * 2;
+
+	m_Texture.HandleCPU = handleCPU;
+	m_Texture.HandleGPU = handleGPU;
+
+	auto textureDesc = m_Texture.m_Resource->GetDesc();
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
+	viewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	viewDesc.Format = textureDesc.Format;
+	viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	viewDesc.Texture2D.MostDetailedMip = 0;
+	viewDesc.Texture2D.MipLevels = textureDesc.MipLevels;
+	viewDesc.Texture2D.PlaneSlice = 0;
+	viewDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+
+	pDevice->CreateShaderResourceView(m_Texture.m_Resource.Get(), &viewDesc, handleCPU);
 }
 
-bool Mesh::Init(std::wstring path) 
+
+
+bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap)
 {
 	if (SearchFilePath(path.c_str(), path))
 	{
@@ -83,7 +113,7 @@ bool Mesh::Init(std::wstring path)
 			VertexBufferSize = m_Meshdata[0].Vertices.size() * sizeof(Vertex);
 			IndexBufferSize = m_Meshdata[0].Index.size() * sizeof(UINT);
 			IndexCount = m_Meshdata[0].Index.size();
-			m_Isvalid = true;
+			
 		}
 		else
 		{
@@ -95,8 +125,9 @@ bool Mesh::Init(std::wstring path)
 		return false;
 	}
 
-	GetTexture(L"2024_2_22_1.dds");
-
+	if (!GetTexture(L"2024_2_22_1.dds", pDevice, pQueue, pHeap)) return false;
+	
+	m_Isvalid = true;
 	return true;
 }
 
@@ -219,8 +250,8 @@ void ModelLoader::ParseMesh(MeshData& dstMesh, const aiMesh* pSrcMesh)
 		assert(face.mNumIndices == 3);  // ŽOŠpŒ`‰»‚µ‚Ä‚¢‚é‚Ì‚Å•K‚¸3‚É‚È‚Á‚Ä‚¢‚é.
 	
 		dstMesh.Index[i * 3 + 0] = face.mIndices[0];
-		dstMesh.Index[i * 3 + 1] = face.mIndices[1];
-		dstMesh.Index[i * 3 + 2] = face.mIndices[2];
+		dstMesh.Index[i * 3 + 1] = face.mIndices[2];
+		dstMesh.Index[i * 3 + 2] = face.mIndices[1];
 	}
 
 }

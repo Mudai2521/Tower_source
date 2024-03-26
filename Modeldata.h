@@ -9,7 +9,8 @@
 #include "FileUtil.h"
 #include "ResourceUploadBatch.h"    
 #include "DDSTextureLoader.h"       
-#include "VertexTypes.h"         
+#include "VertexTypes.h"  
+#include "DXHelper.h"
 
 #pragma comment( lib, "dxguid.lib" )
 
@@ -74,10 +75,12 @@ class Mesh
 public:
     Mesh();
 	~Mesh();
-    bool Init(std::wstring path);
+    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap);
     UINT GetVertexBufferSize() { return VertexBufferSize; };
     UINT GetIndexBufferSize() { return IndexBufferSize; };
     UINT GetIndexCount() { return IndexCount; };
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.HandleCPU; };
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.HandleGPU; };
     void CopyVertices(Vertex* pVertexDataBegin);
     void CopyIndex(UINT* pIndexDataBegin);
     Mesh(const Mesh&) = delete;
@@ -94,7 +97,7 @@ private:
     UINT IndexBufferSize;
     UINT IndexCount;
 
-    bool GetTexture(std::wstring path);
+    bool GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap);
 };
 
 class ModelLoader

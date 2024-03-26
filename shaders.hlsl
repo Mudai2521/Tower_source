@@ -45,8 +45,7 @@ float4 PSMain(PSInput input) : SV_TARGET
     
     
     result = ColorMap.Sample(ColorSmp, input.uv);
-
     
     
-    return input.color;
+    return result;
 }
