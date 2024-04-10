@@ -107,14 +107,14 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.4\include;$(DXTEX_DIR);C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXTEX_DIR);C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <DelayLoadDLLs>d3d12.dll</DelayLoadDLLs>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;libfbxsdk-md.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.4\lib\vs2022\x64\debug;$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Debug;C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Debug;C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,7 +127,7 @@
       <ConformanceMode>Default</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.4\include;C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\include;$(DXTEX_DIR);C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\include;$(DXTEX_DIR)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,8 +135,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <DelayLoadDLLs>d3d12.dll</DelayLoadDLLs>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;libfbxsdk-md.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.4\lib\vs2022\x64\release;$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Release;C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Release;C:\Users\inaka\source\repos\DX12_test\packages\Assimp_native_4.1_v142.4.1.0\build\native\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

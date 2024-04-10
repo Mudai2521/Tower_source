@@ -1,0 +1,1 @@
+﻿C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12_test.vcxproj(195,5): error : このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは ..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets です。

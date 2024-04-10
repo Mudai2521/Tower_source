@@ -15,7 +15,7 @@
 #include <wrl.h>
 #include <shellapi.h>
 
-#include <fbxsdk.h>
+
 
 #include <DirectXTex.h>
 #include <d3dx12.h>
