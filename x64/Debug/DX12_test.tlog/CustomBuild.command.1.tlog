@@ -1,2 +1,2 @@
-^C:\USERS\INAKA\SOURCE\REPOS\DX12_TEST\DX12_TEST\SHADERS.HLSL
-copy shaders.hlsl "C:\Users\inaka\source\repos\DX12_test\x64\Debug\" > NUL
+^C:\USERS\K024G\ONEDRIVE\ドキュメント\GITHUB\DX12_TEST\SHADERS.HLSL
+copy shaders.hlsl "C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Debug\" > NUL
