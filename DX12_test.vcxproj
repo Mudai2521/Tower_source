@@ -152,7 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12Application.h" />
-    <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="DescriptorPool.h" />
     <ClInclude Include="DXHelper.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Modeldata.h" />
