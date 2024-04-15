@@ -4,7 +4,7 @@ template<typename T> bool Pool<typename T>::Init(uint32_t count)
 {
 	std::lock_guard<std::mutex> guard(m_Mutex);
 
-	m_pBuffer = sratic_cast<uint8_t*>(malloc(sizeof(Item) * (count + 2)));
+	m_pBuffer = static_cast<uint8_t*>(malloc(sizeof(Item) * (count + 2)));
 	if (m_pBuffer == nullptr)return false;
 
 	m_Capacity = count;

@@ -15,9 +15,9 @@ public:
 	Pool()
 		:m_pBuffer(nullptr),
 		m_pActive(nullptr),
-		m_pfree(nullptr),
+		m_pFree(nullptr),
 		m_Capacity(0),
-		m_COunt(0)
+		m_Count(0)
 	{}
 	~Pool()
 	{
@@ -75,8 +75,8 @@ private:
 class DescriptorHandle
 {
 public:
-	D3D12_CPU_DESCRIPTOR_HANDLE HandleCPU;  //!< CPUディスクリプタハンドルです.
-	D3D12_GPU_DESCRIPTOR_HANDLE HandleGPU;  //!< GPUディスクリプタハンドルです.
+	CD3DX12_CPU_DESCRIPTOR_HANDLE HandleCPU;  //!< CPUディスクリプタハンドル
+	CD3DX12_GPU_DESCRIPTOR_HANDLE HandleGPU;  //!< GPUディスクリプタハンドル
 	
 	bool HasCPU() const
 	{ return HandleCPU.ptr != 0; }

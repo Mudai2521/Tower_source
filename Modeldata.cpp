@@ -79,11 +79,14 @@ bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 
 	auto incrementSize = pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	auto handleCPU = pHeap->GetCPUDescriptorHandleForHeapStart();
-	auto handleGPU = pHeap->GetGPUDescriptorHandleForHeapStart();
+	CD3DX12_CPU_DESCRIPTOR_HANDLE handleCPU(pHeap->GetCPUDescriptorHandleForHeapStart());
+	CD3DX12_GPU_DESCRIPTOR_HANDLE handleGPU(pHeap->GetGPUDescriptorHandleForHeapStart());
 
-	handleCPU.ptr += incrementSize * 2;
-	handleGPU.ptr += incrementSize * 2;
+	//handleCPU.ptr += incrementSize * 2;
+	//handleGPU.ptr += incrementSize * 2;
+
+	handleCPU.Offset(2, incrementSize);
+	handleGPU.Offset(2, incrementSize);
 
 	m_Texture.HandleCPU = handleCPU;
 	m_Texture.HandleGPU = handleGPU;

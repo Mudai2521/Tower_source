@@ -61,8 +61,8 @@ struct MeshData
 struct Texture
 {
     ComPtr<ID3D12Resource> m_Resource;
-    D3D12_CPU_DESCRIPTOR_HANDLE HandleCPU;
-    D3D12_GPU_DESCRIPTOR_HANDLE HandleGPU;
+    CD3DX12_CPU_DESCRIPTOR_HANDLE HandleCPU;
+    CD3DX12_GPU_DESCRIPTOR_HANDLE HandleGPU;
 };
 
 bool LoadMesh(

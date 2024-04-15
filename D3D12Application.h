@@ -6,7 +6,7 @@
 #include "DXHelper.h"
 #include "Win32Application.h"
 #include "Modeldata.h"
-
+#include "DescriptorPool.h"
 #include <stdexcept>
 
 
@@ -54,6 +54,15 @@ public:
 private:
     static const UINT FrameCount = 2;
 
+    enum POOL_TYPE
+    {
+        POOL_TYPE_RES = 0,     // CBV / SRV / UAV
+        POOL_TYPE_SMP = 1,     // Sampler
+        POOL_TYPE_RTV = 2,     // RTV
+        POOL_TYPE_DSV = 3,     // DSV
+        POOL_COUNT = 4,
+    };
+
     // Root assets path.
     std::wstring m_assetsPath;
 
@@ -86,12 +95,13 @@ private:
     ComPtr<ID3D12CommandAllocator> m_commandAllocator[FrameCount];
     ComPtr<ID3D12CommandQueue> m_commandQueue;
     ComPtr<ID3D12RootSignature> m_rootSignature;
-    ComPtr<ID3D12DescriptorHeap> m_rtvHeap;
-    ComPtr<ID3D12DescriptorHeap> m_cbv_srv_uav_Heap;
+    //ComPtr<ID3D12DescriptorHeap> m_rtvHeap;
+    //ComPtr<ID3D12DescriptorHeap> m_cbv_srv_uav_Heap;
+    DescriptorPool* m_pPool[POOL_COUNT];
     ComPtr<ID3D12PipelineState> m_pipelineState;
     ComPtr<ID3D12GraphicsCommandList> m_commandList;
-    UINT m_rtvDescriptorSize;
-    UINT m_dsvDescriptorSize;
+    //UINT m_rtvDescriptorSize;
+    //UINT m_dsvDescriptorSize;
 
     // App resources.
     ComPtr<ID3D12Resource> m_vertexBuffer;
@@ -99,7 +109,7 @@ private:
     D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
     D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
     ComPtr<ID3D12Resource> m_depthStencilBuffer;
-    ComPtr<ID3D12DescriptorHeap> m_dsvHeap;
+    //ComPtr<ID3D12DescriptorHeap> m_dsvHeap;
     ComPtr<ID3D12Resource> m_constantBuffer[FrameCount];
     Transform m_constantBufferData[FrameCount];
     UINT8* m_pCbvDataBegin[FrameCount];

@@ -2,7 +2,7 @@
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
   (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
   
-  FileUtil.cpp
+  main.cpp
   Win32Application.cpp
   コードを生成中...
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Debug\DX12_test.exe
