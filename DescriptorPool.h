@@ -22,9 +22,9 @@ public:
 	{
 		Term();
 	}
-	bool Init(unit32_t count);
+	bool Init(uint32_t count);
 	void Term();
-	T* Alloc(std::function<void(uit32_t, T*)> func = nullptr);
+	T* Alloc(std::function<void(uint32_t, T*)> func = nullptr);
 	void Free(T* pValue);
 	uint32_t Getsize()const { return m_Capacity; }
 	uint32_t GetUsedCount() const { return m_Count; }
@@ -52,4 +52,21 @@ private:
 	Item* m_pFree;
 	uint32_t m_Capacity;
 	uint32_t m_Count;
+	std::mutex m_Mutex;
+
+	Item* GetItem(uint32_t index)
+	{
+		assert(0 <= index && index <= m_Capacity + 2);
+		return reinterpret_cast<Item*>(m_pBuffer + sizeof(Item) * index);
+	}
+
+	Item* AssignItem(uint32_t index);
+	{
+		assert(0 <= index && index <= m_Capacity + 2);
+		auto buf = (m_pBuffer + sizeof(Item) * index);
+		return new (buf) Item;
+	}
+	
+	Pool(const Pool&) = delete;
+	void operator = (const Pool&) = delete;
 };

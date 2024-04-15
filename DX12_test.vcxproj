@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="D3D12Application.cpp" />
+    <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeldata.cpp" />
