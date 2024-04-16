@@ -52,7 +52,7 @@ Mesh::~Mesh()
 	Term();
 }
 
-bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap)
+bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue)
 {
 	if (!SearchFilePath(path.c_str(), path))return false;
 	ResourceUploadBatch batch(pDevice);
@@ -61,19 +61,20 @@ bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 	auto future = batch.End(pQueue);
 	future.wait();
 
-	auto incrementSize = pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_pHandle = m_pPool->AllocHandle();
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE handleCPU(pHeap->GetCPUDescriptorHandleForHeapStart());
-	CD3DX12_GPU_DESCRIPTOR_HANDLE handleGPU(pHeap->GetGPUDescriptorHandleForHeapStart());
+	//auto incrementSize = pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	//CD3DX12_CPU_DESCRIPTOR_HANDLE handleCPU(pHeap->GetCPUDescriptorHandleForHeapStart());
+	//CD3DX12_GPU_DESCRIPTOR_HANDLE handleGPU(pHeap->GetGPUDescriptorHandleForHeapStart());
 
 	//handleCPU.ptr += incrementSize * 2;
 	//handleGPU.ptr += incrementSize * 2;
 
-	handleCPU.Offset(2, incrementSize);
-	handleGPU.Offset(2, incrementSize);
+	//handleCPU.Offset(2, incrementSize);
+	//handleGPU.Offset(2, incrementSize);
 
-	m_Texture.HandleCPU = handleCPU;
-	m_Texture.HandleGPU = handleGPU;
+	
 
 	auto textureDesc = m_Texture.m_Resource->GetDesc();
 
@@ -86,7 +87,7 @@ bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 	viewDesc.Texture2D.PlaneSlice = 0;
 	viewDesc.Texture2D.ResourceMinLODClamp = 0.0f;
 
-	pDevice->CreateShaderResourceView(m_Texture.m_Resource.Get(), &viewDesc, handleCPU);
+	pDevice->CreateShaderResourceView(m_Texture.m_Resource.Get(), &viewDesc, m_pHandle->HandleCPU);
 }
 
 
@@ -138,7 +139,19 @@ bool Mesh::Isvalid()
 
 void Mesh::Term() 
 {
+	// ディスクリプタハンドルを解放
+	if (m_pHandle != nullptr && m_pPool != nullptr)
+	{
+		m_pPool->FreeHandle(m_pHandle);
+		m_pHandle = nullptr;
+	}
 
+	// ディスクリプタプールを解放
+	if (m_pPool != nullptr)
+	{
+		m_pPool->Release();
+		m_pPool = nullptr;
+	}
 }
 
 ModelLoader::ModelLoader() 

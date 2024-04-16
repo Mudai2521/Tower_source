@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "DescriptorPool.h"
 
 using Microsoft::WRL::ComPtr;
 

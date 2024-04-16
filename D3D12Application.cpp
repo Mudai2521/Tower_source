@@ -347,7 +347,7 @@ void D3D12Application::LoadAssets()
     // Create the vertex buffer.
     {
         
-        modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]->GetHeap());
+        modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]);
 
         if (!modeldata.Isvalid())throw std::exception();
 

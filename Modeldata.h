@@ -62,8 +62,8 @@ struct MeshData
 struct Texture
 {
     ComPtr<ID3D12Resource> m_Resource;
-    CD3DX12_CPU_DESCRIPTOR_HANDLE HandleCPU;
-    CD3DX12_GPU_DESCRIPTOR_HANDLE HandleGPU;
+    
+    ~Texture() { m_Resource.Reset(); }
 };
 
 bool LoadMesh(
@@ -94,6 +94,7 @@ private:
     std::vector <Material> m_Material;
     Texture m_Texture;
     DescriptorPool* m_pPool;
+    DescriptorHandle* m_pHandle;
    
     UINT VertexBufferSize;
     UINT IndexBufferSize;
