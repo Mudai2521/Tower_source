@@ -168,6 +168,16 @@ uint32_t DescriptorPool::GetHandleCount() const
 ID3D12DescriptorHeap* const DescriptorPool::GetHeap() const
 { return m_pHeap.Get(); }
 
+ID3D12DescriptorHeap* const * DescriptorPool::GetHeapAddress() const
+{
+	return m_pHeap.GetAddressOf();
+}
+
+uint32_t DescriptorPool::GetDescriptorSize() const
+{
+	return m_DescriptorSize;
+}
+
 bool DescriptorPool::Create
 (ID3D12Device* pDevice,
 const D3D12_DESCRIPTOR_HEAP_DESC * pDesc,

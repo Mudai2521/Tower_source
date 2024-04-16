@@ -111,6 +111,10 @@ public:
 
 	ID3D12DescriptorHeap* const GetHeap() const;
 
+	ID3D12DescriptorHeap* const * GetHeapAddress() const;
+
+	uint32_t GetDescriptorSize() const;
+
 private:
 	std::atomic<uint32_t>           m_RefCount;         //参照カウント
 	Pool<DescriptorHandle>          m_Pool;             //ディスクリプタハンドルプール

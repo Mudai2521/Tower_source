@@ -11,6 +11,7 @@
 #include "DDSTextureLoader.h"       
 #include "VertexTypes.h"  
 #include "DXHelper.h"
+#include "DescriptorPool.h"
 
 #pragma comment( lib, "dxguid.lib" )
 
@@ -75,7 +76,7 @@ class Mesh
 public:
     Mesh();
 	~Mesh();
-    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap);
+    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool);
     UINT GetVertexBufferSize() { return VertexBufferSize; };
     UINT GetIndexBufferSize() { return IndexBufferSize; };
     UINT GetIndexCount() { return IndexCount; };
@@ -92,12 +93,14 @@ private:
     std::vector <MeshData> m_Meshdata;
     std::vector <Material> m_Material;
     Texture m_Texture;
+    DescriptorPool* m_pPool;
    
     UINT VertexBufferSize;
     UINT IndexBufferSize;
     UINT IndexCount;
 
-    bool GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap);
+    bool GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue);
+    void Term();
 };
 
 class ModelLoader

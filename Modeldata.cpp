@@ -45,27 +45,11 @@ bool LoadMesh
 
 Mesh::Mesh()
 {
-	
-	
-	
-	//assert(m_Meshdata.size() == 1);
-
-	/*
-	m_Meshdata.Vertices = {
-		{ { 0.25f, 0.25f, 0.0f }, {0.0f,0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f,0.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
-			{ { -0.25f, 0.25f, 0.0f },{0.0f,0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f,0.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
-			{ { 0.25f, -0.25f, 0.0f },{0.0f,0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f,0.0f}, { 0.0f, 1.0f, 0.0f, 1.0f } },
-			{ { -0.25f, -0.25f, 0.0f },{0.0f,0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f,0.0f}, { 0.0f, 0.0f, 1.0f, 1.0f } } };
-	m_Meshdata.Index = {
-		2,1,0,
-		1,2,3
-	};
-	*/
-	
 }
 
 Mesh::~Mesh()
 {
+	Term();
 }
 
 bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap)
@@ -107,7 +91,7 @@ bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 
 
 
-bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, ID3D12DescriptorHeap* pHeap)
+bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool)
 {
 	if (SearchFilePath(path.c_str(), path))
 	{
@@ -116,7 +100,6 @@ bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQ
 			VertexBufferSize = m_Meshdata[0].Vertices.size() * sizeof(Vertex);
 			IndexBufferSize = m_Meshdata[0].Index.size() * sizeof(UINT);
 			IndexCount = m_Meshdata[0].Index.size();
-			
 		}
 		else
 		{
@@ -128,7 +111,9 @@ bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQ
 		return false;
 	}
 
-	if (!GetTexture(L"2024_2_22_1.dds", pDevice, pQueue, pHeap)) return false;
+	m_pPool = pPool;
+
+	if (!GetTexture(L"2024_2_22_1.dds", pDevice, pQueue)) return false;
 	
 	m_Isvalid = true;
 	return true;
@@ -149,6 +134,11 @@ void Mesh::CopyIndex(UINT* pIndexDataBegin)
 bool Mesh::Isvalid() 
 {
 	return m_Isvalid;
+}
+
+void Mesh::Term() 
+{
+
 }
 
 ModelLoader::ModelLoader() 

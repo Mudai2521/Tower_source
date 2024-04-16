@@ -403,9 +403,10 @@ void D3D12Application::LoadAssets()
         heapDesc.NumDescriptors = 1;
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-        ThrowIfFailed(m_device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_dsvHeap)));
+        if (DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
+        //ThrowIfFailed(m_device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_dsvHeap)));
 
-        m_dsvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+        //m_dsvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 
         D3D12_CLEAR_VALUE dsvClearValue;
         dsvClearValue.Format = DXGI_FORMAT_D32_FLOAT;
@@ -433,9 +434,9 @@ void D3D12Application::LoadAssets()
             IID_PPV_ARGS(m_depthStencilBuffer.ReleaseAndGetAddressOf())));
 
         //ディスクリプタを作成
-        D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = m_dsvHeap->GetCPUDescriptorHandleForHeapStart();
+        //D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = m_dsvHeap->GetCPUDescriptorHandleForHeapStart();
 
-        m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr, dsvHandle);
+        m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr, m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
     }
     
     //定数バッファの作成
@@ -461,7 +462,7 @@ void D3D12Application::LoadAssets()
             D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
             cbvDesc.BufferLocation = m_constantBuffer[i]->GetGPUVirtualAddress();
             cbvDesc.SizeInBytes = constantBufferSize;
-            m_device->CreateConstantBufferView(&cbvDesc, m_cbv_srv_uav_Heap->GetCPUDescriptorHandleForHeapStart());
+            m_device->CreateConstantBufferView(&cbvDesc, m_pPool[POOL_TYPE_RES]->AllocHandle()->HandleCPU);
 
             // Map and initialize the constant buffer. We don't unmap this until the
             // app closes. Keeping things mapped for the lifetime of the resource is okay.
@@ -537,7 +538,7 @@ void D3D12Application::PopulateCommandList()
 
     // Set necessary state.
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
-    m_commandList->SetDescriptorHeaps(1, m_cbv_srv_uav_Heap.GetAddressOf());
+    m_commandList->SetDescriptorHeaps(1, m_pPool[POOL_TYPE_RES]->GetHeapAddress());
     m_commandList->SetPipelineState(m_pipelineState.Get());
     m_commandList->SetGraphicsRootConstantBufferView(0, m_constantBuffer[m_frameIndex]->GetGPUVirtualAddress());
     m_commandList->SetGraphicsRootDescriptorTable(1, modeldata.GetGPUHandle());
@@ -547,8 +548,10 @@ void D3D12Application::PopulateCommandList()
     // Indicate that the back buffer will be used as a render target.
     m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
-    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
+    //CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
+    //CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
+    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU, m_frameIndex, m_pPool[POOL_TYPE_RTV]->GetDescriptorSize());
+    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
     m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
     // Record commands.
