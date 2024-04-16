@@ -10,8 +10,8 @@ D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
     m_useWarpDevice(false),
     m_frameIndex(0),
     m_fenceValue{},
-    m_rtvDescriptorSize(0),
-    m_dsvDescriptorSize(0),
+    //m_rtvDescriptorSize(0),
+    //m_dsvDescriptorSize(0),
     m_scissorRect(0, 0, static_cast<LONG>(width), static_cast<LONG>(height)),
     m_viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)),
     m_constantBufferData{}
@@ -217,27 +217,28 @@ void D3D12Application::LoadPipeline()
         rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
         rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         if (DescriptorPool::Create(m_device.Get(), &rtvHeapDesc, &m_pPool[POOL_TYPE_RTV]))throw std::exception();
-        ThrowIfFailed(m_device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
+        //ThrowIfFailed(m_device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
 
-        m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+        //m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
         D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
         cbvHeapDesc.NumDescriptors = 2*FrameCount;
         cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-        ThrowIfFailed(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_uav_Heap)));
+        if (DescriptorPool::Create(m_device.Get(), &cbvHeapDesc, &m_pPool[POOL_TYPE_RES]))throw std::exception();
+        //ThrowIfFailed(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_uav_Heap)));
     }
 
     // Create frame resources.
     {
-        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart());
+        //CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart());
 
         // Create a RTV for each frame.
         for (UINT n = 0; n < FrameCount; n++)
         {
             ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_renderTargets[n])));
-            m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, rtvHandle);
-            rtvHandle.Offset(1, m_rtvDescriptorSize);
+            m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU);
+            //rtvHandle.Offset(1, m_rtvDescriptorSize);
 
             ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
         }
@@ -346,7 +347,7 @@ void D3D12Application::LoadAssets()
     // Create the vertex buffer.
     {
         
-        modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_commandQueue.Get(), m_cbv_srv_uav_Heap.Get());
+        modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]->GetHeap());
 
         if (!modeldata.Isvalid())throw std::exception();
 
