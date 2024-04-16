@@ -7,6 +7,7 @@
 #include "Win32Application.h"
 #include "Modeldata.h"
 #include "DescriptorPool.h"
+#include "ConstantBuffer.h"
 #include <stdexcept>
 
 
@@ -15,14 +16,7 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 
-struct Transform 
-{
-    XMMATRIX World; // ワールド行列
-    XMMATRIX View; // ビュー行列
-    XMMATRIX Proj; // 投影行列
-    float padding[16]; // Padding so the constant buffer is 256-byte aligned.
-};
-static_assert((sizeof(Transform) % 256) == 0, "Constant Buffer size must be 256-byte aligned");
+
 
 
 
@@ -111,9 +105,11 @@ private:
     ComPtr<ID3D12Resource> m_depthStencilBuffer;
     //ComPtr<ID3D12DescriptorHeap> m_dsvHeap;
 
-    ComPtr<ID3D12Resource> m_constantBuffer[FrameCount];
-    Transform m_constantBufferData[FrameCount];
-    UINT8* m_pCbvDataBegin[FrameCount];
+    //ComPtr<ID3D12Resource> m_constantBuffer[FrameCount];
+    //Transform m_constantBufferData[FrameCount];
+    //UINT8* m_pCbvDataBegin[FrameCount];
+
+    ConstantBuffer m_CBuffer[FrameCount];
 
     Mesh modeldata;
 

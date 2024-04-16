@@ -1,8 +1,23 @@
-﻿  DescriptorPool.cpp
+﻿  D3D12Application.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\D3D12Application.cpp(275,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/D3D12Application.cpp' をコンパイルしています)
+  
+  DescriptorPool.cpp
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
   (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
   
   main.cpp
+  Modeldata.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(101,53): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(102,49): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(103,41): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
   Win32Application.cpp
   コードを生成中...
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(91,1): warning C4715: 'Mesh::GetTexture': 値を返さないコントロール パスがあります。
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Debug\DX12_test.exe

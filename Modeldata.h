@@ -80,8 +80,8 @@ public:
     UINT GetVertexBufferSize() { return VertexBufferSize; };
     UINT GetIndexBufferSize() { return IndexBufferSize; };
     UINT GetIndexCount() { return IndexCount; };
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.HandleCPU; };
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.HandleGPU; };
+    CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_pHandle->HandleCPU; };
+    CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_pHandle->HandleGPU; };
     void CopyVertices(Vertex* pVertexDataBegin);
     void CopyIndex(UINT* pIndexDataBegin);
     Mesh(const Mesh&) = delete;

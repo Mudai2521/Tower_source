@@ -13,8 +13,7 @@ D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
     //m_rtvDescriptorSize(0),
     //m_dsvDescriptorSize(0),
     m_scissorRect(0, 0, static_cast<LONG>(width), static_cast<LONG>(height)),
-    m_viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)),
-    m_constantBufferData{}
+    m_viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height))
 {
     WCHAR assetsPath[512];
     GetAssetsPath(assetsPath, _countof(assetsPath));
@@ -450,28 +449,10 @@ void D3D12Application::LoadAssets()
 
         for (UINT i = 0; i < FrameCount; i++)
         {
-            ThrowIfFailed(m_device->CreateCommittedResource(
-                &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-                D3D12_HEAP_FLAG_NONE,
-                &CD3DX12_RESOURCE_DESC::Buffer(constantBufferSize),
-                D3D12_RESOURCE_STATE_GENERIC_READ,
-                nullptr,
-                IID_PPV_ARGS(&m_constantBuffer[i])));
-
-            // Describe and create a constant buffer view.
-            D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-            cbvDesc.BufferLocation = m_constantBuffer[i]->GetGPUVirtualAddress();
-            cbvDesc.SizeInBytes = constantBufferSize;
-            m_device->CreateConstantBufferView(&cbvDesc, m_pPool[POOL_TYPE_RES]->AllocHandle()->HandleCPU);
-
-            // Map and initialize the constant buffer. We don't unmap this until the
-            // app closes. Keeping things mapped for the lifetime of the resource is okay.
-            CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
-            ThrowIfFailed(m_constantBuffer[i]->Map(0, &readRange, reinterpret_cast<void**>(&m_pCbvDataBegin[i])));
-            m_constantBufferData[i].World = XMMatrixIdentity();
-            m_constantBufferData[i].View = XMMatrixLookAtRH(eyePos, targetPos, upward);
-            m_constantBufferData[i].Proj = XMMatrixPerspectiveFovRH(fov, m_aspectRatio, 0.3f, 1000.0f);
-            memcpy(m_pCbvDataBegin[i], &m_constantBufferData[i], sizeof(m_constantBufferData[i]));
+            m_CBuffer[i].Init(m_device.Get(), m_pPool[POOL_TYPE_RES]);
+            m_CBuffer[i].SetTransform(XMMatrixIdentity(), 
+                XMMatrixLookAtRH(eyePos, targetPos, upward), 
+                XMMatrixPerspectiveFovRH(fov, m_aspectRatio, 0.3f, 1000.0f));
         }
     }
     
@@ -540,7 +521,7 @@ void D3D12Application::PopulateCommandList()
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
     m_commandList->SetDescriptorHeaps(1, m_pPool[POOL_TYPE_RES]->GetHeapAddress());
     m_commandList->SetPipelineState(m_pipelineState.Get());
-    m_commandList->SetGraphicsRootConstantBufferView(0, m_constantBuffer[m_frameIndex]->GetGPUVirtualAddress());
+    m_commandList->SetGraphicsRootConstantBufferView(0, m_CBuffer[m_frameIndex].GetAddress());
     m_commandList->SetGraphicsRootDescriptorTable(1, modeldata.GetGPUHandle());
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);

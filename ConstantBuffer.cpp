@@ -5,6 +5,7 @@ ConstantBuffer::ConstantBuffer()
 	, m_pHandle(nullptr)
 	, m_pPool(nullptr)
 	, m_pMappedPtr(nullptr)
+    , m_ConstantBufferData{}
 { 
 }
 
@@ -16,11 +17,10 @@ ConstantBuffer::~ConstantBuffer()
 bool ConstantBuffer::Init
 (
     ID3D12Device* pDevice,
-    DescriptorPool* pPool,
-    size_t          size
+    DescriptorPool* pPool
 )
 {
-    if (pDevice == nullptr || pPool == nullptr || size == 0)
+    if (pDevice == nullptr || pPool == nullptr)
     {
         return false;
     }
@@ -31,57 +31,29 @@ bool ConstantBuffer::Init
     m_pPool = pPool;
     m_pPool->AddRef();
 
-    size_t align = D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT;
-    UINT64 sizeAligned = (size + (align - 1)) & ~(align - 1); // alignに切り上げる.
+    
 
-    // ヒーププロパティ.
-    D3D12_HEAP_PROPERTIES prop = {};
-    prop.Type = D3D12_HEAP_TYPE_UPLOAD;
-    prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-    prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-    prop.CreationNodeMask = 1;
-    prop.VisibleNodeMask = 1;
-
-    // リソースの設定.
-    D3D12_RESOURCE_DESC desc = {};
-    desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-    desc.Alignment = 0;
-    desc.Width = sizeAligned;
-    desc.Height = 1;
-    desc.DepthOrArraySize = 1;
-    desc.MipLevels = 1;
-    desc.Format = DXGI_FORMAT_UNKNOWN;
-    desc.SampleDesc.Count = 1;
-    desc.SampleDesc.Quality = 0;
-    desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-    // リソースを生成.
-    auto hr = pDevice->CreateCommittedResource(
-        &prop,
+    ThrowIfFailed(pDevice->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
         D3D12_HEAP_FLAG_NONE,
-        &desc,
+        &CD3DX12_RESOURCE_DESC::Buffer(sizeof(Transform)),
         D3D12_RESOURCE_STATE_GENERIC_READ,
         nullptr,
-        IID_PPV_ARGS(m_pCB.GetAddressOf()));
-    if (FAILED(hr))
-    {
-        return false;
-    }
+        IID_PPV_ARGS(m_pCB.GetAddressOf())));
 
-    // メモリマッピングしておきます.
-    hr = m_pCB->Map(0, nullptr, &m_pMappedPtr);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
+    // Describe and create a constant buffer view.
     m_Desc.BufferLocation = m_pCB->GetGPUVirtualAddress();
-    m_Desc.SizeInBytes = UINT(sizeAligned);
+    m_Desc.SizeInBytes = sizeof(Transform);
     m_pHandle = pPool->AllocHandle();
-
     pDevice->CreateConstantBufferView(&m_Desc, m_pHandle->HandleCPU);
 
+    // Map and initialize the constant buffer. We don't unmap this until the
+    // app closes. Keeping things mapped for the lifetime of the resource is okay.
+    CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+    ThrowIfFailed(m_pCB->Map(0, &readRange, &m_pMappedPtr));
+    memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
+
+    
     // 正常終了.
     return true;
 }

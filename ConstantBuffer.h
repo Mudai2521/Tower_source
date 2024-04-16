@@ -2,8 +2,20 @@
 
 #include "stdafx.h"
 #include "DescriptorPool.h"
+#include "DXHelper.h"
+
+using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
+
+struct Transform
+{
+    XMMATRIX World; // ワールド行列
+    XMMATRIX View; // ビュー行列
+    XMMATRIX Proj; // 投影行列
+    float padding[16]; // Padding so the constant buffer is 256-byte aligned.
+};
+static_assert((sizeof(Transform) % 256) == 0, "Constant Buffer size must be 256-byte aligned");
 
 class ConstantBuffer
 {
@@ -12,8 +24,7 @@ public:
 	~ConstantBuffer();
     bool Init(
         ID3D12Device* pDevice,
-        DescriptorPool* pPool,
-        size_t          size);
+        DescriptorPool* pPool);
 
     void Term();
 
@@ -36,6 +47,13 @@ public:
         return reinterpret_cast<T*>(GetPtr());
     }
 
+    void SetTransform(XMMATRIX World, XMMATRIX View, XMMATRIX Proj)
+    {
+        m_ConstantBufferData.World = World;
+        m_ConstantBufferData.View = View;
+        m_ConstantBufferData.Proj = Proj;
+    }
+
 private:
     
     ComPtr<ID3D12Resource>          m_pCB;          //定数バッファ
@@ -43,6 +61,8 @@ private:
     DescriptorPool* m_pPool;        //ディスクリプタプール
     D3D12_CONSTANT_BUFFER_VIEW_DESC m_Desc;         //定数バッファビューの構成設定
     void* m_pMappedPtr;   //マップ済みポインタ
+    Transform m_ConstantBufferData;
+    UINT8* m_pCbvDataBegin;
 
     
     ConstantBuffer(const ConstantBuffer&) = delete;       // アクセス禁止
