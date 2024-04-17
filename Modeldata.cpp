@@ -57,37 +57,11 @@ bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 	if (!SearchFilePath(path.c_str(), path))return false;
 	ResourceUploadBatch batch(pDevice);
 	batch.Begin();
-	ThrowIfFailed(CreateDDSTextureFromFile(pDevice, batch, path.c_str(), m_Texture.m_Resource.GetAddressOf(), true));
+	m_Texture.Init(pDevice, m_pPool, path.c_str(), batch);
 	auto future = batch.End(pQueue);
 	future.wait();
 
-	m_pHandle = m_pPool->AllocHandle();
-
-	//auto incrementSize = pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	//CD3DX12_CPU_DESCRIPTOR_HANDLE handleCPU(pHeap->GetCPUDescriptorHandleForHeapStart());
-	//CD3DX12_GPU_DESCRIPTOR_HANDLE handleGPU(pHeap->GetGPUDescriptorHandleForHeapStart());
-
-	//handleCPU.ptr += incrementSize * 2;
-	//handleGPU.ptr += incrementSize * 2;
-
-	//handleCPU.Offset(2, incrementSize);
-	//handleGPU.Offset(2, incrementSize);
-
-	
-
-	auto textureDesc = m_Texture.m_Resource->GetDesc();
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
-	viewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	viewDesc.Format = textureDesc.Format;
-	viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	viewDesc.Texture2D.MostDetailedMip = 0;
-	viewDesc.Texture2D.MipLevels = textureDesc.MipLevels;
-	viewDesc.Texture2D.PlaneSlice = 0;
-	viewDesc.Texture2D.ResourceMinLODClamp = 0.0f;
-
-	pDevice->CreateShaderResourceView(m_Texture.m_Resource.Get(), &viewDesc, m_pHandle->HandleCPU);
+	return true;
 }
 
 

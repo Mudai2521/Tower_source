@@ -12,6 +12,7 @@
 #include "VertexTypes.h"  
 #include "DXHelper.h"
 #include "DescriptorPool.h"
+#include "Texture.h"
 
 #pragma comment( lib, "dxguid.lib" )
 
@@ -59,12 +60,7 @@ struct MeshData
     uint32_t MaterialId;
 };
 
-struct Texture
-{
-    ComPtr<ID3D12Resource> m_Resource;
-    
-    ~Texture() { m_Resource.Reset(); }
-};
+
 
 bool LoadMesh(
     const wchar_t* filename,
