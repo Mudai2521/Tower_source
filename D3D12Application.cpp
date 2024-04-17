@@ -212,19 +212,19 @@ void D3D12Application::LoadPipeline()
         
         // Describe and create a render target view (RTV) descriptor heap.
         D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-        rtvHeapDesc.NumDescriptors = FrameCount;
+        rtvHeapDesc.NumDescriptors =256;
         rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
         rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-        if (DescriptorPool::Create(m_device.Get(), &rtvHeapDesc, &m_pPool[POOL_TYPE_RTV]))throw std::exception();
+        if (!DescriptorPool::Create(m_device.Get(), &rtvHeapDesc, &m_pPool[POOL_TYPE_RTV]))throw std::exception();
         //ThrowIfFailed(m_device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
 
         //m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
         D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
-        cbvHeapDesc.NumDescriptors = 2*FrameCount;
+        cbvHeapDesc.NumDescriptors = 256;
         cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-        if (DescriptorPool::Create(m_device.Get(), &cbvHeapDesc, &m_pPool[POOL_TYPE_RES]))throw std::exception();
+        if (!DescriptorPool::Create(m_device.Get(), &cbvHeapDesc, &m_pPool[POOL_TYPE_RES]))throw std::exception();
         //ThrowIfFailed(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_uav_Heap)));
     }
 
@@ -399,10 +399,10 @@ void D3D12Application::LoadAssets()
     //深度ステンシルバッファの作成
     {
         D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
-        heapDesc.NumDescriptors = 1;
+        heapDesc.NumDescriptors = 24;
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-        if (DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
+        if (!DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
         //ThrowIfFailed(m_device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_dsvHeap)));
 
         //m_dsvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);

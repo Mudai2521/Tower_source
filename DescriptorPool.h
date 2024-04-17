@@ -5,6 +5,7 @@
 #include <cassert>
 #include <functional>
 #include "stdafx.h"
+#include "DXHelper.h"
 
 using Microsoft::WRL::ComPtr;
 

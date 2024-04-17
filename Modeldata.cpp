@@ -52,12 +52,12 @@ Mesh::~Mesh()
 	Term();
 }
 
-bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue)
+bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool)
 {
 	if (!SearchFilePath(path.c_str(), path))return false;
 	ResourceUploadBatch batch(pDevice);
 	batch.Begin();
-	m_Texture.Init(pDevice, m_pPool, path.c_str(), batch);
+	m_Texture.Init(pDevice, pPool, path.c_str(), batch);
 	auto future = batch.End(pQueue);
 	future.wait();
 
@@ -86,9 +86,9 @@ bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQ
 		return false;
 	}
 
-	m_pPool = pPool;
+	
 
-	if (!GetTexture(L"2024_2_22_1.dds", pDevice, pQueue)) return false;
+	if (!GetTexture(L"2024_2_22_1.dds", pDevice, pQueue,pPool)) return false;
 	
 	m_Isvalid = true;
 	return true;
@@ -113,19 +113,6 @@ bool Mesh::Isvalid()
 
 void Mesh::Term() 
 {
-	// ディスクリプタハンドルを解放
-	if (m_pHandle != nullptr && m_pPool != nullptr)
-	{
-		m_pPool->FreeHandle(m_pHandle);
-		m_pHandle = nullptr;
-	}
-
-	// ディスクリプタプールを解放
-	if (m_pPool != nullptr)
-	{
-		m_pPool->Release();
-		m_pPool = nullptr;
-	}
 }
 
 ModelLoader::ModelLoader() 

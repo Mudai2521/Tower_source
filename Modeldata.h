@@ -76,8 +76,8 @@ public:
     UINT GetVertexBufferSize() { return VertexBufferSize; };
     UINT GetIndexBufferSize() { return IndexBufferSize; };
     UINT GetIndexCount() { return IndexCount; };
-    CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_pHandle->HandleCPU; };
-    CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_pHandle->HandleGPU; };
+    CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.GetHandleCPU(); };
+    CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.GetHandleGPU(); };
     void CopyVertices(Vertex* pVertexDataBegin);
     void CopyIndex(UINT* pIndexDataBegin);
     Mesh(const Mesh&) = delete;
@@ -89,14 +89,12 @@ private:
     std::vector <MeshData> m_Meshdata;
     std::vector <Material> m_Material;
     Texture m_Texture;
-    DescriptorPool* m_pPool;
-    DescriptorHandle* m_pHandle;
    
     UINT VertexBufferSize;
     UINT IndexBufferSize;
     UINT IndexCount;
 
-    bool GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue);
+    bool GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool);
     void Term();
 };
 

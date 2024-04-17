@@ -194,16 +194,11 @@ DescriptorPool * *ppPool
 	{ return false; }
 	
 	// ディスクリプタヒープを生成.
-	auto hr = pDevice->CreateDescriptorHeap(
+	ThrowIfFailed(pDevice->CreateDescriptorHeap(
 	pDesc,
-	IID_PPV_ARGS(instance->m_pHeap.GetAddressOf()));
+	IID_PPV_ARGS(instance->m_pHeap.GetAddressOf())));
 	
-	// 失敗したら解放処理を行って終了します.
-	if (FAILED(hr))
-	{
-		instance->Release();
-		return false;
-	}
+	
 	
 	// プールを初期化します.
 	if (!instance->m_Pool.Init(pDesc->NumDescriptors))
