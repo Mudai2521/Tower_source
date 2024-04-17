@@ -531,14 +531,14 @@ void D3D12Application::PopulateCommandList()
 
     //CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
     //CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU, m_frameIndex, m_pPool[POOL_TYPE_RTV]->GetDescriptorSize());
-    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
-    m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle(m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU, m_frameIndex, m_pPool[POOL_TYPE_RTV]->GetDescriptorSize());
+    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle(m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
+    m_commandList->OMSetRenderTargets(1, &rtvCPUHandle, FALSE, &dsvCPUHandle);
 
     // Record commands.
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
-    m_commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-    m_commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+    m_commandList->ClearRenderTargetView(rtvCPUHandle, clearColor, 0, nullptr);
+    m_commandList->ClearDepthStencilView(dsvCPUHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
     m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
     m_commandList->IASetIndexBuffer(&m_indexBufferView);
