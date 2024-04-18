@@ -203,6 +203,11 @@ DescriptorPool * *ppPool
 	ThrowIfFailed(pDevice->CreateDescriptorHeap(
 	pDesc,
 	IID_PPV_ARGS(instance->m_pHeap.GetAddressOf())));
+
+	if (pDesc->Type == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) instance->m_pHeap->SetName(L"CBV_SRV_UAV");
+	else if (pDesc->Type == D3D12_DESCRIPTOR_HEAP_TYPE_RTV) instance->m_pHeap->SetName(L"RTV");
+	else if (pDesc->Type == D3D12_DESCRIPTOR_HEAP_TYPE_DSV) instance->m_pHeap->SetName(L"DSV");
+	else if (pDesc->Type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER) instance->m_pHeap->SetName(L"SAMPLER");
 	
 	// ƒv[ƒ‹‚ð‰Šú‰»‚µ‚Ü‚·.
 	if (!instance->m_Pool.Init(pDesc->NumDescriptors))

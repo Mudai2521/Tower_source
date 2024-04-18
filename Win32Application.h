@@ -11,7 +11,11 @@ class D3D12Application;
 class Win32Application
 {
 public:
-    static int Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdShow);
+    static int Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdShow
+#if defined(DEBUG) || defined(_DEBUG)
+        , ID3D12DebugDevice** debugDevice
+#endif
+    );
     static HWND GetHwnd() { return m_hwnd; }
 
 protected:

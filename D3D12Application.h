@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "stdafx.h"
@@ -10,15 +8,9 @@
 #include "ConstantBuffer.h"
 #include <stdexcept>
 
-
-
 using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
-
-
-
-
 
 class D3D12Application 
 {

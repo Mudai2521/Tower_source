@@ -23,7 +23,10 @@ D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
 
 D3D12Application::~D3D12Application()
 {
-   
+    for (int i = 0; i < POOL_COUNT; i++) 
+    { 
+       if(m_pPool[i]!=nullptr) m_pPool[i]->Release();
+    }
 }
 
 // Helper function for resolving the full path of assets.
@@ -175,6 +178,8 @@ void D3D12Application::LoadPipeline()
         ));
     }
 
+
+
     // Describe and create the command queue.
     D3D12_COMMAND_QUEUE_DESC queueDesc = {};
     queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -240,7 +245,6 @@ void D3D12Application::LoadPipeline()
             m_rtvHandle[n] = m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU;
             m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, m_rtvHandle[n]);
             //rtvHandle.Offset(1, m_rtvDescriptorSize);
-
             ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
         }
     }

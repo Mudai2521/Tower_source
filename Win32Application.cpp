@@ -5,7 +5,11 @@
 
 HWND Win32Application::m_hwnd = nullptr;
 
-int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdShow)
+int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdShow
+#if defined(DEBUG) || defined(_DEBUG)
+    , ID3D12DebugDevice** debugDevice
+#endif
+)
 {
     // Parse the command line parameters
     int argc;
@@ -41,8 +45,9 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
         pApp);
 
     pApp->OnInit();
-
-    
+#if defined(DEBUG) || defined(_DEBUG)
+    pApp->GetDevice()->QueryInterface(debugDevice);
+#endif
 
     ShowWindow(m_hwnd, nCmdShow);
 
@@ -67,6 +72,8 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
     }
 
     pApp->OnDestroy();
+
+
 
     // Return this part of the WM_QUIT message to Windows.
     return static_cast<char>(msg.wParam);
