@@ -1,10 +1,30 @@
-﻿  stdafx.cpp
-  D3D12HelloTriangle.cpp
-  DXSample.cpp
+﻿  Performing Custom Build Tools
+  stdafx.cpp
+  ConstantBuffer.cpp
+  D3D12Application.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\D3D12Application.cpp(277,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/D3D12Application.cpp' をコンパイルしています)
+  
+  DescriptorPool.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
+  (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
+  
+  FileUtil.cpp
   main.cpp
+  Modeldata.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(75,53): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(76,49): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(77,41): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+  Texture.cpp
   Win32Application.cpp
   コード生成しています。
-  Previous IPDB not found, fall back to full compilation.
-  All 350 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  All 790 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   コード生成が終了しました。
-  DX12_test.vcxproj -> C:\Users\inaka\source\repos\DX12_test\x64\Release\DX12_test.exe
+  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Release\DX12_test.exe

@@ -52,6 +52,7 @@ public:
         m_ConstantBufferData.World = World;
         m_ConstantBufferData.View = View;
         m_ConstantBufferData.Proj = Proj;
+        memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
 
 private:

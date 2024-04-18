@@ -535,7 +535,7 @@ void D3D12Application::PopulateCommandList()
     //CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle(m_pPool[POOL_TYPE_DSV]->GetHeap()->GetCPUDescriptorHandleForHeapStart());
     m_commandList->OMSetRenderTargets(1, &m_rtvHandle[m_frameIndex], FALSE, &dsvCPUHandle);
-
+    
     // Record commands.
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
     m_commandList->ClearRenderTargetView(m_rtvHandle[m_frameIndex], clearColor, 0, nullptr);

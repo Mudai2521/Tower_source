@@ -1,3 +1,9 @@
-﻿  Performing Custom Build Tools
-  LINK : 前回のインクリメンタル リンクで C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Debug\DX12_test.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
-  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Debug\DX12_test.exe
+﻿  ConstantBuffer.cpp
+  D3D12Application.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\D3D12Application.cpp(277,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/D3D12Application.cpp' をコンパイルしています)
+  
+  Win32Application.cpp
+  main.cpp
+  コードを生成中...
+  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

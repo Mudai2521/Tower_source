@@ -51,7 +51,6 @@ bool ConstantBuffer::Init
     // app closes. Keeping things mapped for the lifetime of the resource is okay.
     CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
     ThrowIfFailed(m_pCB->Map(0, &readRange, &m_pMappedPtr));
-    memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
 
     
     // ³íI—¹.
