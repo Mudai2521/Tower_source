@@ -135,11 +135,17 @@ DescriptorHandle* DescriptorPool::AllocHandle()
 			auto handleCPU = m_pHeap->GetCPUDescriptorHandleForHeapStart();
 			handleCPU.ptr += m_DescriptorSize * index;
 
-			auto handleGPU = m_pHeap->GetGPUDescriptorHandleForHeapStart();
-			handleGPU.ptr += m_DescriptorSize * index;
-
 			pHandle->HandleCPU = handleCPU;
-			pHandle->HandleGPU = handleGPU;
+
+			if (m_pHeap->GetDesc().Flags == D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE)
+			{
+				auto handleGPU = m_pHeap->GetGPUDescriptorHandleForHeapStart();
+				handleGPU.ptr += m_DescriptorSize * index;
+
+				pHandle->HandleGPU = handleGPU;
+			}
+			
+			
 		};
 	return m_Pool.Alloc(func);
 }
@@ -197,8 +203,6 @@ DescriptorPool * *ppPool
 	ThrowIfFailed(pDevice->CreateDescriptorHeap(
 	pDesc,
 	IID_PPV_ARGS(instance->m_pHeap.GetAddressOf())));
-	
-	
 	
 	// ƒv[ƒ‹‚ð‰Šú‰»‚µ‚Ü‚·.
 	if (!instance->m_Pool.Init(pDesc->NumDescriptors))

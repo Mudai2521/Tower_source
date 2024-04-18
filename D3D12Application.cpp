@@ -23,6 +23,7 @@ D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
 
 D3D12Application::~D3D12Application()
 {
+   
 }
 
 // Helper function for resolving the full path of assets.
@@ -236,7 +237,8 @@ void D3D12Application::LoadPipeline()
         for (UINT n = 0; n < FrameCount; n++)
         {
             ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_renderTargets[n])));
-            m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU);
+            m_rtvHandle[n] = m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU;
+            m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, m_rtvHandle[n]);
             //rtvHandle.Offset(1, m_rtvDescriptorSize);
 
             ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
@@ -531,13 +533,12 @@ void D3D12Application::PopulateCommandList()
 
     //CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
     //CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle(m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU, m_frameIndex, m_pPool[POOL_TYPE_RTV]->GetDescriptorSize());
-    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle(m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
-    m_commandList->OMSetRenderTargets(1, &rtvCPUHandle, FALSE, &dsvCPUHandle);
+    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle(m_pPool[POOL_TYPE_DSV]->GetHeap()->GetCPUDescriptorHandleForHeapStart());
+    m_commandList->OMSetRenderTargets(1, &m_rtvHandle[m_frameIndex], FALSE, &dsvCPUHandle);
 
     // Record commands.
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
-    m_commandList->ClearRenderTargetView(rtvCPUHandle, clearColor, 0, nullptr);
+    m_commandList->ClearRenderTargetView(m_rtvHandle[m_frameIndex], clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(dsvCPUHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
     m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);

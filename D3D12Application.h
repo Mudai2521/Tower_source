@@ -96,6 +96,7 @@ private:
     ComPtr<ID3D12GraphicsCommandList> m_commandList;
     //UINT m_rtvDescriptorSize;
     //UINT m_dsvDescriptorSize;
+    CD3DX12_CPU_DESCRIPTOR_HANDLE m_rtvHandle[FrameCount];
 
     // App resources.
     ComPtr<ID3D12Resource> m_vertexBuffer;

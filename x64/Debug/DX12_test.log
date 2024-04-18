@@ -1,5 +1,2 @@
-﻿  D3D12Application.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\D3D12Application.cpp(275,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/D3D12Application.cpp' をコンパイルしています)
-  
+﻿  Performing Custom Build Tools
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Debug\DX12_test.exe
