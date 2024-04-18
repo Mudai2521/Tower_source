@@ -60,7 +60,7 @@ private:
 		return reinterpret_cast<Item*>(m_pBuffer + sizeof(Item) * index);
 	}
 
-	Item* AssignItem(uint32_t index);
+	Item* AssignItem(uint32_t index)
 	{
 		assert(0 <= index && index <= m_Capacity + 2);
 		auto buf = (m_pBuffer + sizeof(Item) * index);
