@@ -37,7 +37,7 @@ public:
 
     void ParseCommandLineArgs(_In_reads_(argc) WCHAR* argv[], int argc);
 
-private:
+protected:
     static const UINT FrameCount = 2;
 
     enum POOL_TYPE

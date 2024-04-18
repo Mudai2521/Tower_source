@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "Win32Application.h"
 #include "D3D12Application.h"
+#include "DX12Game.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
@@ -20,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     ComPtr<ID3D12DebugDevice> debugDevice;
 #endif
     {
-        D3D12Application App(1280, 720, L"DX12 test");
+        DX12Game App(1280, 720, L"DX12_Application");
         Win32Application::Run(&App, hInstance, nCmdShow
 #if defined(DEBUG) || defined(_DEBUG)
             , &debugDevice

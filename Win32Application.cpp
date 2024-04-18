@@ -1,6 +1,3 @@
-
-
-#include "stdafx.h"
 #include "Win32Application.h"
 
 HWND Win32Application::m_hwnd = nullptr;
@@ -24,7 +21,7 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
     windowClass.lpfnWndProc = WindowProc;
     windowClass.hInstance = hInstance;
     windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    windowClass.lpszClassName = L"DXSampleClass";
+    windowClass.lpszClassName = L"DXApp";
     RegisterClassEx(&windowClass);
 
     RECT windowRect = { 0, 0, static_cast<LONG>(pApp->GetWidth()), static_cast<LONG>(pApp->GetHeight()) };

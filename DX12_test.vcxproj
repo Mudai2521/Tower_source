@@ -146,6 +146,7 @@
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="D3D12Application.cpp" />
     <ClCompile Include="DescriptorPool.cpp" />
+    <ClCompile Include="DX12Game.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeldata.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="D3D12Application.h" />
     <ClInclude Include="DescriptorPool.h" />
+    <ClInclude Include="DX12Game.h" />
     <ClInclude Include="DXHelper.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Modeldata.h" />
