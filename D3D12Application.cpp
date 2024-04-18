@@ -7,8 +7,6 @@ D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
     m_useWarpDevice(false),
     m_frameIndex(0),
     m_fenceValue{},
-    //m_rtvDescriptorSize(0),
-    //m_dsvDescriptorSize(0),
     m_scissorRect(0, 0, static_cast<LONG>(width), static_cast<LONG>(height)),
     m_viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height))
 {
@@ -406,9 +404,7 @@ void D3D12Application::LoadAssets()
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         if (!DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
-        //ThrowIfFailed(m_device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_dsvHeap)));
-
-        //m_dsvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+       
 
         D3D12_CLEAR_VALUE dsvClearValue;
         dsvClearValue.Format = DXGI_FORMAT_D32_FLOAT;
@@ -436,7 +432,7 @@ void D3D12Application::LoadAssets()
             IID_PPV_ARGS(m_depthStencilBuffer.ReleaseAndGetAddressOf())));
 
         //ディスクリプタを作成
-        //D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = m_dsvHeap->GetCPUDescriptorHandleForHeapStart();
+        
 
         m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr, m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
     }
@@ -478,27 +474,8 @@ void D3D12Application::LoadAssets()
     
 }
 
-// Update frame-based values.
-void D3D12Application::OnUpdate()
-{
-   
-}
 
-// Render the scene.
-void D3D12Application::OnRender()
-{
-    // Record all the commands we need to render the scene into the command list.
-    PopulateCommandList();
 
-    // Execute the command list.
-    ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };
-    m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-    // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(1, 0));
-
-    MoveToNextFrame();
-}
 
 void D3D12Application::OnDestroy()
 {
@@ -532,8 +509,7 @@ void D3D12Application::PopulateCommandList()
     // Indicate that the back buffer will be used as a render target.
     m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-    //CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
-    //CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
+    
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle(m_pPool[POOL_TYPE_DSV]->GetHeap()->GetCPUDescriptorHandleForHeapStart());
     m_commandList->OMSetRenderTargets(1, &m_rtvHandle[m_frameIndex], FALSE, &dsvCPUHandle);
     

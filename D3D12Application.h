@@ -20,12 +20,11 @@ public:
     ~D3D12Application();
 
     virtual void OnInit();
-    virtual void OnUpdate();
-    virtual void OnRender();
+    virtual void OnUpdate() = 0;
+    virtual void OnRender() = 0;
     virtual void OnDestroy();
 
-    virtual void OnKeyDown(UINT8) {}
-    virtual void OnKeyUp(UINT8) {}
+    
 
     // Accessors.
     UINT GetWidth() const { return m_width; }
@@ -81,13 +80,9 @@ protected:
     ComPtr<ID3D12CommandAllocator> m_commandAllocator[FrameCount];
     ComPtr<ID3D12CommandQueue> m_commandQueue;
     ComPtr<ID3D12RootSignature> m_rootSignature;
-    //ComPtr<ID3D12DescriptorHeap> m_rtvHeap;
-    //ComPtr<ID3D12DescriptorHeap> m_cbv_srv_uav_Heap;
     DescriptorPool* m_pPool[POOL_COUNT];
     ComPtr<ID3D12PipelineState> m_pipelineState;
     ComPtr<ID3D12GraphicsCommandList> m_commandList;
-    //UINT m_rtvDescriptorSize;
-    //UINT m_dsvDescriptorSize;
     CD3DX12_CPU_DESCRIPTOR_HANDLE m_rtvHandle[FrameCount];
 
     // App resources.
@@ -96,11 +91,7 @@ protected:
     D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
     D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
     ComPtr<ID3D12Resource> m_depthStencilBuffer;
-    //ComPtr<ID3D12DescriptorHeap> m_dsvHeap;
-
-    //ComPtr<ID3D12Resource> m_constantBuffer[FrameCount];
-    //Transform m_constantBufferData[FrameCount];
-    //UINT8* m_pCbvDataBegin[FrameCount];
+   
 
     ConstantBuffer m_CBuffer[FrameCount];
 
