@@ -231,7 +231,8 @@ void D3D12Application::LoadPipeline()
         // Create a RTV for each frame.
         for (UINT n = 0; n < FrameCount; n++)
         {
-            m_RenderTargetView[n].Init(m_device.Get(), m_pPool[POOL_TYPE_RTV], &m_swapChain, m_commandAllocator[n].Get(), n);
+            m_RenderTargetView[n].Init(m_device.Get(), m_pPool[POOL_TYPE_RTV], m_swapChain.Get(), m_commandAllocator[n].Get(), n);
+            ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
         }
     }
 
@@ -470,11 +471,11 @@ void D3D12Application::PopulateCommandList()
 
     
     
-    m_commandList->OMSetRenderTargets(1, &m_rtvHandle[m_frameIndex], FALSE, &m_DSBuffer.GetHandleCPU());
+    m_commandList->OMSetRenderTargets(1, &m_RenderTargetView[m_frameIndex].GetHandleCPU(), FALSE, &m_DSBuffer.GetHandleCPU());
     
     // Record commands.
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
-    m_commandList->ClearRenderTargetView(m_rtvHandle[m_frameIndex], clearColor, 0, nullptr);
+    m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
     m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
@@ -484,7 +485,7 @@ void D3D12Application::PopulateCommandList()
 
 
     // Indicate that the back buffer will now be used to present.
-    m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+    m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetView[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
     ThrowIfFailed(m_commandList->Close());
 }

@@ -21,7 +21,6 @@ bool RenderTargetView::Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGIS
 	ThrowIfFailed(pSwapChain->GetBuffer(rtvIndex, IID_PPV_ARGS(&m_pRenderTargetView)));
 	m_pHandle = m_pPool->AllocHandle();
 	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), nullptr, m_pHandle->HandleCPU);
-	ThrowIfFailed(pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pCommandAllocator)));
 
 	return true;
 }
@@ -44,4 +43,17 @@ void RenderTargetView::Term()
 	}
 }
 
-ID3D12Resource* RenderTargetView::Get();
+ID3D12Resource* RenderTargetView::Get() const
+{
+	return m_pRenderTargetView.Get();
+}
+
+CD3DX12_CPU_DESCRIPTOR_HANDLE RenderTargetView::GetHandleCPU() const
+{
+	return m_pHandle->HandleCPU;
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE RenderTargetView::GetHandleGPU() const
+{
+	return m_pHandle->HandleGPU;
+}

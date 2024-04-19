@@ -11,7 +11,9 @@ public:
 	~RenderTargetView();
 	bool Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGISwapChain3* pSwapChain, ID3D12CommandAllocator* pCommandAllocator, UINT Index);
 	void Term();
-	ID3D12Resource* Get();
+	ID3D12Resource* Get() const;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetHandleCPU() const;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetHandleGPU() const;
 private:
 	DescriptorHandle* m_pHandle;      //ディスクリプタハンドル
 	DescriptorPool* m_pPool;        //ディスクリプタプール

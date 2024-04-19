@@ -1,7 +1,10 @@
 ﻿  D3D12Application.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\D3D12Application.cpp(276,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\D3D12Application.cpp(268,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/D3D12Application.cpp' をコンパイルしています)
   
-  DepthStencilBuffer.cpp
+  DX12Game.cpp
+  RenderTargetView.cpp
+  Win32Application.cpp
+  main.cpp
   コードを生成中...
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

@@ -88,7 +88,7 @@ protected:
     DescriptorPool* m_pPool[POOL_COUNT];
     ComPtr<ID3D12PipelineState> m_pipelineState;
     ComPtr<ID3D12GraphicsCommandList> m_commandList;
-    CD3DX12_CPU_DESCRIPTOR_HANDLE m_rtvHandle[FrameCount];
+    //CD3DX12_CPU_DESCRIPTOR_HANDLE m_rtvHandle[FrameCount];
 
     // App resources.
     ComPtr<ID3D12Resource> m_vertexBuffer;
