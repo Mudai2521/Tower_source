@@ -217,9 +217,6 @@ void D3D12Application::LoadPipeline()
         rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
         rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         if (!DescriptorPool::Create(m_device.Get(), &rtvHeapDesc, &m_pPool[POOL_TYPE_RTV]))throw std::exception();
-        //ThrowIfFailed(m_device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
-
-        //m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
         D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
         cbvHeapDesc.NumDescriptors = 256;
@@ -231,16 +228,10 @@ void D3D12Application::LoadPipeline()
 
     // Create frame resources.
     {
-        //CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart());
-
         // Create a RTV for each frame.
         for (UINT n = 0; n < FrameCount; n++)
         {
-            ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_renderTargets[n])));
-            m_rtvHandle[n] = m_pPool[POOL_TYPE_RTV]->AllocHandle()->HandleCPU;
-            m_device->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, m_rtvHandle[n]);
-            //rtvHandle.Offset(1, m_rtvDescriptorSize);
-            ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
+            m_RenderTargetView[n].Init(m_device.Get(), m_pPool[POOL_TYPE_RTV], &m_swapChain, m_commandAllocator[n].Get(), n);
         }
     }
 
@@ -404,37 +395,8 @@ void D3D12Application::LoadAssets()
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         if (!DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
-       
 
-        D3D12_CLEAR_VALUE dsvClearValue;
-        dsvClearValue.Format = DXGI_FORMAT_D32_FLOAT;
-        dsvClearValue.DepthStencil.Depth = 1.0f;
-        dsvClearValue.DepthStencil.Stencil = 0;
-
-        CD3DX12_RESOURCE_DESC resourceDesc(
-            D3D12_RESOURCE_DIMENSION_TEXTURE2D,
-            0,
-            m_width,
-            m_height,
-            1,
-            1,
-            DXGI_FORMAT_D32_FLOAT,
-            1,
-            0,
-            D3D12_TEXTURE_LAYOUT_UNKNOWN,
-            D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL | D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE);
-        ThrowIfFailed(m_device->CreateCommittedResource(
-            &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-            D3D12_HEAP_FLAG_NONE,
-            &resourceDesc,
-            D3D12_RESOURCE_STATE_DEPTH_WRITE,
-            &dsvClearValue,
-            IID_PPV_ARGS(m_depthStencilBuffer.ReleaseAndGetAddressOf())));
-
-        //ディスクリプタを作成
-        
-
-        m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr, m_pPool[POOL_TYPE_DSV]->AllocHandle()->HandleCPU);
+        if(!m_DSBuffer.Init(m_device.Get(), m_pPool[POOL_TYPE_DSV], m_width, m_height))throw std::exception();
     }
     
     //定数バッファの作成
@@ -474,9 +436,6 @@ void D3D12Application::LoadAssets()
     
 }
 
-
-
-
 void D3D12Application::OnDestroy()
 {
     
@@ -507,16 +466,16 @@ void D3D12Application::PopulateCommandList()
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
 
     // Indicate that the back buffer will be used as a render target.
-    m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+    m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetView[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
     
-    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle(m_pPool[POOL_TYPE_DSV]->GetHeap()->GetCPUDescriptorHandleForHeapStart());
-    m_commandList->OMSetRenderTargets(1, &m_rtvHandle[m_frameIndex], FALSE, &dsvCPUHandle);
+    
+    m_commandList->OMSetRenderTargets(1, &m_rtvHandle[m_frameIndex], FALSE, &m_DSBuffer.GetHandleCPU());
     
     // Record commands.
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
     m_commandList->ClearRenderTargetView(m_rtvHandle[m_frameIndex], clearColor, 0, nullptr);
-    m_commandList->ClearDepthStencilView(dsvCPUHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+    m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
     m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
     m_commandList->IASetIndexBuffer(&m_indexBufferView);

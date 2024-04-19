@@ -8,8 +8,15 @@ class DepthStencilBuffer
 public:
 	DepthStencilBuffer();
 	~DepthStencilBuffer();
-	bool Init();
+	bool Init(ID3D12Device* pDevice,DescriptorPool *pPool,UINT width,UINT height);
+	void Term();
+	CD3DX12_CPU_DESCRIPTOR_HANDLE GetHandleCPU() const;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GetHandleGPU() const;
 private:
 	DescriptorHandle* m_pHandle;      //ディスクリプタハンドル
 	DescriptorPool* m_pPool;        //ディスクリプタプール
+	ComPtr<ID3D12Resource> m_pDepthStencilBuffer;
+
+	DepthStencilBuffer(const DepthStencilBuffer&) = delete;       // アクセス禁止
+	void operator = (const DepthStencilBuffer&) = delete;       // アクセス禁止
 };

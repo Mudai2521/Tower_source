@@ -6,6 +6,8 @@
 #include "Modeldata.h"
 #include "DescriptorPool.h"
 #include "ConstantBuffer.h"
+#include "DepthStencilBuffer.h"
+#include "RenderTargetView.h"
 #include <stdexcept>
 
 using namespace DirectX;
@@ -76,7 +78,10 @@ protected:
     CD3DX12_RECT m_scissorRect;
     ComPtr<IDXGISwapChain3> m_swapChain;
     ComPtr<ID3D12Device> m_device;
-    ComPtr<ID3D12Resource> m_renderTargets[FrameCount];
+
+    //ComPtr<ID3D12Resource> m_renderTargets[FrameCount];
+    RenderTargetView m_RenderTargetView[FrameCount];
+
     ComPtr<ID3D12CommandAllocator> m_commandAllocator[FrameCount];
     ComPtr<ID3D12CommandQueue> m_commandQueue;
     ComPtr<ID3D12RootSignature> m_rootSignature;
@@ -90,9 +95,8 @@ protected:
     ComPtr<ID3D12Resource> m_indexBuffer;
     D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
     D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
-    ComPtr<ID3D12Resource> m_depthStencilBuffer;
    
-
+    DepthStencilBuffer m_DSBuffer;
     ConstantBuffer m_CBuffer[FrameCount];
 
     Mesh modeldata;
