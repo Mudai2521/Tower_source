@@ -21,20 +21,17 @@ public:
     D3D12Application(UINT width, UINT height, std::wstring name);
     ~D3D12Application();
 
-    virtual void OnInit();
+    virtual void OnInit() = 0;
     virtual void OnUpdate() = 0;
     virtual void OnRender() = 0;
-    virtual void OnDestroy();
-
-    
+    virtual void OnDestroy() = 0;
 
     // Accessors.
     UINT GetWidth() const { return m_width; }
     UINT GetHeight() const { return m_height; }
     const WCHAR* GetTitle() const { return m_title.c_str(); }
     ID3D12Device* D3D12Application::GetDevice() {return m_device.Get();}
-    ID3D12GraphicsCommandList* D3D12Application::GetCommandList(){return m_commandList.Get();}
-    UINT D3D12Application::GetframeIndex(){return m_frameIndex;}
+    UINT GetframeIndex() { return m_frameIndex; }
 
     void ParseCommandLineArgs(_In_reads_(argc) WCHAR* argv[], int argc);
 
@@ -79,28 +76,15 @@ protected:
     ComPtr<IDXGISwapChain3> m_swapChain;
     ComPtr<ID3D12Device> m_device;
 
-    //ComPtr<ID3D12Resource> m_renderTargets[FrameCount];
     RenderTargetView m_RenderTargetView[FrameCount];
+    DepthStencilBuffer m_DSBuffer;
 
     ComPtr<ID3D12CommandAllocator> m_commandAllocator[FrameCount];
     ComPtr<ID3D12CommandQueue> m_commandQueue;
     ComPtr<ID3D12RootSignature> m_rootSignature;
     DescriptorPool* m_pPool[POOL_COUNT];
     ComPtr<ID3D12PipelineState> m_pipelineState;
-    ComPtr<ID3D12GraphicsCommandList> m_commandList;
-    //CD3DX12_CPU_DESCRIPTOR_HANDLE m_rtvHandle[FrameCount];
-
-    // App resources.
-    ComPtr<ID3D12Resource> m_vertexBuffer;
-    ComPtr<ID3D12Resource> m_indexBuffer;
-    D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
-    D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
-   
-    DepthStencilBuffer m_DSBuffer;
-    ConstantBuffer m_CBuffer[FrameCount];
-
-    Mesh modeldata;
-
+    
     // Synchronization objects.
     UINT m_frameIndex;
     HANDLE m_fenceEvent;
@@ -108,8 +92,6 @@ protected:
     UINT64 m_fenceValue[FrameCount];
 
     void LoadPipeline();
-    void LoadAssets();
-    void PopulateCommandList();
     void WaitForGpu();
     void MoveToNextFrame();
 };

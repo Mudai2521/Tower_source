@@ -55,6 +55,12 @@ public:
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
 
+    void SetWorldMatrix(XMMATRIX World)
+    {
+        m_ConstantBufferData.World *= World;
+        memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
+    }
+
 private:
     
     ComPtr<ID3D12Resource>          m_pCB;          //定数バッファ
