@@ -6,6 +6,15 @@ void DX12Game::OnInit()
 {
     LoadPipeline();
     LoadAssets();
+    if (m_tearingSupport)
+    {
+        Win32Application::ToggleFullscreenWindow();
+    }
+    else
+    {
+        ThrowIfFailed(m_swapChain->SetFullscreenState(TRUE, nullptr));
+    }
+    LoadSizeDependentResources();
 }
 
 // Load the sample assets.
@@ -98,6 +107,17 @@ void DX12Game::LoadAssets()
         ThrowIfFailed(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState)));
     }
 
+    //深度ステンシルバッファの作成
+    {
+        D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+        heapDesc.NumDescriptors = 24;
+        heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+        heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        if (!DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
+
+        if (!m_DSBuffer.Init(m_device.Get(), m_pPool[POOL_TYPE_DSV], m_width, m_height))throw std::exception();
+    }
+
     // Create the command list.
     ThrowIfFailed(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator[m_frameIndex].Get(), m_pipelineState.Get(), IID_PPV_ARGS(&m_commandList)));
 
@@ -105,13 +125,11 @@ void DX12Game::LoadAssets()
     // to record yet. The main loop expects it to be closed, so close it now.
     ThrowIfFailed(m_commandList->Close());
 
+   
     // Create the vertex buffer.
     {
-
-        modeldata.Init(L"DX12_test\\Untitled.fbx", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]);
-
-        if (!modeldata.Isvalid())throw std::exception();
-
+        if (!modeldata.Init(L"DX12_test\\Untitled.fbx"))throw std::exception();
+        if (!modeldata.SetTexture(L"2024_2_22_1.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]))throw std::exception();
 
 
         const UINT vertexBufferSize = modeldata.GetVertexBufferSize();
@@ -158,16 +176,7 @@ void DX12Game::LoadAssets()
         m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
     }
 
-    //深度ステンシルバッファの作成
-    {
-        D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
-        heapDesc.NumDescriptors = 24;
-        heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-        heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-        if (!DescriptorPool::Create(m_device.Get(), &heapDesc, &m_pPool[POOL_TYPE_DSV]))throw std::exception();
-
-        if (!m_DSBuffer.Init(m_device.Get(), m_pPool[POOL_TYPE_DSV], m_width, m_height))throw std::exception();
-    }
+   
 
     //定数バッファの作成
     {
@@ -206,10 +215,38 @@ void DX12Game::LoadAssets()
 
 }
 
+
+void DX12Game::LoadSizeDependentResources()
+{
+    UpdateViewAndScissor();
+
+    // Create frame resources.
+    {
+        // Create a RTV for each frame.
+        for (UINT n = 0; n < FrameCount; n++)
+        {
+            m_RenderTargetView[n].OnSizeChanged(m_device.Get(),m_swapChain.Get());
+        }
+
+        //DSV作成
+        //m_DSBuffer.OnSizeChanged(m_device.Get(), m_width, m_height);
+    }
+
+    // This is where you would create/resize intermediate render targets, depth stencils, or other resources
+    // dependent on the window size.
+}
+
+
 void DX12Game::OnDestroy()
 {
 
     WaitForGpu();
+
+    if (!m_tearingSupport)
+    {
+        // Fullscreen state should always be false before exiting the app.
+        ThrowIfFailed(m_swapChain->SetFullscreenState(FALSE, nullptr));
+    }
 
     CloseHandle(m_fenceEvent);
 }
@@ -237,6 +274,43 @@ void DX12Game::OnRender()
     ThrowIfFailed(m_swapChain->Present(1, 0));
 
     MoveToNextFrame();
+}
+
+void DX12Game::OnSizeChanged(UINT width, UINT height, bool minimized)
+{
+    // Determine if the swap buffers and other resources need to be resized or not.
+    if ((width != m_width || height != m_height) && !minimized)
+    {
+        // Flush all current GPU commands.
+        WaitForGpu();
+
+        // Release the resources holding references to the swap chain (requirement of
+        // IDXGISwapChain::ResizeBuffers) and reset the frame fence values to the
+        // current fence value.
+        for (UINT n = 0; n < FrameCount; n++)
+        {
+            m_fenceValue[n] = m_fenceValue[m_frameIndex];
+        }
+
+        // Resize the swap chain to the desired dimensions.
+        DXGI_SWAP_CHAIN_DESC desc = {};
+        m_swapChain->GetDesc(&desc);
+        ThrowIfFailed(m_swapChain->ResizeBuffers(FrameCount, width, height, desc.BufferDesc.Format, desc.Flags));
+
+        BOOL fullscreenState;
+        ThrowIfFailed(m_swapChain->GetFullscreenState(&fullscreenState, nullptr));
+        m_windowedMode = !fullscreenState;
+
+        // Reset the frame index to the current back buffer index.
+        m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+
+        // Update the width, height, and aspect ratio member variables.
+        UpdateForSizeChange(width, height);
+
+        LoadSizeDependentResources();
+    }
+
+    m_windowVisible = !minimized;
 }
 
 
@@ -283,4 +357,17 @@ void DX12Game::PopulateCommandList()
     m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetView[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
     ThrowIfFailed(m_commandList->Close());
+}
+
+void DX12Game::UpdateViewAndScissor()
+{
+    m_viewport.TopLeftX = 0.0f;
+    m_viewport.TopLeftY = 0.0f;
+    m_viewport.Width = static_cast<float>(m_width);
+    m_viewport.Height = static_cast<float>(m_height);
+
+    m_scissorRect.left = 0;
+    m_scissorRect.top = 0;
+    m_scissorRect.right = static_cast<LONG>(m_width);
+    m_scissorRect.bottom = static_cast<LONG>(m_height);
 }

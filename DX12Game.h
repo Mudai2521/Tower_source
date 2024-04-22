@@ -11,6 +11,7 @@ public:
 	virtual void OnUpdate();
 	virtual void OnRender();
 	virtual void OnDestroy();
+	void OnSizeChanged(UINT width, UINT height, bool minimized);
 
 	ID3D12GraphicsCommandList* GetCommandList() { return m_commandList.Get(); }
 private:
@@ -26,6 +27,11 @@ private:
 
 	float RotateTest = 0.0f;
 
+	bool m_windowVisible = true;
+	bool m_windowedMode = true;
+
 	void PopulateCommandList();
 	void LoadAssets();
+	void LoadSizeDependentResources();
+	void UpdateViewAndScissor();
 };

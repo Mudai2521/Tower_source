@@ -7,11 +7,13 @@ RenderTargetView::RenderTargetView():
 	rtvIndex(0)
 {
 }
+
 RenderTargetView::~RenderTargetView()
 {
 	Term();
 }
-bool RenderTargetView::Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGISwapChain3* pSwapChain, ID3D12CommandAllocator* pCommandAllocator, UINT Index)
+
+bool RenderTargetView::Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGISwapChain3* pSwapChain, UINT Index)
 {
 	rtvIndex = Index;
 
@@ -22,8 +24,19 @@ bool RenderTargetView::Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGIS
 	m_pHandle = m_pPool->AllocHandle();
 	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), nullptr, m_pHandle->HandleCPU);
 
+	NAME_D3D12_OBJECT(m_pRenderTargetView, Index);
+
 	return true;
 }
+
+void RenderTargetView::OnSizeChanged(ID3D12Device* pDevice, IDXGISwapChain3* pSwapChain)
+{
+	//m_pRenderTargetView.Reset();
+	ThrowIfFailed(pSwapChain->GetBuffer(rtvIndex, IID_PPV_ARGS(&m_pRenderTargetView)));
+
+	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), nullptr, m_pHandle->HandleCPU);
+}
+
 void RenderTargetView::Term()
 {
 	m_pRenderTargetView.Reset();

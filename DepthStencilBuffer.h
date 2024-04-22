@@ -9,6 +9,7 @@ public:
 	DepthStencilBuffer();
 	~DepthStencilBuffer();
 	bool Init(ID3D12Device* pDevice,DescriptorPool *pPool,UINT width,UINT height);
+	void OnSizeChanged(ID3D12Device* pDevice, UINT width, UINT height);
 	void Term();
 	CD3DX12_CPU_DESCRIPTOR_HANDLE GetHandleCPU() const;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GetHandleGPU() const;

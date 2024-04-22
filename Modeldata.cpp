@@ -52,7 +52,7 @@ Mesh::~Mesh()
 	Term();
 }
 
-bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool)
+bool Mesh::SetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool)
 {
 	if (!SearchFilePath(path.c_str(), path))return false;
 	ResourceUploadBatch batch(pDevice);
@@ -66,8 +66,10 @@ bool Mesh::GetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 
 
 
-bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool)
+bool Mesh::Init(std::wstring path)
 {
+	if (m_Isvalid == true)return false;
+
 	if (SearchFilePath(path.c_str(), path))
 	{
 		if (LoadMesh(path.c_str(), m_Meshdata, m_Material))
@@ -86,10 +88,6 @@ bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQ
 		return false;
 	}
 
-	
-
-	if (!GetTexture(L"2024_2_22_1.dds", pDevice, pQueue,pPool)) return false;
-	
 	m_Isvalid = true;
 	return true;
 }

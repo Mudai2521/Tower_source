@@ -37,6 +37,10 @@ public:
 
 protected:
     static const UINT FrameCount = 2;
+    static const float QuadWidth;
+    static const float QuadHeight;
+    static const float LetterboxColor[4];
+    static const float ClearColor[4];
 
     enum POOL_TYPE
     {
@@ -46,6 +50,16 @@ protected:
         POOL_TYPE_DSV = 3,     // DSV
         POOL_COUNT = 4,
     };
+
+    struct Resolution
+    {
+        UINT Width;
+        UINT Height;
+    };
+
+    static const Resolution m_resolutionOptions[];
+    static const UINT m_resolutionOptionsCount;
+    static UINT m_resolutionIndex; // Index of the current scene rendering resolution from m_resolutionOptions.
 
     // Root assets path.
     std::wstring m_assetsPath;
@@ -91,8 +105,14 @@ protected:
     ComPtr<ID3D12Fence> m_fence;
     UINT64 m_fenceValue[FrameCount];
 
+    RECT m_windowBounds;
+    bool m_tearingSupport;
+
     void LoadPipeline();
     void WaitForGpu();
     void MoveToNextFrame();
+    void UpdateForSizeChange(UINT clientWidth, UINT clientHeight);
+    void CheckTearingSupport();
+    void SetWindowBounds(int left, int top, int right, int bottom);
 };
 

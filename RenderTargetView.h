@@ -9,7 +9,8 @@ class RenderTargetView
 public:
 	RenderTargetView();
 	~RenderTargetView();
-	bool Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGISwapChain3* pSwapChain, ID3D12CommandAllocator* pCommandAllocator, UINT Index);
+	bool Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGISwapChain3* pSwapChain, UINT Index);
+	void OnSizeChanged(ID3D12Device* pDevice, IDXGISwapChain3* pSwapChain);
 	void Term();
 	ID3D12Resource* Get() const;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE GetHandleCPU() const;

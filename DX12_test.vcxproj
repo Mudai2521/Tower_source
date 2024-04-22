@@ -149,6 +149,7 @@
     <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="DX12Game.cpp" />
     <ClCompile Include="FileUtil.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeldata.cpp" />
     <ClCompile Include="RenderTargetView.cpp" />
@@ -157,6 +158,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Win32Application.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,10 +169,12 @@
     <ClInclude Include="DX12Game.h" />
     <ClInclude Include="DXHelper.h" />
     <ClInclude Include="FileUtil.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Modeldata.h" />
     <ClInclude Include="RenderTargetView.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="Win32Application.h" />
   </ItemGroup>
   <ItemGroup>

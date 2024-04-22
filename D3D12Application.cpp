@@ -1,5 +1,7 @@
 #include "D3D12Application.h"
 
+
+
 D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
     m_width(width),
     m_height(height),
@@ -13,7 +15,8 @@ D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
     WCHAR assetsPath[512];
     GetAssetsPath(assetsPath, _countof(assetsPath));
     m_assetsPath = assetsPath;
-    m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    UpdateForSizeChange(width, height);
+    CheckTearingSupport();
 }
 
 D3D12Application::~D3D12Application()
@@ -184,7 +187,7 @@ void D3D12Application::LoadPipeline()
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
     swapChainDesc.SampleDesc.Count = 1;
-    swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+    swapChainDesc.Flags = m_tearingSupport ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
 
     ComPtr<IDXGISwapChain1> swapChain;
     ThrowIfFailed(factory->CreateSwapChainForHwnd(
@@ -196,8 +199,12 @@ void D3D12Application::LoadPipeline()
         &swapChain
     ));
 
-    // This app does not support fullscreen transitions.
-    ThrowIfFailed(factory->MakeWindowAssociation(Win32Application::GetHwnd(), DXGI_MWA_NO_ALT_ENTER));
+    if (m_tearingSupport)
+    {
+        // When tearing support is enabled we will handle ALT+Enter key presses in the
+        // window message loop rather than let DXGI handle it by calling SetFullscreenState.
+        factory->MakeWindowAssociation(Win32Application::GetHwnd(), DXGI_MWA_NO_ALT_ENTER);
+    }
 
     ThrowIfFailed(swapChain.As(&m_swapChain));
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
@@ -217,7 +224,7 @@ void D3D12Application::LoadPipeline()
         cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
         if (!DescriptorPool::Create(m_device.Get(), &cbvHeapDesc, &m_pPool[POOL_TYPE_RES]))throw std::exception();
-        //ThrowIfFailed(m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_cbv_srv_uav_Heap)));
+        
     }
 
     // Create frame resources.
@@ -225,7 +232,7 @@ void D3D12Application::LoadPipeline()
         // Create a RTV for each frame.
         for (UINT n = 0; n < FrameCount; n++)
         {
-            m_RenderTargetView[n].Init(m_device.Get(), m_pPool[POOL_TYPE_RTV], m_swapChain.Get(), m_commandAllocator[n].Get(), n);
+            if (!m_RenderTargetView[n].Init(m_device.Get(), m_pPool[POOL_TYPE_RTV], m_swapChain.Get(), n))throw std::exception();
             ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
         }
     }
@@ -270,3 +277,37 @@ void D3D12Application::MoveToNextFrame()
     // Set the fence value for the next frame.
     m_fenceValue[m_frameIndex] = currentFenceValue + 1;
 }
+
+void D3D12Application::UpdateForSizeChange(UINT clientWidth, UINT clientHeight)
+{
+    m_width = clientWidth;
+    m_height = clientHeight;
+    m_aspectRatio = static_cast<float>(clientWidth) / static_cast<float>(clientHeight);
+}
+
+void D3D12Application::CheckTearingSupport()
+{
+#ifndef PIXSUPPORT
+    ComPtr<IDXGIFactory6> factory;
+    HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
+    BOOL allowTearing = FALSE;
+    if (SUCCEEDED(hr))
+    {
+        hr = factory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
+    }
+
+    m_tearingSupport = SUCCEEDED(hr) && allowTearing;
+#else
+    m_tearingSupport = TRUE;
+#endif
+}
+
+void D3D12Application::SetWindowBounds(int left, int top, int right, int bottom)
+{
+    m_windowBounds.left = static_cast<LONG>(left);
+    m_windowBounds.top = static_cast<LONG>(top);
+    m_windowBounds.right = static_cast<LONG>(right);
+    m_windowBounds.bottom = static_cast<LONG>(bottom);
+}
+
+
