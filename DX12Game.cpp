@@ -129,7 +129,7 @@ void DX12Game::LoadAssets()
     // Create the vertex buffer.
     {
         if (!modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get()))throw std::exception();
-        if (!modeldata.SetTexture(L"2024_2_22_1.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]))throw std::exception();
+        if (!modeldata.SetTexture(L"2024_03_29_3.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]))throw std::exception();
 
 
         //const UINT vertexBufferSize = modeldata.GetVertexBufferSize();

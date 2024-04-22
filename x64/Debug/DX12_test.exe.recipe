@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe</FullPath>
+      <FullPath>C:\Users\inaka\source\repos\DX12_test\DX12_test\Debug\DX12_test.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\shaders.hlsl</FullPath>
+      <FullPath>C:\Users\inaka\source\repos\DX12_test\DX12_test\shaders.hlsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\shaders.hlsl</FullPath>
+      <FullPath>C:\Users\inaka\source\repos\DX12_test\DX12_test\Debug\shaders.hlsl</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
