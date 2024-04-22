@@ -1,6 +1,6 @@
 #include "DX12Game.h"
 
-
+using namespace DirectX;
 
 void DX12Game::OnInit()
 {
@@ -128,52 +128,52 @@ void DX12Game::LoadAssets()
    
     // Create the vertex buffer.
     {
-        if (!modeldata.Init(L"DX12_test\\Untitled.fbx"))throw std::exception();
+        if (!modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get()))throw std::exception();
         if (!modeldata.SetTexture(L"2024_2_22_1.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]))throw std::exception();
 
 
-        const UINT vertexBufferSize = modeldata.GetVertexBufferSize();
-        const UINT indexBufferSize = modeldata.GetIndexBufferSize();
+        //const UINT vertexBufferSize = modeldata.GetVertexBufferSize();
+        //const UINT indexBufferSize = modeldata.GetIndexBufferSize();
 
 
-        ThrowIfFailed(m_device->CreateCommittedResource(
-            &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-            D3D12_HEAP_FLAG_NONE,
-            &CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
-            D3D12_RESOURCE_STATE_GENERIC_READ,
-            nullptr,
-            IID_PPV_ARGS(&m_vertexBuffer)));
+        //ThrowIfFailed(m_device->CreateCommittedResource(
+        //    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+        //    D3D12_HEAP_FLAG_NONE,
+        //    &CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
+        //    D3D12_RESOURCE_STATE_GENERIC_READ,
+        //    nullptr,
+        //    IID_PPV_ARGS(&m_vertexBuffer)));
 
-        ThrowIfFailed(m_device->CreateCommittedResource(
-            &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-            D3D12_HEAP_FLAG_NONE,
-            &CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize),
-            D3D12_RESOURCE_STATE_GENERIC_READ,
-            nullptr,
-            IID_PPV_ARGS(&m_indexBuffer)));
+        //ThrowIfFailed(m_device->CreateCommittedResource(
+        //    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+        //    D3D12_HEAP_FLAG_NONE,
+        //    &CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize),
+        //    D3D12_RESOURCE_STATE_GENERIC_READ,
+        //    nullptr,
+        //    IID_PPV_ARGS(&m_indexBuffer)));
 
-        // Copy the triangle data to the vertex buffer.
-        Vertex* pVertexDataBegin;
-        UINT* pIndexDataBegin;
-        CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
-        ThrowIfFailed(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
+        //// Copy the triangle data to the vertex buffer.
+        //Vertex* pVertexDataBegin;
+        //UINT* pIndexDataBegin;
+        //CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+        //ThrowIfFailed(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
 
-        ThrowIfFailed(m_indexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pIndexDataBegin)));
+        //ThrowIfFailed(m_indexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pIndexDataBegin)));
 
-        modeldata.CopyVertices(pVertexDataBegin);
-        modeldata.CopyIndex(pIndexDataBegin);
+        //modeldata.CopyVertices(pVertexDataBegin);
+        //modeldata.CopyIndex(pIndexDataBegin);
 
-        m_vertexBuffer->Unmap(0, nullptr);
-        m_indexBuffer->Unmap(0, nullptr);
+        //m_vertexBuffer->Unmap(0, nullptr);
+        //m_indexBuffer->Unmap(0, nullptr);
 
-        // Initialize the vertex buffer view.
-        m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
-        m_vertexBufferView.StrideInBytes = sizeof(Vertex);
-        m_vertexBufferView.SizeInBytes = vertexBufferSize;
+        //// Initialize the vertex buffer view.
+        //m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
+        //m_vertexBufferView.StrideInBytes = sizeof(Vertex);
+        //m_vertexBufferView.SizeInBytes = vertexBufferSize;
 
-        m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
-        m_indexBufferView.SizeInBytes = indexBufferSize;
-        m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+        //m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
+        //m_indexBufferView.SizeInBytes = indexBufferSize;
+        //m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
     }
 
    
@@ -346,10 +346,8 @@ void DX12Game::PopulateCommandList()
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
     m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-    m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
-    m_commandList->IASetIndexBuffer(&m_indexBufferView);
-    m_commandList->DrawIndexedInstanced(modeldata.GetIndexCount(), 1, 0, 0, 0);
+
+    modeldata.Draw(m_commandList.Get());
 
 
 

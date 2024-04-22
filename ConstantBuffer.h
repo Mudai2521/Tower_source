@@ -4,15 +4,15 @@
 #include "DescriptorPool.h"
 #include "DXHelper.h"
 
-using namespace DirectX;
+
 
 using Microsoft::WRL::ComPtr;
 
 struct Transform
 {
-    XMMATRIX World; // ワールド行列
-    XMMATRIX View; // ビュー行列
-    XMMATRIX Proj; // 投影行列
+    DirectX::XMMATRIX World; // ワールド行列
+    DirectX::XMMATRIX View; // ビュー行列
+    DirectX::XMMATRIX Proj; // 投影行列
     float padding[16]; // Padding so the constant buffer is 256-byte aligned.
 };
 static_assert((sizeof(Transform) % 256) == 0, "Constant Buffer size must be 256-byte aligned");
@@ -47,7 +47,7 @@ public:
         return reinterpret_cast<T*>(GetPtr());
     }
 
-    void SetTransform(XMMATRIX World, XMMATRIX View, XMMATRIX Proj)
+    void SetTransform(DirectX::XMMATRIX World, DirectX::XMMATRIX View, DirectX::XMMATRIX Proj)
     {
         m_ConstantBufferData.World = World;
         m_ConstantBufferData.View = View;
@@ -55,7 +55,7 @@ public:
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
 
-    void SetWorldMatrix(XMMATRIX World)
+    void SetWorldMatrix(DirectX::XMMATRIX World)
     {
         m_ConstantBufferData.World *= World;
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));

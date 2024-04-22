@@ -17,7 +17,7 @@ bool Texture::Init
     ID3D12Device* pDevice,
     DescriptorPool* pPool,
     const wchar_t* filename,
-    ResourceUploadBatch& batch
+    DirectX::ResourceUploadBatch& batch
 )
 {
     // 引数チェック.

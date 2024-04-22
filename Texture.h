@@ -8,7 +8,7 @@
 #include "DescriptorPool.h"
 #include "DXHelper.h"
 
-using namespace DirectX;
+
 
 class Texture 
 {
@@ -20,7 +20,7 @@ public:
         ID3D12Device* pDevice,
         DescriptorPool* pPool,
         const wchar_t* filename,
-        ResourceUploadBatch& batch);
+        DirectX::ResourceUploadBatch& batch);
 
     bool Init(
         ID3D12Device* pDevice,

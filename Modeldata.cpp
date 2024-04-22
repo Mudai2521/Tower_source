@@ -1,5 +1,7 @@
 #include "Modeldata.h"
 
+using namespace DirectX;
+
 std::string ToUTF8(const std::wstring& value)
 {
 	auto length = WideCharToMultiByte(
@@ -66,7 +68,7 @@ bool Mesh::SetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 
 
 
-bool Mesh::Init(std::wstring path)
+bool Mesh::Init(std::wstring path, ID3D12Device* pDevice)
 {
 	if (m_Isvalid == true)return false;
 
@@ -88,6 +90,23 @@ bool Mesh::Init(std::wstring path)
 		return false;
 	}
 
+	if (pDevice == nullptr)
+	{
+		return false;
+	}
+
+	if (!m_VB.Init(
+		pDevice, VertexBufferSize, m_Meshdata[0].Vertices.data()))
+	{
+		return false;
+	}
+
+	if (!m_IB.Init(
+		pDevice, IndexBufferSize, m_Meshdata[0].Index.data()))
+	{
+		return false;
+	}
+
 	m_Isvalid = true;
 	return true;
 }
@@ -102,6 +121,16 @@ void Mesh::CopyIndex(UINT* pIndexDataBegin)
 {
 	std::copy(std::begin(m_Meshdata[0].Index), std::end(m_Meshdata[0].Index), pIndexDataBegin);
 	return;
+}
+
+void Mesh::Draw(ID3D12GraphicsCommandList* pCmdList)
+{
+	auto VBV = m_VB.GetView();
+	auto IBV = m_IB.GetView();
+	pCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	pCmdList->IASetVertexBuffers(0, 1, &VBV);
+	pCmdList->IASetIndexBuffer(&IBV);
+	pCmdList->DrawIndexedInstanced(IndexCount, 1, 0, 0, 0);
 }
 
 bool Mesh::Isvalid() 

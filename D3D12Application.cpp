@@ -1,6 +1,6 @@
 #include "D3D12Application.h"
 
-
+using namespace DirectX;
 
 D3D12Application::D3D12Application(UINT width, UINT height, std::wstring name) :
     m_width(width),

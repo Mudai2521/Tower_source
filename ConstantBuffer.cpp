@@ -1,5 +1,7 @@
 #include "ConstantBuffer.h"
 
+using namespace DirectX;
+
 ConstantBuffer::ConstantBuffer()
 	: m_pCB(nullptr)
 	, m_pHandle(nullptr)

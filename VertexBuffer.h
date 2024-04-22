@@ -1,10 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "D3D12Application.h"
 
-using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
+
 
 class VertexBuffer
 {

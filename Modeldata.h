@@ -1,5 +1,7 @@
 #pragma once
 #define NOMINMAX
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include "stdafx.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -8,34 +10,30 @@
 #include <cassert>
 #include "FileUtil.h"
 #include "ResourceUploadBatch.h"    
-#include "DDSTextureLoader.h"       
-#include "VertexTypes.h"  
+#include "DDSTextureLoader.h"  
 #include "DXHelper.h"
 #include "DescriptorPool.h"
 #include "Texture.h"
 
 #pragma comment( lib, "dxguid.lib" )
 
-
-using namespace DirectX;
-using namespace std;
-
-
+class MeshVertexBuffer;
+class MeshIndexBuffer;
 
 struct Vertex
 {
-    XMFLOAT3 position;
-    XMFLOAT3 normal;
-    XMFLOAT2 uv;
-    XMFLOAT3 tangent;
-    XMFLOAT4 color;
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 normal;
+    DirectX::XMFLOAT2 uv;
+    DirectX::XMFLOAT3 tangent;
+    DirectX::XMFLOAT4 color;
 
     Vertex() = default;
-    Vertex(XMFLOAT3 const& position,
-        XMFLOAT3 const& normal,
-        XMFLOAT2 const& uv,
-        XMFLOAT3 const& tangent,
-        XMFLOAT4 const& color)
+    Vertex(DirectX::XMFLOAT3 const& position,
+        DirectX::XMFLOAT3 const& normal,
+        DirectX::XMFLOAT2 const& uv,
+        DirectX::XMFLOAT3 const& tangent,
+        DirectX::XMFLOAT4 const& color)
         : position(position)
         , normal(normal)
         , uv(uv)
@@ -46,18 +44,18 @@ struct Vertex
 
 struct Material 
 {
-    XMFLOAT3 Diffuse;
-    XMFLOAT3 Specular;
+    DirectX::XMFLOAT3 Diffuse;
+    DirectX::XMFLOAT3 Specular;
     float Alpha;
     float Shininess;
-    string DiffuseMap;
+    std::string DiffuseMap;
 };
 
 class MeshData
 {
 public:
-    vector<Vertex> Vertices;
-    vector<UINT> Index;
+    std::vector<Vertex> Vertices;
+    std::vector<UINT> Index;
     uint32_t MaterialId;
 private:
 };
@@ -74,7 +72,7 @@ class Mesh
 public:
     Mesh();
 	~Mesh();
-    bool Init(std::wstring path);
+    bool Init(std::wstring path, ID3D12Device* pDevice);
     bool SetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool);
     UINT GetVertexBufferSize() { return VertexBufferSize; };
     UINT GetIndexBufferSize() { return IndexBufferSize; };
@@ -83,8 +81,8 @@ public:
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.GetHandleGPU(); };
     void CopyVertices(Vertex* pVertexDataBegin);
     void CopyIndex(UINT* pIndexDataBegin);
-    Mesh(const Mesh&) = delete;
-    Mesh& operator=(const Mesh&) = delete;
+    void Draw(ID3D12GraphicsCommandList* pCmdList);
+    
     bool Isvalid();
 private:
     
@@ -93,12 +91,17 @@ private:
     std::vector <Material> m_Material;
     Texture m_Texture;
    
+    VertexBuffer m_VB;
+    IndexBuffer m_IB;
     UINT VertexBufferSize;
     UINT IndexBufferSize;
     UINT IndexCount;
 
     
     void Term();
+
+    Mesh(const Mesh&) = delete;
+    Mesh& operator=(const Mesh&) = delete;
 };
 
 class ModelLoader

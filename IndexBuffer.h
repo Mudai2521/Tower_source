@@ -1,15 +1,13 @@
 #pragma once
 
-//-----------------------------------------------------------------------------
-// Includes
-//-----------------------------------------------------------------------------
-#include <d3d12.h>
 #include <cstdint>
 #include "stdafx.h"
 
-using namespace DirectX;
+
+
 
 using Microsoft::WRL::ComPtr;
+
 
 
 class IndexBuffer

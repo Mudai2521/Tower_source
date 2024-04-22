@@ -10,7 +10,7 @@
 #include "RenderTargetView.h"
 #include <stdexcept>
 
-using namespace DirectX;
+
 
 using Microsoft::WRL::ComPtr;
 

@@ -1,7 +1,42 @@
-﻿  main.cpp
-  コード生成しています。
-  6 of 790 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  コード生成が終了しました。
-  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Release\DX12_test.exe
+﻿  Performing Custom Build Tools
+  stdafx.cpp
+  ConstantBuffer.cpp
+  D3D12Application.cpp
+  DepthStencilBuffer.cpp
+  DescriptorPool.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
+  (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
+  
+  DX12Game.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(46,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+  
+  FileUtil.cpp
+  IndexBuffer.cpp
+  main.cpp
+  Modeldata.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(77,53): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(78,49): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(79,41): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+  
+  RenderTargetView.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\RenderTargetView.cpp(27,2): warning C4002: 関数に似たマクロ呼び出し 'NAME_D3D12_OBJECT' の引数が多すぎます
+  (ソース ファイル '/RenderTargetView.cpp' をコンパイルしています)
+  
+  Texture.cpp
+  VertexBuffer.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.h(94,17): error C2143: 構文エラー: ';' が '*' の前にありません。
+  (ソース ファイル '/VertexBuffer.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.h(94,17): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+  (ソース ファイル '/VertexBuffer.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.h(94,23): error C2238: ';' の前に無効なトークンがあります。
+  (ソース ファイル '/VertexBuffer.cpp' をコンパイルしています)
+  
+  Win32Application.cpp
