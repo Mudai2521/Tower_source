@@ -56,6 +56,11 @@ Mesh::~Mesh()
 
 bool Mesh::SetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool)
 {
+	if (pDevice == nullptr)
+	{
+		return false;
+	}
+
 	if (!SearchFilePath(path.c_str(), path))return false;
 	ResourceUploadBatch batch(pDevice);
 	batch.Begin();
@@ -111,17 +116,6 @@ bool Mesh::Init(std::wstring path, ID3D12Device* pDevice)
 	return true;
 }
 
-void Mesh::CopyVertices(Vertex* pVertexDataBegin)
-{
-	std::copy(std::begin(m_Meshdata[0].Vertices), std::end(m_Meshdata[0].Vertices), pVertexDataBegin);
-	return;
-}
-
-void Mesh::CopyIndex(UINT* pIndexDataBegin)
-{
-	std::copy(std::begin(m_Meshdata[0].Index), std::end(m_Meshdata[0].Index), pIndexDataBegin);
-	return;
-}
 
 void Mesh::Draw(ID3D12GraphicsCommandList* pCmdList)
 {

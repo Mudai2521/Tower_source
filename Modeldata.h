@@ -79,8 +79,6 @@ public:
     UINT GetIndexCount() { return IndexCount; };
     CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.GetHandleCPU(); };
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.GetHandleGPU(); };
-    void CopyVertices(Vertex* pVertexDataBegin);
-    void CopyIndex(UINT* pIndexDataBegin);
     void Draw(ID3D12GraphicsCommandList* pCmdList);
     
     bool Isvalid();
