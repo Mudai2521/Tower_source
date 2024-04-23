@@ -1,2 +1,5 @@
-﻿  Sprite.cpp
-  DX12_test.vcxproj -> C:\Users\inaka\source\repos\DX12_test\DX12_test\Debug\DX12_test.exe
+﻿  DX12Game.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(46,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+  
+  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

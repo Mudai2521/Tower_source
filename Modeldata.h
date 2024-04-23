@@ -14,6 +14,7 @@
 #include "DXHelper.h"
 #include "DescriptorPool.h"
 #include "Texture.h"
+#include "ConstantBuffer.h"
 
 #pragma comment( lib, "dxguid.lib" )
 
@@ -72,15 +73,11 @@ class Mesh
 public:
     Mesh();
 	~Mesh();
-    bool Init(std::wstring path, ID3D12Device* pDevice);
+    bool Init(std::wstring path, ID3D12Device* pDevice, DescriptorPool* pPool, float aspectRatio);
     bool SetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool);
-    UINT GetVertexBufferSize() { return VertexBufferSize; };
-    UINT GetIndexBufferSize() { return IndexBufferSize; };
-    UINT GetIndexCount() { return IndexCount; };
     CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.GetHandleCPU(); };
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.GetHandleGPU(); };
     void Draw(ID3D12GraphicsCommandList* pCmdList);
-    
     bool Isvalid();
 private:
     
@@ -88,6 +85,7 @@ private:
     std::vector <MeshData> m_Meshdata;
     std::vector <Material> m_Material;
     Texture m_Texture;
+    ConstantBuffer m_CBuffer;
    
     VertexBuffer m_VB;
     IndexBuffer m_IB;

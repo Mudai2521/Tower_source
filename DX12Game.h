@@ -12,6 +12,7 @@ public:
 	virtual void OnRender();
 	virtual void OnDestroy();
 	void OnSizeChanged(UINT width, UINT height, bool minimized);
+	virtual void OnKeyDown(UINT8 key);
 
 	ID3D12GraphicsCommandList* GetCommandList() { return m_commandList.Get(); }
 private:
@@ -21,11 +22,12 @@ private:
 	ComPtr<ID3D12Resource> m_indexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
-	ConstantBuffer m_CBuffer[FrameCount];
 
 	Mesh modeldata;
+	Sprite m_spritedata;
 
 	float RotateTest = 0.0f;
+	float RotateTest_Move = 0.01f;
 
 	bool m_windowVisible = true;
 	bool m_windowedMode = true;

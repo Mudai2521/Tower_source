@@ -176,7 +176,7 @@ LRESULT CALLBACK Win32Application::WindowProc(HWND hWnd, UINT message, WPARAM wP
     case WM_KEYDOWN:
         if (pApp)
         {
-            //pApp->OnKeyDown(static_cast<UINT8>(wParam));
+            pApp->OnKeyDown(static_cast<UINT8>(wParam));
         }
         return 0;
 

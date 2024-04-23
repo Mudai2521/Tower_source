@@ -115,6 +115,9 @@
     <CustomBuild Include="shaders.hlsl">
       <Filter>リソース ファイル\Shaders</Filter>
     </CustomBuild>
+    <CustomBuild Include="SpriteShader.hlsl">
+      <Filter>リソース ファイル\Shaders</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

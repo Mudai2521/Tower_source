@@ -73,7 +73,7 @@ bool Mesh::SetTexture(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQue
 
 
 
-bool Mesh::Init(std::wstring path, ID3D12Device* pDevice)
+bool Mesh::Init(std::wstring path, ID3D12Device* pDevice, DescriptorPool* pPool,float aspectRatio)
 {
 	if (m_Isvalid == true)return false;
 
@@ -100,6 +100,16 @@ bool Mesh::Init(std::wstring path, ID3D12Device* pDevice)
 		return false;
 	}
 
+	XMVECTOR eyePos = XMVectorSet(0, 0, 10.0f, 0.0f); // 視点の位置
+	XMVECTOR targetPos = XMVectorZero(); // 視点を向ける座標
+	XMVECTOR upward = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // 上方向を表すベクトル
+	constexpr float fov = XMConvertToRadians(90); // 視野角
+
+	m_CBuffer.Init(pDevice, pPool);
+	m_CBuffer.SetTransform(XMMatrixIdentity(),
+		XMMatrixLookAtRH(eyePos, targetPos, upward),
+		XMMatrixPerspectiveFovRH(fov, aspectRatio, 0.3f, 1000.0f));
+
 	if (!m_VB.Init(
 		pDevice, VertexBufferSize, m_Meshdata[0].Vertices.data()))
 	{
@@ -121,6 +131,7 @@ void Mesh::Draw(ID3D12GraphicsCommandList* pCmdList)
 {
 	auto VBV = m_VB.GetView();
 	auto IBV = m_IB.GetView();
+	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer.GetAddress());
 	pCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	pCmdList->IASetVertexBuffers(0, 1, &VBV);
 	pCmdList->IASetIndexBuffer(&IBV);

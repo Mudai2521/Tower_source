@@ -76,16 +76,14 @@ void DX12Game::LoadAssets()
         UINT compileFlags = 0;
 #endif
 
-        ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr));
-        ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr));
+        ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"SpriteShader.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr));
+        ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"SpriteShader.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr));
 
         // Define the vertex input layout.
         D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
         {
             { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-            { "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
             { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-            { "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
             { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
         };
 
@@ -128,73 +126,15 @@ void DX12Game::LoadAssets()
    
     // Create the vertex buffer.
     {
-        if (!modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get()))throw std::exception();
+        if (!modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_pPool[POOL_TYPE_RES],m_aspectRatio))throw std::exception();
         if (!modeldata.SetTexture(L"2024_03_29_3.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]))throw std::exception();
-
-
-        //const UINT vertexBufferSize = modeldata.GetVertexBufferSize();
-        //const UINT indexBufferSize = modeldata.GetIndexBufferSize();
-
-
-        //ThrowIfFailed(m_device->CreateCommittedResource(
-        //    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-        //    D3D12_HEAP_FLAG_NONE,
-        //    &CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
-        //    D3D12_RESOURCE_STATE_GENERIC_READ,
-        //    nullptr,
-        //    IID_PPV_ARGS(&m_vertexBuffer)));
-
-        //ThrowIfFailed(m_device->CreateCommittedResource(
-        //    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-        //    D3D12_HEAP_FLAG_NONE,
-        //    &CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize),
-        //    D3D12_RESOURCE_STATE_GENERIC_READ,
-        //    nullptr,
-        //    IID_PPV_ARGS(&m_indexBuffer)));
-
-        //// Copy the triangle data to the vertex buffer.
-        //Vertex* pVertexDataBegin;
-        //UINT* pIndexDataBegin;
-        //CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
-        //ThrowIfFailed(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-
-        //ThrowIfFailed(m_indexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pIndexDataBegin)));
-
-        //modeldata.CopyVertices(pVertexDataBegin);
-        //modeldata.CopyIndex(pIndexDataBegin);
-
-        //m_vertexBuffer->Unmap(0, nullptr);
-        //m_indexBuffer->Unmap(0, nullptr);
-
-        //// Initialize the vertex buffer view.
-        //m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
-        //m_vertexBufferView.StrideInBytes = sizeof(Vertex);
-        //m_vertexBufferView.SizeInBytes = vertexBufferSize;
-
-        //m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
-        //m_indexBufferView.SizeInBytes = indexBufferSize;
-        //m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+        if(!m_spritedata.Init(L"2024_03_29_3.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES],m_width,m_height))throw std::exception();
     }
 
    
 
     //定数バッファの作成
-    {
-        const UINT constantBufferSize = sizeof(Transform);    // CB size is required to be 256-byte aligned.
-
-        XMVECTOR eyePos = XMVectorSet(700.0f, 0.0f, 700.0f, 0.0f); // 視点の位置
-        XMVECTOR targetPos = XMVectorZero(); // 視点を向ける座標
-        XMVECTOR upward = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // 上方向を表すベクトル
-        constexpr float fov = XMConvertToRadians(37.5); // 視野角
-
-        for (UINT i = 0; i < FrameCount; i++)
-        {
-            m_CBuffer[i].Init(m_device.Get(), m_pPool[POOL_TYPE_RES]);
-            m_CBuffer[i].SetTransform(XMMatrixIdentity(),
-                XMMatrixLookAtRH(eyePos, targetPos, upward),
-                XMMatrixPerspectiveFovRH(fov, m_aspectRatio, 0.3f, 1000.0f));
-        }
-    }
+   
 
     // Create synchronization objects and wait until assets have been uploaded to the GPU.
     {
@@ -254,11 +194,12 @@ void DX12Game::OnDestroy()
 //フレーム毎の更新処理
 void DX12Game::OnUpdate()
 {
-    RotateTest += (RotateTest != 1.0f ? 0.1f : -1.0f);
-    XMMATRIX RotateY = XMMatrixRotationY(RotateTest * XM_PI);
-    XMMATRIX RotateX = XMMatrixRotationX((RotateTest-0.5f) * XM_PI);
-    RotateY *= RotateX;
-    for (int n = 0; n < FrameCount; n++)m_CBuffer[n].SetWorldMatrix(RotateY);
+    RotateTest += RotateTest_Move;
+    if (RotateTest > 1.0f)RotateTest_Move = -RotateTest_Move;
+    if (RotateTest < -1.0f)RotateTest_Move = -RotateTest_Move;
+    XMMATRIX RotateZ = XMMatrixRotationZ(RotateTest * XM_PI);
+    XMMATRIX Trans = XMMatrixTranslation(RotateTest*400, 0.0f, 0.0f);
+    m_spritedata.SetWorldMatrix(RotateZ * Trans);
 }
 
 void DX12Game::OnRender()
@@ -313,6 +254,38 @@ void DX12Game::OnSizeChanged(UINT width, UINT height, bool minimized)
     m_windowVisible = !minimized;
 }
 
+void  DX12Game::OnKeyDown(UINT8 key)
+{
+    switch (key)
+    {
+        // Instrument the Space Bar to toggle between fullscreen states.
+        // The window message loop callback will receive a WM_SIZE message once the
+        // window is in the fullscreen state. At that point, the IDXGISwapChain should
+        // be resized to match the new window size.
+        //
+        // NOTE: ALT+Enter will perform a similar operation; the code below is not
+        // required to enable that key combination.
+    case VK_SPACE:
+    {
+        if (m_tearingSupport)
+        {
+            Win32Application::ToggleFullscreenWindow();
+            LoadSizeDependentResources();
+        }
+        else
+        {
+            BOOL fullscreenState;
+            ThrowIfFailed(m_swapChain->GetFullscreenState(&fullscreenState, nullptr));
+            ThrowIfFailed(m_swapChain->SetFullscreenState(!fullscreenState, nullptr));
+            LoadSizeDependentResources();
+        }
+        break;
+    }
+
+    
+    break;
+    }
+}
 
 void DX12Game::PopulateCommandList()
 {
@@ -330,7 +303,9 @@ void DX12Game::PopulateCommandList()
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
     m_commandList->SetDescriptorHeaps(1, m_pPool[POOL_TYPE_RES]->GetHeapAddress());
     m_commandList->SetPipelineState(m_pipelineState.Get());
-    m_commandList->SetGraphicsRootConstantBufferView(0, m_CBuffer[m_frameIndex].GetAddress());
+
+    
+
     m_commandList->SetGraphicsRootDescriptorTable(1, modeldata.GetGPUHandle());
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
@@ -347,8 +322,8 @@ void DX12Game::PopulateCommandList()
     m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-    modeldata.Draw(m_commandList.Get());
-
+    //modeldata.Draw(m_commandList.Get());
+    m_spritedata.Draw(m_commandList.Get());
 
 
     // Indicate that the back buffer will now be used to present.

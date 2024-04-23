@@ -26,9 +26,7 @@ struct SpriteVertex
 
     SpriteVertex() = default;
     SpriteVertex(DirectX::XMFLOAT3 const& position,
-        DirectX::XMFLOAT3 const& normal,
         DirectX::XMFLOAT2 const& uv,
-        DirectX::XMFLOAT3 const& tangent,
         DirectX::XMFLOAT4 const& color)
         : position(position)
         , uv(uv)
@@ -38,7 +36,7 @@ struct SpriteVertex
 };
 
 
-class MeshData
+class SpriteMeshData
 {
 public:
     std::vector<SpriteVertex> Vertices;
@@ -51,20 +49,18 @@ class Sprite
 public:
     Sprite();
     ~Sprite();
-    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool);
-    UINT GetVertexBufferSize() { return VertexBufferSize; };
-    UINT GetIndexBufferSize() { return IndexBufferSize; };
-    UINT GetIndexCount() { return IndexCount; };
+    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
     CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.GetHandleCPU(); };
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.GetHandleGPU(); };
     void Draw(ID3D12GraphicsCommandList* pCmdList);
-
+    void SetWorldMatrix(DirectX::XMMATRIX World) { m_CBuffer.SetWorldMatrix(World); };
     bool Isvalid();
 private:
 
     bool m_Isvalid = false;
-    MeshData m_Meshdata;
+    SpriteMeshData m_Meshdata;
     Texture m_Texture;
+    ConstantBuffer m_CBuffer;
 
     VertexBuffer m_VB;
     IndexBuffer m_IB;
