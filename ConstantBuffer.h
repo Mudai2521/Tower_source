@@ -55,9 +55,11 @@ public:
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
 
+    
+
     void SetWorldMatrix(DirectX::XMMATRIX World)
     {
-        m_ConstantBufferData.World *= World;
+        m_ConstantBufferData.World = DirectX::XMMatrixIdentity() * World;
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
 

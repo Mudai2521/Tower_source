@@ -9,6 +9,7 @@
 #include "DepthStencilBuffer.h"
 #include "RenderTargetView.h"
 #include "Sprite.h"
+#include "Scene.h"
 #include <stdexcept>
 
 

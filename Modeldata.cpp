@@ -132,6 +132,7 @@ void Mesh::Draw(ID3D12GraphicsCommandList* pCmdList)
 	auto VBV = m_VB.GetView();
 	auto IBV = m_IB.GetView();
 	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer.GetAddress());
+	pCmdList->SetGraphicsRootDescriptorTable(1, GetGPUHandle());
 	pCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	pCmdList->IASetVertexBuffers(0, 1, &VBV);
 	pCmdList->IASetIndexBuffer(&IBV);
@@ -145,6 +146,7 @@ bool Mesh::Isvalid()
 
 void Mesh::Term() 
 {
+	m_Texture.Term();
 }
 
 ModelLoader::ModelLoader() 

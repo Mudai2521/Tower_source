@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Character.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="D3D12Application.cpp" />
     <ClCompile Include="DepthStencilBuffer.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeldata.cpp" />
     <ClCompile Include="RenderTargetView.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -163,6 +165,7 @@
     <ClCompile Include="Win32Application.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Character.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="D3D12Application.h" />
     <ClInclude Include="DepthStencilBuffer.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Modeldata.h" />
     <ClInclude Include="RenderTargetView.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Texture.h" />

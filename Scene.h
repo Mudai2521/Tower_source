@@ -1,13 +1,27 @@
 #pragma once
-#pragma once
+#include "stdafx.h"
+#include "DescriptorPool.h"
+#include "Sprite.h"
 
+//シーン管理クラス
 class Scene
 {
 public:
-	bool Init(); // 初期化
+	Scene();
+	~Scene();
+	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
+	void Term();
+	void DrawSprite(ID3D12GraphicsCommandList* pCmdList);
+	void OnUpdate();
+	void OnKeyDown(UINT8 key);
+private:
+	std::vector<Sprite*> m_spritedata;
 
-	void Update(); // 更新処理
-	void Draw(); // 描画処理
+	UINT m_width;
+	UINT m_height;
+
+	int Moveinput = 0;
+
+	Scene(const  Scene&) = delete;
+	Scene& operator=(const  Scene&) = delete;
 };
-
-extern Scene* g_Scene;

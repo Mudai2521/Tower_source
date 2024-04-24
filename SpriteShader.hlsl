@@ -30,7 +30,6 @@ PSInput VSMain(VSInput input)
     PSInput result;
 
     result.position = input.position;
-    //result.position = mul(Proj, mul(View, mul(World, result.position)));
     result.position = mul(Proj, mul(World, result.position));
     result.color = input.color;
     result.uv = input.uv;

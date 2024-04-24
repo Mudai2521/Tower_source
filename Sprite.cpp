@@ -3,7 +3,9 @@
 using namespace DirectX;
 
 
-Sprite::Sprite()
+Sprite::Sprite():
+	m_Isvalid(false),
+	DefaultSpriteSize(1.0f)
 {
 }
 
@@ -14,6 +16,9 @@ Sprite::~Sprite()
 
 bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool,UINT width,UINT height)
 {
+	m_width = width;
+	m_height = height;
+
 	if (m_Isvalid == true)return false;
 
 	
@@ -33,22 +38,22 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 	m_Meshdata.Vertices.resize(4);
 
 	m_Meshdata.Vertices[0] = SpriteVertex(
-		XMFLOAT3(-200.0f, 200.0f, 0.0f),
+		XMFLOAT3(-DefaultSpriteSize/2, DefaultSpriteSize/2, 0.0f),
 		XMFLOAT2(0.0f, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 	m_Meshdata.Vertices[1] = SpriteVertex(
-		XMFLOAT3(-200.0f, -200.0f, 0.0f),
+		XMFLOAT3(-DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
 		XMFLOAT2(0.0f, 1.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 	m_Meshdata.Vertices[2] = SpriteVertex(
-		XMFLOAT3(200.0f, 200.0f, 0.0f),
+		XMFLOAT3(DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
 		XMFLOAT2(1.0f, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 	m_Meshdata.Vertices[3] = SpriteVertex(
-		XMFLOAT3(200.0f, -200.0f, 0.0f),
+		XMFLOAT3(DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
 		XMFLOAT2(1.0f, 1.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 	);
@@ -60,14 +65,9 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 	IndexBufferSize = m_Meshdata.Index.size() * sizeof(UINT);
 	IndexCount = m_Meshdata.Index.size();
 
-	XMVECTOR eyePos = XMVectorSet(0, 0, 10.0f, 0.0f); // 視点の位置
-	XMVECTOR targetPos = XMVectorZero(); // 視点を向ける座標
-	XMVECTOR upward = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // 上方向を表すベクトル
-	constexpr float fov = XMConvertToRadians(90); // 視野角
-
 	m_CBuffer.Init(pDevice, pPool);
 	m_CBuffer.SetTransform(XMMatrixIdentity(),
-		XMMatrixLookAtRH(eyePos, targetPos, upward),
+		XMMatrixIdentity(),
 		XMMatrixOrthographicRH(width, height, 0, 1));
 
 	if (!m_VB.Init(
@@ -92,11 +92,21 @@ void Sprite::Draw(ID3D12GraphicsCommandList* pCmdList)
 	auto VBV = m_VB.GetView();
 	auto IBV = m_IB.GetView();
 	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer.GetAddress());
+	pCmdList->SetGraphicsRootDescriptorTable(1, GetGPUHandle());
 	pCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	pCmdList->IASetVertexBuffers(0, 1, &VBV);
 	pCmdList->IASetIndexBuffer(&IBV);
 	pCmdList->DrawIndexedInstanced(IndexCount, 1, 0, 0, 0);
 }
+
+//拡縮、回転、移動 スクリーン座標系
+void Sprite::SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans)
+{
+	XMMATRIX World = XMMatrixScaling(Scale.x, Scale.y, 1.0f) *
+		XMMatrixRotationZ(Rotate) *
+		XMMatrixTranslation(Trans.x - m_width / 2, -Trans.y + m_height / 2, 0.0f);
+	m_CBuffer.SetWorldMatrix(World);
+};
 
 bool Sprite::Isvalid()
 {
@@ -105,4 +115,5 @@ bool Sprite::Isvalid()
 
 void Sprite::Term()
 {
+	m_Texture.Term();
 }

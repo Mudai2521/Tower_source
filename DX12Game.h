@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "D3D12Application.h"
 
+
 class DX12Game : public D3D12Application 
 {
 public:
@@ -23,11 +24,10 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
 
-	Mesh modeldata;
-	Sprite m_spritedata;
+	
+	Scene m_Scene;
 
-	float RotateTest = 0.0f;
-	float RotateTest_Move = 0.01f;
+	int Moveinput = 0;
 
 	bool m_windowVisible = true;
 	bool m_windowedMode = true;

@@ -6,6 +6,7 @@ void DX12Game::OnInit()
 {
     LoadPipeline();
     LoadAssets();
+
     if (m_tearingSupport)
     {
         Win32Application::ToggleFullscreenWindow();
@@ -15,6 +16,8 @@ void DX12Game::OnInit()
         ThrowIfFailed(m_swapChain->SetFullscreenState(TRUE, nullptr));
     }
     LoadSizeDependentResources();
+
+    m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 }
 
 // Load the sample assets.
@@ -123,18 +126,6 @@ void DX12Game::LoadAssets()
     // to record yet. The main loop expects it to be closed, so close it now.
     ThrowIfFailed(m_commandList->Close());
 
-   
-    // Create the vertex buffer.
-    {
-        if (!modeldata.Init(L"DX12_test\\Untitled.fbx",m_device.Get(), m_pPool[POOL_TYPE_RES],m_aspectRatio))throw std::exception();
-        if (!modeldata.SetTexture(L"2024_03_29_3.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES]))throw std::exception();
-        if(!m_spritedata.Init(L"2024_03_29_3.dds", m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES],m_width,m_height))throw std::exception();
-    }
-
-   
-
-    //定数バッファの作成
-   
 
     // Create synchronization objects and wait until assets have been uploaded to the GPU.
     {
@@ -194,12 +185,7 @@ void DX12Game::OnDestroy()
 //フレーム毎の更新処理
 void DX12Game::OnUpdate()
 {
-    RotateTest += RotateTest_Move;
-    if (RotateTest > 1.0f)RotateTest_Move = -RotateTest_Move;
-    if (RotateTest < -1.0f)RotateTest_Move = -RotateTest_Move;
-    XMMATRIX RotateZ = XMMatrixRotationZ(RotateTest * XM_PI);
-    XMMATRIX Trans = XMMatrixTranslation(RotateTest*400, 0.0f, 0.0f);
-    m_spritedata.SetWorldMatrix(RotateZ * Trans);
+    m_Scene.OnUpdate();
 }
 
 void DX12Game::OnRender()
@@ -258,13 +244,7 @@ void  DX12Game::OnKeyDown(UINT8 key)
 {
     switch (key)
     {
-        // Instrument the Space Bar to toggle between fullscreen states.
-        // The window message loop callback will receive a WM_SIZE message once the
-        // window is in the fullscreen state. At that point, the IDXGISwapChain should
-        // be resized to match the new window size.
-        //
-        // NOTE: ALT+Enter will perform a similar operation; the code below is not
-        // required to enable that key combination.
+        
     case VK_SPACE:
     {
         if (m_tearingSupport)
@@ -279,12 +259,13 @@ void  DX12Game::OnKeyDown(UINT8 key)
             ThrowIfFailed(m_swapChain->SetFullscreenState(!fullscreenState, nullptr));
             LoadSizeDependentResources();
         }
-        break;
+        
     }
-
     
     break;
     }
+
+    m_Scene.OnKeyDown(key);
 }
 
 void DX12Game::PopulateCommandList()
@@ -306,7 +287,7 @@ void DX12Game::PopulateCommandList()
 
     
 
-    m_commandList->SetGraphicsRootDescriptorTable(1, modeldata.GetGPUHandle());
+    
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
 
@@ -322,8 +303,7 @@ void DX12Game::PopulateCommandList()
     m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-    //modeldata.Draw(m_commandList.Get());
-    m_spritedata.Draw(m_commandList.Get());
+    m_Scene.DrawSprite(m_commandList.Get());
 
 
     // Indicate that the back buffer will now be used to present.
