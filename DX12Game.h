@@ -12,10 +12,10 @@ public:
 	virtual void OnUpdate();
 	virtual void OnRender();
 	virtual void OnDestroy();
-	void OnSizeChanged(UINT width, UINT height, bool minimized);
 	virtual void OnKeyDown(UINT8 key);
 
 	ID3D12GraphicsCommandList* GetCommandList() { return m_commandList.Get(); }
+	void ChangeFullScreenState();
 private:
 	ComPtr<ID3D12GraphicsCommandList> m_commandList;
 

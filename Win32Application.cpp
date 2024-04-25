@@ -45,12 +45,14 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
         hInstance,
         pApp);
 
+   
+
+    ShowWindow(m_hwnd, nCmdShow);
+
     pApp->OnInit();
 #if defined(DEBUG) || defined(_DEBUG)
     pApp->GetDevice()->QueryInterface(debugDevice);
 #endif
-
-    ShowWindow(m_hwnd, nCmdShow);
 
     // Main loop.
     MSG msg = {};
@@ -63,12 +65,6 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
             DispatchMessage(&msg);
         }
         
-        else 
-        {
-            pApp->OnUpdate();
-            pApp->OnRender();
-            
-        }
         
     }
 

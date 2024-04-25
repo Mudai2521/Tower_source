@@ -7,15 +7,7 @@ void DX12Game::OnInit()
     LoadPipeline();
     LoadAssets();
 
-    if (m_tearingSupport)
-    {
-        Win32Application::ToggleFullscreenWindow();
-    }
-    else
-    {
-        ThrowIfFailed(m_swapChain->SetFullscreenState(TRUE, nullptr));
-    }
-    LoadSizeDependentResources();
+    ChangeFullScreenState();
 
     m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 }
@@ -203,41 +195,20 @@ void DX12Game::OnRender()
     MoveToNextFrame();
 }
 
-void DX12Game::OnSizeChanged(UINT width, UINT height, bool minimized)
+void DX12Game::ChangeFullScreenState()
 {
-    // Determine if the swap buffers and other resources need to be resized or not.
-    if ((width != m_width || height != m_height) && !minimized)
+    if (m_tearingSupport)
     {
-        // Flush all current GPU commands.
-        WaitForGpu();
-
-        // Release the resources holding references to the swap chain (requirement of
-        // IDXGISwapChain::ResizeBuffers) and reset the frame fence values to the
-        // current fence value.
-        for (UINT n = 0; n < FrameCount; n++)
-        {
-            m_fenceValue[n] = m_fenceValue[m_frameIndex];
-        }
-
-        // Resize the swap chain to the desired dimensions.
-        DXGI_SWAP_CHAIN_DESC desc = {};
-        m_swapChain->GetDesc(&desc);
-        ThrowIfFailed(m_swapChain->ResizeBuffers(FrameCount, width, height, desc.BufferDesc.Format, desc.Flags));
-
-        BOOL fullscreenState;
-        ThrowIfFailed(m_swapChain->GetFullscreenState(&fullscreenState, nullptr));
-        m_windowedMode = !fullscreenState;
-
-        // Reset the frame index to the current back buffer index.
-        m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
-
-        // Update the width, height, and aspect ratio member variables.
-        UpdateForSizeChange(width, height);
-
+        Win32Application::ToggleFullscreenWindow();
         LoadSizeDependentResources();
     }
-
-    m_windowVisible = !minimized;
+    else
+    {
+        BOOL fullscreenState;
+        ThrowIfFailed(m_swapChain->GetFullscreenState(&fullscreenState, nullptr));
+        ThrowIfFailed(m_swapChain->SetFullscreenState(!fullscreenState, nullptr));
+        LoadSizeDependentResources();
+    }
 }
 
 void  DX12Game::OnKeyDown(UINT8 key)
@@ -245,21 +216,9 @@ void  DX12Game::OnKeyDown(UINT8 key)
     switch (key)
     {
         
-    case VK_SPACE:
+    case VK_RETURN:
     {
-        if (m_tearingSupport)
-        {
-            Win32Application::ToggleFullscreenWindow();
-            LoadSizeDependentResources();
-        }
-        else
-        {
-            BOOL fullscreenState;
-            ThrowIfFailed(m_swapChain->GetFullscreenState(&fullscreenState, nullptr));
-            ThrowIfFailed(m_swapChain->SetFullscreenState(!fullscreenState, nullptr));
-            LoadSizeDependentResources();
-        }
-        
+        ChangeFullScreenState();
     }
     
     break;

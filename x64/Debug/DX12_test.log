@@ -1,5 +1,2 @@
-﻿  DX12Game.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(49,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
-  
+﻿  Scene.cpp
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

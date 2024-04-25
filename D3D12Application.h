@@ -54,16 +54,6 @@ protected:
         POOL_COUNT = 4,
     };
 
-    struct Resolution
-    {
-        UINT Width;
-        UINT Height;
-    };
-
-    static const Resolution m_resolutionOptions[];
-    static const UINT m_resolutionOptionsCount;
-    static UINT m_resolutionIndex; // Index of the current scene rendering resolution from m_resolutionOptions.
-
     // Root assets path.
     std::wstring m_assetsPath;
 
