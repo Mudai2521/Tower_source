@@ -3,9 +3,10 @@
 using namespace DirectX;
 
 Character::Character():
-	m_Scale(32.0f,32.0f),
-	m_Rotate(0.0f),
-	m_Trans(0.0f,0.0f)
+	m_CharactorState(
+		XMFLOAT2(32.0f,32.0f),
+		0.0f,
+		XMFLOAT2(0.0f,0.0f))
 {
 }
 
@@ -24,7 +25,7 @@ bool Character::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descript
 	m_height = height;
 
 	
-	m_spritedata[0]->SetWorldMatrix(m_Scale, m_Rotate, m_Trans);
+	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans);
 
 	return true;
 }
@@ -44,6 +45,6 @@ void Character::Term()
 
 void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 {
-	m_spritedata[0]->SetWorldMatrix(m_Scale, m_Rotate, m_Trans);
+	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans);
 	m_spritedata[0]->Draw(pCmdList);
 }

@@ -49,12 +49,12 @@ class Sprite
 public:
     Sprite();
     ~Sprite();
-    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
+    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height, UINT CBNum = 1);
     void Term();
     CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle() { return m_Texture.GetHandleCPU(); };
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle() { return m_Texture.GetHandleGPU(); };
-    void Draw(ID3D12GraphicsCommandList* pCmdList);
-    void SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans);
+    void Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID = 0);
+    void SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans, UINT CBufferID = 0);
     bool Isvalid();
     void SetWidth(UINT width) { m_width = width; };
     void SetHeight(UINT height) { m_width = height; };
@@ -64,13 +64,15 @@ private:
     bool m_Isvalid;
     SpriteMeshData m_Meshdata;
     Texture m_Texture;
-    ConstantBuffer m_CBuffer;
+    std::vector<ConstantBuffer*> m_CBuffer;
 
     VertexBuffer m_VB;
     IndexBuffer m_IB;
     UINT VertexBufferSize;
     UINT IndexBufferSize;
     UINT IndexCount;
+
+    UINT CbufferCount;
 
     UINT m_width;
     UINT m_height;

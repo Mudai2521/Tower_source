@@ -11,23 +11,25 @@ Scene::~Scene()
 	Term();
 }
 
-//22*40
 bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height)
 {
 	m_width = width;
 	m_height = height;
 	m_Chara.Init(pDevice, pQueue, pPool, width, height);
+	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
 	return true;
 }
 
 void Scene::Term()
 {
 	m_Chara.Term();
+	m_Terrain.Term();
 }
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 {
 	m_Chara.DrawSprite(pCmdList);
+	m_Terrain.DrawMap(pCmdList);
 }
 
 void Scene::OnUpdate()

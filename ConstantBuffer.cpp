@@ -16,6 +16,7 @@ ConstantBuffer::~ConstantBuffer()
 	Term();
 }
 
+
 bool ConstantBuffer::Init
 (
     ID3D12Device* pDevice,

@@ -24,7 +24,8 @@ public:
 	~ConstantBuffer();
     bool Init(
         ID3D12Device* pDevice,
-        DescriptorPool* pPool);
+        DescriptorPool* pPool
+    );
 
     void Term();
 

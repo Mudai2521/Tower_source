@@ -1,2 +1,28 @@
-﻿  Scene.cpp
+﻿  Character.cpp
+  D3D12Application.cpp
+  DX12Game.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(43,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+  
+  Scene.cpp
+  Sprite.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(65,48): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(66,44): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(67,36): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(83,34): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(83,27): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+  Terrain.cpp
+  Win32Application.cpp
+  main.cpp
+  コードを生成中...
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

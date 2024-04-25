@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "DescriptorPool.h"
 #include "Sprite.h"
-#include "Character.h"
+#include "Terrain.h"
 
 //シーン管理クラス
 class Scene
@@ -17,6 +17,7 @@ public:
 	void OnKeyDown(UINT8 key);
 private:
 	Character m_Chara;
+	Terrain m_Terrain;
 
 	UINT m_width;
 	UINT m_height;
