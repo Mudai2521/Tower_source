@@ -10,7 +10,7 @@ public:
 	using D3D12Application::D3D12Application;
 	virtual void OnInit();
 	virtual void OnUpdate();
-	virtual void OnRender();
+	virtual void OnRender(HWND hwnd);
 	virtual void OnDestroy();
 	virtual void OnKeyDown(UINT8 key);
 

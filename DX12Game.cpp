@@ -182,7 +182,7 @@ void DX12Game::OnUpdate()
     m_Scene.OnUpdate();
 }
 
-void DX12Game::OnRender()
+void DX12Game::OnRender(HWND hwnd)
 {
     // Record all the commands we need to render the scene into the command list.
     PopulateCommandList();
@@ -191,8 +191,11 @@ void DX12Game::OnRender()
     ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };
     m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
+    auto hdc = GetDC(hwnd);
+    auto rate = GetDeviceCaps(hdc, VREFRESH);
+
     // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(1, 0));
+    ThrowIfFailed(m_swapChain->Present(rate / 60 + 1, 0));
 
     MoveToNextFrame();
 }

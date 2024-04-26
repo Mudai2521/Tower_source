@@ -17,6 +17,8 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_height = height;
 	m_Chara.Init(pDevice, pQueue, pPool, width, height);
 	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
+
+	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 1.5f, m_height - 112.0f));
 	return true;
 }
 
@@ -34,22 +36,33 @@ void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 
 void Scene::OnUpdate()
 {
+	// TODO : フレームレート固定まで手を加えないこと
+
+	//キー入力の処理
 	if (temp_key == 0x41) //A
 	{
-		if (MoveinputAX > (-ma_MAX))MoveinputAX -= ma; else MoveinputAX = -ma_MAX;
+		if (Moveinput.x > (-ma_MAX))Moveinput.x -= ma; else Moveinput.x = -ma_MAX;
 	}
 	else
 	{
-		if (MoveinputAX < 0)MoveinputAX += ma;
+		if (Moveinput.x < 0 && pre_key != 0x41)
+		{
+			Moveinput.x += ma;
+			if (Moveinput.x > 0)Moveinput.x = 0;
+		}
 	}
 
 	if (temp_key == 0x44) //D
 	{
-		if (MoveinputAX < ma_MAX)MoveinputAX += ma; else MoveinputAX = ma_MAX;
+		if (Moveinput.x < ma_MAX)Moveinput.x += ma; else Moveinput.x = ma_MAX;
 	}
 	else
 	{
-		if (MoveinputAX > 0)MoveinputAX -= ma;
+		if (Moveinput.x > 0 && pre_key != 0x44)
+		{
+			Moveinput.x -= ma;
+			if (Moveinput.x < 0)Moveinput.x = 0;
+		}
 	}
 
 	if (temp_key == VK_SPACE)
@@ -57,8 +70,11 @@ void Scene::OnUpdate()
 
 	}
 
-	MoveinputX += MoveinputAX;
-	m_Chara.SetRotateTrans(0.0f, XMFLOAT2(m_Chara.GetScaleX()/2 + MoveinputX, m_height - m_Chara.GetScaleY()/2));
+
+	m_Chara.AddTrans(Moveinput);
+	m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale()));
+
+	pre_key = temp_key;
 	temp_key = NULL;
 }
 

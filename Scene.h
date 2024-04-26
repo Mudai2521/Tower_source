@@ -23,11 +23,11 @@ private:
 	UINT m_height;
 
 	UINT8 temp_key;
+	UINT8 pre_key;
 
-	float MoveinputX = 0.0f;
-	float MoveinputAX = 0.0f;
-	const float ma = 1.0f;
-	const float ma_MAX = 5.0f;
+	DirectX::XMFLOAT2 Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
+	const float ma = 0.7f;
+	const float ma_MAX = 1.0f;
 
 	Scene(const  Scene&) = delete;
 	Scene& operator=(const  Scene&) = delete;

@@ -27,11 +27,14 @@ public:
 	void Term();
 	void DrawSprite(ID3D12GraphicsCommandList* pCmdList);
 
+	DirectX::XMFLOAT2 GetTrans() { return  m_CharactorState.Trans; };
+	DirectX::XMFLOAT2 GetScale() { return  m_CharactorState.Scale; };
 	void SetScale(DirectX::XMFLOAT2 Scale) { m_CharactorState.Scale = Scale; };
 	float GetScaleX() { return m_CharactorState.Scale.x; };
 	float GetScaleY() { return m_CharactorState.Scale.y; };
 	void SetRotate(float Rotate) { m_CharactorState.Rotate = Rotate; };
 	void SetTrans(DirectX::XMFLOAT2 Trans) { m_CharactorState.Trans = Trans; };
+	void AddTrans(DirectX::XMFLOAT2 Trans) { m_CharactorState.Trans.x += Trans.x; m_CharactorState.Trans.y += Trans.y; };
 	void SetScaleRotateTrans(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans)
 	{
 		m_CharactorState.Scale = Scale;

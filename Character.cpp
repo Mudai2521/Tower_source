@@ -4,7 +4,7 @@ using namespace DirectX;
 
 Character::Character():
 	m_CharactorState(
-		XMFLOAT2(32.0f,32.0f),
+		XMFLOAT2(64.0f,64.0f),
 		0.0f,
 		XMFLOAT2(0.0f,0.0f))
 {

@@ -188,7 +188,7 @@ LRESULT CALLBACK Win32Application::WindowProc(HWND hWnd, UINT message, WPARAM wP
         if (pApp)
         {
             pApp->OnUpdate();
-            pApp->OnRender();
+            pApp->OnRender(hWnd);
         }
         
         return 0;
