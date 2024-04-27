@@ -80,7 +80,9 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale)
 
 				if (abs(Map_X - Trans.x) < DIS_X && abs(Map_Y - Trans.y) < DIS_Y)
 				{
+					if(abs(Map_X - Trans.x)>= abs(Map_Y - Trans.y))
 					returnVec.x += (Map_X - Trans.x > 0) ? abs(Trans.x - Map_X) - DIS_X : DIS_X - abs(Trans.x - Map_X);
+					else
 					returnVec.y += (Map_Y - Trans.y > 0) ? abs(Trans.y - Map_Y) - DIS_Y : DIS_Y - abs(Trans.y - Map_Y);
 				}
 			}

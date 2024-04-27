@@ -195,7 +195,7 @@ void DX12Game::OnRender(HWND hwnd)
     auto rate = GetDeviceCaps(hdc, VREFRESH);
 
     // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(rate / 60 + 1, 0));
+    ThrowIfFailed(m_swapChain->Present((rate < 65 ? 1 : 2), 0));
 
     MoveToNextFrame();
 }

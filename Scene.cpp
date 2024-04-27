@@ -2,7 +2,8 @@
 
 using namespace DirectX;
 
-Scene::Scene() 
+Scene::Scene() :
+	keylog(0xff, logtime_max)
 {
 }
 
@@ -39,6 +40,16 @@ void Scene::OnUpdate()
 	// TODO : フレームレート固定まで手を加えないこと
 
 	//キー入力の処理
+	if (keylog.size() < logsize_max)
+	{
+		keylog.push_back(temp_key);
+	}
+	else
+	{
+		keylog.erase(keylog.begin());
+		keylog.push_back(temp_key);
+	}
+
 	if (temp_key == 0x41) //A
 	{
 		if (Moveinput.x > (-ma_MAX))Moveinput.x -= ma; else Moveinput.x = -ma_MAX;

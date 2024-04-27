@@ -14,7 +14,8 @@
 #include <stdexcept>
 #include <codecvt>
 #include <cassert>
-
+#include <xinput.h>
+#include <dinput.h>
 
 #include <string>
 #include <wrl.h>

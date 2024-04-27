@@ -24,6 +24,9 @@ private:
 
 	UINT8 temp_key;
 	UINT8 pre_key;
+	const int logtime_max = 60;
+	std::vector<UINT8> keylog;
+	
 
 	DirectX::XMFLOAT2 Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
 	const float ma = 0.7f;
