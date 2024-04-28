@@ -13,8 +13,8 @@
 #include <atomic>
 #include <stdexcept>
 #include <codecvt>
-#include <cassert>
-#include <xinput.h>
+#include <cassert>dd
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
 #include <string>

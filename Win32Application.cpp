@@ -49,7 +49,8 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
 
     ShowWindow(m_hwnd, nCmdShow);
 
-    pApp->OnInit();
+    pApp->OnInit(hInstance, m_hwnd);
+
 #if defined(DEBUG) || defined(_DEBUG)
     pApp->GetDevice()->QueryInterface(debugDevice);
 #endif
@@ -64,7 +65,6 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        
         
     }
 
@@ -172,7 +172,7 @@ LRESULT CALLBACK Win32Application::WindowProc(HWND hWnd, UINT message, WPARAM wP
     case WM_KEYDOWN:
         if (pApp)
         {
-            pApp->OnKeyDown(static_cast<UINT8>(wParam));
+            //pApp->OnKeyDown(static_cast<UINT8>(wParam));
         }
         return 0;
 

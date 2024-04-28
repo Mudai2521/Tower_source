@@ -12,7 +12,8 @@
 #include "Scene.h"
 #include <stdexcept>
 
-
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxguid.lib")
 
 using Microsoft::WRL::ComPtr;
 
@@ -23,7 +24,7 @@ public:
     D3D12Application(UINT width, UINT height, std::wstring name);
     ~D3D12Application();
 
-    virtual void OnInit() = 0;
+    virtual void OnInit(HINSTANCE hinst, HWND hwnd) = 0;
     virtual void OnUpdate() = 0;
     virtual void OnRender(HWND hwnd) = 0;
     virtual void OnDestroy() = 0;
@@ -91,6 +92,9 @@ protected:
     ComPtr<ID3D12RootSignature> m_rootSignature;
     DescriptorPool* m_pPool[POOL_COUNT];
     ComPtr<ID3D12PipelineState> m_pipelineState;
+
+    IDirectInput8* m_directInput;
+    IDirectInputDevice8* m_inputDevice;
     
     // Synchronization objects.
     UINT m_frameIndex;
@@ -107,5 +111,6 @@ protected:
     void UpdateForSizeChange(UINT clientWidth, UINT clientHeight);
     void CheckTearingSupport();
     void SetWindowBounds(int left, int top, int right, int bottom);
+    void InitDirectInput(HINSTANCE hinst, HWND hwnd);
 };
 

@@ -8,7 +8,7 @@ class DX12Game : public D3D12Application
 {
 public:
 	using D3D12Application::D3D12Application;
-	virtual void OnInit();
+	virtual void OnInit(HINSTANCE hinst, HWND hwnd);
 	virtual void OnUpdate();
 	virtual void OnRender(HWND hwnd);
 	virtual void OnDestroy();

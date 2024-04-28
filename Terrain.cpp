@@ -53,9 +53,10 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList)
 
 //中央座標と大きさを入力、めり込みを補正するベクトルを返す
 //めり込んでいない場合は 0ベクトルを返す
-XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale) 
+XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, bool& OnGround)
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
+	OnGround = false;
 
 	int MIN_X = int((Trans.x - (Scale.x + m_CharactorState.Scale.x)) / m_CharactorState.Scale.x);
 	int MIN_Y = int((Trans.y - (Scale.y + m_CharactorState.Scale.y)) / m_CharactorState.Scale.y);
@@ -80,14 +81,22 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale)
 
 				if (abs(Map_X - Trans.x) < DIS_X && abs(Map_Y - Trans.y) < DIS_Y)
 				{
-					if(abs(Map_X - Trans.x)>= abs(Map_Y - Trans.y))
-					returnVec.x += (Map_X - Trans.x > 0) ? abs(Trans.x - Map_X) - DIS_X : DIS_X - abs(Trans.x - Map_X);
+					if (abs(Map_X - Trans.x) >= abs(Map_Y - Trans.y))
+					{
+						returnVec.x += (Map_X - Trans.x > 0) ? abs(Trans.x - Map_X) - DIS_X : DIS_X - abs(Trans.x - Map_X);
+						Trans.x += returnVec.x;
+					}
 					else
-					returnVec.y += (Map_Y - Trans.y > 0) ? abs(Trans.y - Map_Y) - DIS_Y : DIS_Y - abs(Trans.y - Map_Y);
+					{
+						returnVec.y += (Map_Y - Trans.y > 0) ? abs(Trans.y - Map_Y) - DIS_Y : DIS_Y - abs(Trans.y - Map_Y);
+						Trans.y += returnVec.y;
+					}
 				}
 			}
 		}
 	}
+
+	if (returnVec.y<0)OnGround = true;
 
 	return returnVec;
 }

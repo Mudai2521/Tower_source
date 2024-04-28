@@ -2,8 +2,7 @@
 
 using namespace DirectX;
 
-Scene::Scene() :
-	keylog(0xff, logtime_max)
+Scene::Scene() 
 {
 }
 
@@ -35,12 +34,12 @@ void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 	m_Terrain.DrawMap(pCmdList);
 }
 
-void Scene::OnUpdate()
+void Scene::OnUpdate(unsigned char* key)
 {
 	// TODO : フレームレート固定まで手を加えないこと
 
 	//キー入力の処理
-	if (keylog.size() < logsize_max)
+	/*if (keylog.size() < logsize_max)
 	{
 		keylog.push_back(temp_key);
 	}
@@ -48,48 +47,80 @@ void Scene::OnUpdate()
 	{
 		keylog.erase(keylog.begin());
 		keylog.push_back(temp_key);
-	}
+	}*/
+	KeyUpdate(key);
 
-	if (temp_key == 0x41) //A
+	if (m_InputState[LEFT_KEY]>= PUSH_ENTER)
 	{
-		if (Moveinput.x > (-ma_MAX))Moveinput.x -= ma; else Moveinput.x = -ma_MAX;
+		if (Moveinput.x > (-xs_MAX))Moveinput.x -= xa; else Moveinput.x = -xs_MAX;
 	}
 	else
 	{
-		if (Moveinput.x < 0 && pre_key != 0x41)
+		if (Moveinput.x < 0)
 		{
-			Moveinput.x += ma;
+			Moveinput.x += xa;
 			if (Moveinput.x > 0)Moveinput.x = 0;
 		}
 	}
 
-	if (temp_key == 0x44) //D
+	if (m_InputState[RIHGT_KEY] >= PUSH_ENTER)
 	{
-		if (Moveinput.x < ma_MAX)Moveinput.x += ma; else Moveinput.x = ma_MAX;
+		if (Moveinput.x < xs_MAX)Moveinput.x += xa; else Moveinput.x = xs_MAX;
 	}
 	else
 	{
-		if (Moveinput.x > 0 && pre_key != 0x44)
+		if (Moveinput.x > 0)
 		{
-			Moveinput.x -= ma;
+			Moveinput.x -= xa;
 			if (Moveinput.x < 0)Moveinput.x = 0;
 		}
 	}
 
-	if (temp_key == VK_SPACE)
+	if (on_ground == false) {
+		Moveinput.y += gravity_s;
+	}
+	else
 	{
-
+		Moveinput.y = gravity_s;
 	}
 
+	if (m_InputState[JUMP_KEY] == PUSH_ENTER && on_ground == true)
+	{
+		Moveinput.y -= jump_s;
+	}
 
-	m_Chara.AddTrans(Moveinput);
-	m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale()));
+	int moveMagnitude = pow(Moveinput.x, 2) + pow(Moveinput.y, 2);
+	moveMagnitude = (moveMagnitude == 0 ? 1 : moveMagnitude);
+	XMFLOAT2 out_Moveinput;
+	out_Moveinput.x = Moveinput.x / float(moveMagnitude);
+	out_Moveinput.y = Moveinput.y / float(moveMagnitude);
 
-	pre_key = temp_key;
-	temp_key = NULL;
+	for (int i = 0; i < moveMagnitude; i++) 
+	{
+		m_Chara.AddTrans(out_Moveinput);
+		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), on_ground));
+	}
+
 }
 
-void Scene::OnKeyDown(UINT8 key)
+void Scene::KeyUpdate(unsigned char* key)
 {
-	temp_key = key;
+	keyInfoUpdate(key, JUMP_KEY);
+	keyInfoUpdate(key, HOOK_KEY);
+	keyInfoUpdate(key, LEFT_KEY);
+	keyInfoUpdate(key, RIHGT_KEY);
+}
+
+void Scene::keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo)
+{
+	if (key[m_KeyInfo[keyInfo]] & 0x80)
+	{
+		if (m_InputState[keyInfo] == NOT_PUSH || m_InputState[keyInfo] == PUSH_EXIT)m_InputState[keyInfo] = PUSH_ENTER;
+		else m_InputState[keyInfo] = PUSH;
+	}
+	else
+	{
+		if (m_InputState[keyInfo] == NOT_PUSH || m_InputState[keyInfo] == PUSH_EXIT)m_InputState[keyInfo] = NOT_PUSH;
+		else m_InputState[keyInfo] = PUSH_EXIT;
+	}
 }

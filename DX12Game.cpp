@@ -2,16 +2,19 @@
 
 using namespace DirectX;
 
-void DX12Game::OnInit()
+void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
 {
     LoadPipeline();
     LoadAssets();
+    InitDirectInput(hinst,hwnd);
 
     //ChangeFullScreenState();
 
     LoadSizeDependentResources();
 
     m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
+
+    ThrowIfFailed(m_inputDevice->Acquire());
 }
 
 // Load the sample assets.
@@ -174,12 +177,25 @@ void DX12Game::OnDestroy()
     }
 
     CloseHandle(m_fenceEvent);
+
+    ThrowIfFailed(m_inputDevice->Unacquire());
+    m_inputDevice->Release();
+    m_directInput->Release();
 }
 
 //フレーム毎の更新処理
 void DX12Game::OnUpdate()
 {
-    m_Scene.OnUpdate();
+    unsigned char KeyState[0x100] = {0};
+    HRESULT hr= m_inputDevice->GetDeviceState(sizeof(KeyState), KeyState);
+    if (hr != S_OK) {
+        ThrowIfFailed(m_inputDevice->Acquire());
+    }
+    if (KeyState[DIK_RETURN] & 0x80)
+    {
+        ChangeFullScreenState();
+    }
+    m_Scene.OnUpdate(KeyState);
 }
 
 void DX12Game::OnRender(HWND hwnd)
@@ -218,18 +234,7 @@ void DX12Game::ChangeFullScreenState()
 
 void  DX12Game::OnKeyDown(UINT8 key)
 {
-    switch (key)
-    {
-        
-    case VK_RETURN:
-    {
-        ChangeFullScreenState();
-    }
     
-    break;
-    }
-
-    m_Scene.OnKeyDown(key);
 }
 
 void DX12Game::PopulateCommandList()

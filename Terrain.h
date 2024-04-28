@@ -12,7 +12,7 @@ public:
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
 	void DrawMap(ID3D12GraphicsCommandList* pCmdList);
-	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale);
+	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, bool& OnGround);
 
 	void SetScale(DirectX::XMFLOAT2 Scale) { m_CharactorState.Scale = Scale; };
 	float GetScaleX() { return m_CharactorState.Scale.x; };

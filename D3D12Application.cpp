@@ -310,4 +310,23 @@ void D3D12Application::SetWindowBounds(int left, int top, int right, int bottom)
     m_windowBounds.bottom = static_cast<LONG>(bottom);
 }
 
+void D3D12Application::InitDirectInput(HINSTANCE hinst, HWND hwnd)
+{
+    ThrowIfFailed(DirectInput8Create(
+        hinst,
+        DIRECTINPUT_VERSION,
+        IID_IDirectInput8,
+        (void**)&m_directInput,
+        NULL));
+
+    ThrowIfFailed(m_directInput->CreateDevice(
+        GUID_SysKeyboard,
+        &m_inputDevice,
+        NULL));
+
+    ThrowIfFailed(m_inputDevice->SetDataFormat(&c_dfDIKeyboard));
+    ThrowIfFailed(m_inputDevice->SetCooperativeLevel(hwnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE));
+    //ThrowIfFailed(m_inputDevice->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY));
+}
+
 
