@@ -2,11 +2,12 @@
 
 using namespace DirectX;
 
-Character::Character():
+Character::Character() :
 	m_CharactorState(
-		XMFLOAT2(64.0f,64.0f),
+		XMFLOAT2(64.0f, 64.0f),
 		0.0f,
-		XMFLOAT2(0.0f,0.0f))
+		XMFLOAT2(0.0f, 0.0f)),
+		direction(true)
 {
 }
 
@@ -19,7 +20,7 @@ bool Character::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descript
 {
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
-	if (!pSpritedata->Init(L"2024_03_29_3.dds", pDevice, pQueue, pPool, width, height))throw std::exception();
+	if (!pSpritedata->Init(L"Sprite/Player.dds", pDevice, pQueue, pPool, width, height))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;

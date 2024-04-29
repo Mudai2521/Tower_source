@@ -3,6 +3,7 @@
 #include "DescriptorPool.h"
 #include "Sprite.h"
 #include "Terrain.h"
+#include "Hook.h"
 
 //シーン管理クラス
 class Scene
@@ -43,11 +44,19 @@ private:
 		DIK_D
 	};
 
+	enum HOOK_STATE
+	{
+		SHOOTING=0,
+		RETURNING,
+		HANGING
+	};
+
 	// キーの入力状態を保存する配列
 	INPUT_STATE m_InputState[KEY_INFO::MAX_KEY_INFO]{ NOT_PUSH };
 
 	Character m_Chara;
 	Terrain m_Terrain;
+	Hook m_Hook;
 
 	UINT m_width;
 	UINT m_height;
@@ -59,6 +68,11 @@ private:
 	const float gravity_s = 1.0f;
 	const float jump_s = 20.0f;
 	bool on_ground = false;
+	const float Hook_s = 10.0f;
+	const float Hook_length = 300.0f;
+	HOOK_STATE Hook_state = SHOOTING;
+
+	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);

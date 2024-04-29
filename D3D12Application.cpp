@@ -237,7 +237,6 @@ void D3D12Application::LoadPipeline()
         }
     }
 
-    
 }
 
 

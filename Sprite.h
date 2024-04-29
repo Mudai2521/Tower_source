@@ -57,6 +57,7 @@ public:
     void Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID = 0, UINT TexID = 0);
     void SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans, UINT CBufferID = 0);
     void SetSpriteSheet(int Tex_xmax,int Tex_ymax, int Tex_x, int Tex_y);
+    void turnX();
     bool Isvalid();
     void SetWidth(UINT width) { m_width = width; };
     void SetHeight(UINT height) { m_width = height; };

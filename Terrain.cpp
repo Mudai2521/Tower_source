@@ -19,7 +19,7 @@ bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descriptor
 {
 	
 	
-	if (!m_spritedata.Init(L"2024_03_29_3.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX))throw std::exception();
+	if (!m_spritedata.Init(L"Sprite/2024_03_29_3.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX))throw std::exception();
 	m_width = width;
 	m_height = height;
 

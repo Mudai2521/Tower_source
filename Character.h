@@ -46,10 +46,17 @@ public:
 		m_CharactorState.Rotate = Rotate;
 		m_CharactorState.Trans = Trans;
 	};
+	void turn(int spriteID=0) 
+	{
+		m_spritedata[spriteID]->turnX();
+		direction = !direction;
+	}
+	bool GetDirection() { return direction; };
 private:
 	CharactorState m_CharactorState;
 	UINT m_width;
 	UINT m_height;
+	bool direction;//‰EŒü‚«‚Åtrue
 
 	std::vector<Sprite*> m_spritedata;
 

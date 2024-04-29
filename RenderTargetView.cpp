@@ -22,7 +22,11 @@ bool RenderTargetView::Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGIS
 
 	ThrowIfFailed(pSwapChain->GetBuffer(rtvIndex, IID_PPV_ARGS(&m_pRenderTargetView)));
 	m_pHandle = m_pPool->AllocHandle();
-	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), nullptr, m_pHandle->HandleCPU);
+
+	D3D12_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
+	renderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	renderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), &renderTargetViewDesc, m_pHandle->HandleCPU);
 
 	NAME_D3D12_OBJECT(m_pRenderTargetView, Index);
 
@@ -33,8 +37,10 @@ void RenderTargetView::OnSizeChanged(ID3D12Device* pDevice, IDXGISwapChain3* pSw
 {
 	//m_pRenderTargetView.Reset();
 	ThrowIfFailed(pSwapChain->GetBuffer(rtvIndex, IID_PPV_ARGS(&m_pRenderTargetView)));
-
-	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), nullptr, m_pHandle->HandleCPU);
+	D3D12_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
+	renderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	renderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+	pDevice->CreateRenderTargetView(m_pRenderTargetView.Get(), &renderTargetViewDesc, m_pHandle->HandleCPU);
 }
 
 void RenderTargetView::Term()

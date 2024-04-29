@@ -151,6 +151,22 @@ void Sprite::SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y)
 	m_Meshdata.Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y));
 	m_Meshdata.Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y - 1));
 	m_Meshdata.Vertices[3].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y));
+
+	memcpy(m_VB.Map(), m_Meshdata.Vertices.data(), VertexBufferSize);
+	m_VB.Unmap();
+}
+
+void Sprite::turnX()
+{
+	XMFLOAT2 temp = m_Meshdata.Vertices[0].uv;
+	m_Meshdata.Vertices[0].uv = m_Meshdata.Vertices[2].uv;
+	m_Meshdata.Vertices[2].uv = temp;
+	temp = m_Meshdata.Vertices[1].uv;
+	m_Meshdata.Vertices[1].uv = m_Meshdata.Vertices[3].uv;
+	m_Meshdata.Vertices[3].uv = temp;
+
+	memcpy(m_VB.Map(), m_Meshdata.Vertices.data(), VertexBufferSize);
+	m_VB.Unmap();
 }
 
 bool Sprite::Isvalid()

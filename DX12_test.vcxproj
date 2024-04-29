@@ -150,7 +150,7 @@
     <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="DX12Game.cpp" />
     <ClCompile Include="FileUtil.cpp" />
-    <ClCompile Include="hook.cpp" />
+    <ClCompile Include="Hook.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeldata.cpp" />
