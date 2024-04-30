@@ -32,16 +32,30 @@ void Scene::Term()
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 {
-	m_Chara.DrawSprite(pCmdList);
-	m_Hook.DrawSprite(pCmdList);
 	m_Terrain.DrawMap(pCmdList);
+	m_Hook.DrawSprite(pCmdList);
+	m_Chara.DrawSprite(pCmdList);
 }
 
 void Scene::OnUpdate(unsigned char* key)
 {
 	KeyUpdate(key);
+
+	XMFLOAT2 tmp_CharaMoveLog = m_Chara.GetTrans();
+	
+	if (Hook_state != HANGING)PlayerUpdate(); else PlayerUpdate_Hanging();
+
+	tmp_CharaMoveLog.x = m_Chara.GetTrans().x - tmp_CharaMoveLog.x;
+	tmp_CharaMoveLog.y = m_Chara.GetTrans().y - tmp_CharaMoveLog.y;
+
+	if (Hook_state != HANGING)HookUpdate(tmp_CharaMoveLog);
+
+}
+
+void Scene::PlayerUpdate()
+{
 	//ç∂âEà⁄ìÆ
-	if (m_InputState[LEFT_KEY]>= PUSH_ENTER)
+	if (m_InputState[LEFT_KEY] >= PUSH_ENTER)
 	{
 		if (Moveinput.x > (-xs_MAX))Moveinput.x -= xa; else Moveinput.x = -xs_MAX;
 	}
@@ -69,23 +83,24 @@ void Scene::OnUpdate(unsigned char* key)
 
 
 	//óéâ∫
-	if (on_ground == false) {
+	if (!(Player_Collision & Floor)) {
 		Moveinput.y += gravity_s;
 	}
 	else
 	{
 		Moveinput.y = gravity_s;
+		jump_hook_flag = true;
 	}
 
 
 	//ÉWÉÉÉìÉv
-	if (m_InputState[JUMP_KEY] == PUSH_ENTER && on_ground == true)
+	if (m_InputState[JUMP_KEY] == PUSH_ENTER && Player_Collision & Floor)
 	{
 		Moveinput.y -= jump_s;
 	}
 
 	//êUÇËå¸Ç´
-	if (Moveinput.x < 0 && m_Chara.GetDirection()) 
+	if (Moveinput.x < 0 && m_Chara.GetDirection())
 	{
 		m_Chara.turn();
 	}
@@ -100,18 +115,79 @@ void Scene::OnUpdate(unsigned char* key)
 	out_Moveinput.x = Moveinput.x / float(moveMagnitude);
 	out_Moveinput.y = Moveinput.y / float(moveMagnitude);
 
-	XMFLOAT2 tmp_CharaMoveLog = m_Chara.GetTrans();
 
-	for (int i = 0; i < moveMagnitude; i++) 
+
+	for (int i = 0; i < moveMagnitude; i++)
 	{
-		
 		m_Chara.AddTrans(out_Moveinput);
-		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), on_ground));
+		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
 	}
+}
 
-	tmp_CharaMoveLog.x = m_Chara.GetTrans().x - tmp_CharaMoveLog.x;
-	tmp_CharaMoveLog.y = m_Chara.GetTrans().y - tmp_CharaMoveLog.y;
+void Scene::PlayerUpdate_Hanging() 
+{
+	if (hook_idling_flag == true) 
+	{
+		if (m_InputState[JUMP_KEY] == PUSH_ENTER) 
+		{
+			Moveinput.x = 0.0f;
+			Moveinput.y = -jump_s;
+			Hook_state = SHOOTING;
+			hook_idling_flag = false;
+		}
+		else if (m_InputState[LEFT_KEY] == PUSH_ENTER) 
+		{
+			Moveinput.x = -xa;
+			Moveinput.y = 0.0f;
+			Hook_state = SHOOTING;
+			hook_idling_flag = false;
+		}
+		else if (m_InputState[RIHGT_KEY] == PUSH_ENTER) 
+		{
+			Moveinput.x = xa;
+			Moveinput.y = 0.0f;
+			Hook_state = SHOOTING;
+			hook_idling_flag = false;
+		}
+	}
+	else
+	{
 
+		if (abs(m_Hook.GetTrans().x - m_Chara.GetTrans().x) <= m_Chara.GetScaleX() / 2
+			&& abs(m_Hook.GetTrans().y - m_Chara.GetTrans().y) <= m_Chara.GetScaleY() / 2
+			)
+		{
+			m_Hook.turnDrawFlag();
+			Moveinput.x = 0.0f;
+			Moveinput.y = 0.0f;
+			hook_idling_flag = true;
+		}
+
+		if (m_InputState[HOOK_KEY] == PUSH_ENTER && m_Hook.GetDrawFlag())
+		{
+			Moveinput.x = (m_Hook.GetTrans().x - m_Chara.GetTrans().x) / sqrt(pow(m_Hook.GetTrans().x - m_Chara.GetTrans().x, 2) + pow(m_Hook.GetTrans().y - m_Chara.GetTrans().y, 2));
+			Moveinput.y = (m_Hook.GetTrans().y - m_Chara.GetTrans().y) / sqrt(pow(m_Hook.GetTrans().x - m_Chara.GetTrans().x, 2) + pow(m_Hook.GetTrans().y - m_Chara.GetTrans().y, 2));
+			Moveinput.x *= move_s_h;
+			Moveinput.y *= move_s_h;
+		}
+	}
+	int moveMagnitude = pow(Moveinput.x, 2) + pow(Moveinput.y, 2);
+	moveMagnitude = (moveMagnitude == 0 ? 1 : moveMagnitude);
+	XMFLOAT2 out_Moveinput;
+	out_Moveinput.x = Moveinput.x / float(moveMagnitude);
+	out_Moveinput.y = Moveinput.y / float(moveMagnitude);
+
+
+
+	for (int i = 0; i < moveMagnitude; i++)
+	{
+		m_Chara.AddTrans(out_Moveinput);
+		if(hook_idling_flag)m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+	}
+}
+
+void Scene::HookUpdate(XMFLOAT2 CharaMoveLog) 
+{
 	if (m_Hook.GetDrawFlag())
 	{
 		if ((pow(m_Hook.GetTrans().x - m_Chara.GetTrans().x, 2) + pow(m_Hook.GetTrans().y - m_Chara.GetTrans().y, 2) >= pow(Hook_length, 2))
@@ -122,19 +198,20 @@ void Scene::OnUpdate(unsigned char* key)
 			Hook_Moveinput.y = -Hook_Moveinput.y;
 		}
 
-		if (abs(m_Hook.GetTrans().x - m_Chara.GetTrans().x) <= m_Chara.GetScaleX()/2
-			&& abs(m_Hook.GetTrans().y - m_Chara.GetTrans().y) <= m_Chara.GetScaleY()/2
+		if (abs(m_Hook.GetTrans().x - m_Chara.GetTrans().x) <= m_Chara.GetScaleX() *0.9f
+			&& abs(m_Hook.GetTrans().y - m_Chara.GetTrans().y) <= m_Chara.GetScaleY() * 0.9f
 			&& Hook_state == RETURNING)
 		{
 			m_Hook.turnDrawFlag();
 		}
 	}
 
-	if (m_InputState[HOOK_KEY] >= PUSH_ENTER && !m_Hook.GetDrawFlag())
+	if (m_InputState[HOOK_KEY] >= PUSH_ENTER && !m_Hook.GetDrawFlag()&& jump_hook_flag)
 	{
 		m_Hook.turnDrawFlag();
 		m_Hook.SetTrans(m_Chara.GetTrans());
 		Hook_state = SHOOTING;
+		jump_hook_flag = false;
 
 		Hook_Moveinput = XMFLOAT2(0.0f, 0.0f);
 
@@ -151,35 +228,45 @@ void Scene::OnUpdate(unsigned char* key)
 			Hook_Moveinput.y -= Hook_s;
 		}
 
-		if (Hook_Moveinput.x == 0.0f && Hook_Moveinput.y == 0.0f) 
+		if (Hook_Moveinput.x == 0.0f && Hook_Moveinput.y == 0.0f)
 		{
 			if (m_Chara.GetDirection()) {
 				Hook_Moveinput.x += Hook_s;
 			}
-			else 
+			else
 			{
 				Hook_Moveinput.x -= Hook_s;
 			}
 		}
 	}
 
-	if (m_Hook.GetDrawFlag()) 
+	if (m_Hook.GetDrawFlag())
 	{
-		int moveMagnitude = pow(Hook_Moveinput.x+ tmp_CharaMoveLog.x, 2) + pow(Hook_Moveinput.y+ tmp_CharaMoveLog.y, 2);
+		int moveMagnitude = pow(Hook_Moveinput.x + CharaMoveLog.x, 2) + pow(Hook_Moveinput.y + CharaMoveLog.y, 2);
 		moveMagnitude = (moveMagnitude == 0 ? 1 : moveMagnitude);
-		out_Moveinput.x = (Hook_Moveinput.x + tmp_CharaMoveLog.x) / float(moveMagnitude);
-		out_Moveinput.y = (Hook_Moveinput.y + tmp_CharaMoveLog.y) / float(moveMagnitude);
-		bool tmp_g = false;
+		XMFLOAT2 out_Moveinput;
+		out_Moveinput.x = (Hook_Moveinput.x + CharaMoveLog.x) / float(moveMagnitude);
+		out_Moveinput.y = (Hook_Moveinput.y + CharaMoveLog.y) / float(moveMagnitude);
 
 		for (int i = 0; i < moveMagnitude; i++)
 		{
 			m_Hook.AddTrans(out_Moveinput);
-			m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), tmp_g));
+			if (Hook_state != RETURNING) {
+				m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), Hook_Collision));
+				if ((Hook_Collision & Celling) || (Hook_Collision & Wall))
+				{
+					Hook_state = HANGING;
+					Hook_Moveinput.x = 0.0f;
+					Hook_Moveinput.y = 0.0f;
+					Moveinput.x = 0.0f;
+					Moveinput.y = 0.0f;
+					break;
+				}
+			}
 		}
 
-		
-	}
 
+	}
 }
 
 void Scene::KeyUpdate(unsigned char* key)

@@ -67,15 +67,23 @@ private:
 	const float xs_MAX = 6.0f;
 	const float gravity_s = 1.0f;
 	const float jump_s = 20.0f;
-	bool on_ground = false;
+	Terrain_Collision  Player_Collision = No_Collision;
+	const float move_s_h = 20.0f;
+	bool jump_hook_flag = false;
+	bool hook_idling_flag = false;
+
 	const float Hook_s = 10.0f;
 	const float Hook_length = 300.0f;
 	HOOK_STATE Hook_state = SHOOTING;
+	Terrain_Collision Hook_Collision = No_Collision;
 
 	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);
+	void PlayerUpdate();
+	void PlayerUpdate_Hanging();
+	void HookUpdate(DirectX::XMFLOAT2 CharaMoveLog);
 
 	Scene(const  Scene&) = delete;
 	Scene& operator=(const  Scene&) = delete;
