@@ -48,7 +48,16 @@ private:
 	{
 		SHOOTING=0,
 		RETURNING,
-		HANGING
+		HANGING,
+		HANGING_ENEMY
+	};
+
+	enum PLAYER_STATE
+	{
+		IDLING = 0,
+		P_H_IDLING,
+		DAMAGED_LEFT,
+		DAMAGED_RIGHT
 	};
 
 	// ÉLÅ[ÇÃì¸óÕèÛë‘Çï€ë∂Ç∑ÇÈîzóÒ
@@ -67,23 +76,32 @@ private:
 	const float xs_MAX = 6.0f;
 	const float gravity_s = 1.0f;
 	const float jump_s = 20.0f;
+	const float ejump_s = 25.0f;
 	Terrain_Collision  Player_Collision = No_Collision;
 	const float move_s_h = 20.0f;
-	bool jump_hook_flag = false;
-	bool hook_idling_flag = false;
 
+	const float move_s_d = 4.0f;
+	const float move_a_d = 0.02f;
+	const float jump_s_d = 13.0f;
+
+	bool jump_hook_flag = false;
+	PLAYER_STATE Player_state = IDLING;
+
+	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
 	const float Hook_s = 10.0f;
 	const float Hook_length = 300.0f;
 	HOOK_STATE Hook_state = SHOOTING;
 	Terrain_Collision Hook_Collision = No_Collision;
 
-	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
+	float scrollPosY = 0.0f;
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);
 	void PlayerUpdate();
 	void PlayerUpdate_Hanging();
+	void PlayerUpdate_Damaged();
 	void HookUpdate(DirectX::XMFLOAT2 CharaMoveLog);
+	void Scroll();
 
 	Scene(const  Scene&) = delete;
 	Scene& operator=(const  Scene&) = delete;

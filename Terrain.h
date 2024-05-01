@@ -3,12 +3,14 @@
 #include "Sprite.h"
 #include "Character.h"
 
-enum Terrain_Collision 
+enum Terrain_Collision
 {
-	No_Collision=0,
-	Celling=0x1,
-	Wall=0x2,
-	Floor=0x4
+	No_Collision = 0,
+	Celling = 0x1,
+	Wall = 0x2,
+	Floor = 0x4,
+	Enemy_Hit_Left = 0x8,
+	Enemy_Hit_Right = 0x10
 };
 
 DEFINE_ENUM_FLAG_OPERATORS(Terrain_Collision);
@@ -20,8 +22,8 @@ public:
 	~Terrain();
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
-	void DrawMap(ID3D12GraphicsCommandList* pCmdList);
-	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret);
+	void DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
+	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack=false);
 
 	void SetScale(DirectX::XMFLOAT2 Scale) { m_CharactorState.Scale = Scale; };
 	float GetScaleX() { return m_CharactorState.Scale.x; };
@@ -49,10 +51,21 @@ private:
 	Terrain(const  Terrain&) = delete;
 	Terrain& operator=(const Terrain&) = delete;
 
+	float drawMapBuffer;
+
+	void ScrollUpdate(float Scroll);
+	float TerrainScroll = 0.0f;
+
 	static const UINT MapX_MAX = 40;
-	static const UINT MapY_MAX = 23;
-	//40*22
-	int map[MapY_MAX][MapX_MAX] =
+	static const UINT MapY_MAX = 25;
+	static const UINT MapX_DIVISION = 20;
+	static const UINT MapY_DIVISION = 7;
+
+	
+
+	std::vector<UINT> map;
+
+	int mapSource[MapY_MAX][MapX_MAX] =
 	{
 		{1,1,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,1,1},
 		{1,1,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,1,1},
@@ -78,6 +91,8 @@ private:
 		{1,1,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,1,1},
 		{1,1,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,1,1},
 
+		{1,1,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,1,1},
+		{1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1},
 		{1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1},
 		{1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1},
 		{1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1,  1,1,1,1,1, 1,1,1,1,1},

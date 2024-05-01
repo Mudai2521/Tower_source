@@ -9,7 +9,7 @@ public:
 	~Hook();
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
-	void DrawSprite(ID3D12GraphicsCommandList* pCmdList);
+	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
 
 	DirectX::XMFLOAT2 GetTrans() { return  m_CharactorState.Trans; };
 	DirectX::XMFLOAT2 GetScale() { return  m_CharactorState.Scale; };

@@ -32,9 +32,10 @@ void Scene::Term()
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 {
-	m_Terrain.DrawMap(pCmdList);
-	m_Hook.DrawSprite(pCmdList);
-	m_Chara.DrawSprite(pCmdList);
+	Scroll();
+	m_Terrain.DrawMap(pCmdList, scrollPosY);
+	m_Hook.DrawSprite(pCmdList, scrollPosY);
+	m_Chara.DrawSprite(pCmdList, scrollPosY);
 }
 
 void Scene::OnUpdate(unsigned char* key)
@@ -43,12 +44,24 @@ void Scene::OnUpdate(unsigned char* key)
 
 	XMFLOAT2 tmp_CharaMoveLog = m_Chara.GetTrans();
 	
-	if (Hook_state != HANGING)PlayerUpdate(); else PlayerUpdate_Hanging();
+	if (Hook_state == HANGING || Hook_state == HANGING_ENEMY)
+	{
+		PlayerUpdate_Hanging();
+	}
+	else if (Player_state == DAMAGED_LEFT || Player_state == DAMAGED_RIGHT) 
+	{
+		PlayerUpdate_Damaged();
+	}
+	else 
+	{
+		PlayerUpdate();
+	}
+
 
 	tmp_CharaMoveLog.x = m_Chara.GetTrans().x - tmp_CharaMoveLog.x;
 	tmp_CharaMoveLog.y = m_Chara.GetTrans().y - tmp_CharaMoveLog.y;
 
-	if (Hook_state != HANGING)HookUpdate(tmp_CharaMoveLog);
+	if (Hook_state != HANGING && Hook_state != HANGING_ENEMY)HookUpdate(tmp_CharaMoveLog);
 
 }
 
@@ -121,33 +134,46 @@ void Scene::PlayerUpdate()
 	{
 		m_Chara.AddTrans(out_Moveinput);
 		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+		
+		if (Player_Collision & Enemy_Hit_Left)
+		{
+			Player_state = DAMAGED_LEFT;
+			Moveinput.x = move_s_d;
+			Moveinput.y = -jump_s_d;
+		}
+		else if (Player_Collision & Enemy_Hit_Right)
+		{
+			Player_state = DAMAGED_RIGHT;
+			Moveinput.x = -move_s_d;
+			Moveinput.y = -jump_s_d;
+		}
 	}
 }
 
 void Scene::PlayerUpdate_Hanging() 
 {
-	if (hook_idling_flag == true) 
+	if (Player_state == P_H_IDLING)
 	{
 		if (m_InputState[JUMP_KEY] == PUSH_ENTER) 
 		{
 			Moveinput.x = 0.0f;
-			Moveinput.y = -jump_s;
+			if (Hook_state == HANGING_ENEMY)Moveinput.y = -ejump_s; else Moveinput.y = -jump_s;
 			Hook_state = SHOOTING;
-			hook_idling_flag = false;
+			Player_state = IDLING;
 		}
 		else if (m_InputState[LEFT_KEY] == PUSH_ENTER) 
 		{
 			Moveinput.x = -xa;
 			Moveinput.y = 0.0f;
 			Hook_state = SHOOTING;
-			hook_idling_flag = false;
+			Player_state = IDLING;
 		}
-		else if (m_InputState[RIHGT_KEY] == PUSH_ENTER) 
+		else if (m_InputState[RIHGT_KEY] == PUSH_ENTER)
 		{
 			Moveinput.x = xa;
 			Moveinput.y = 0.0f;
 			Hook_state = SHOOTING;
-			hook_idling_flag = false;
+			Player_state = IDLING;
 		}
 	}
 	else
@@ -160,7 +186,7 @@ void Scene::PlayerUpdate_Hanging()
 			m_Hook.turnDrawFlag();
 			Moveinput.x = 0.0f;
 			Moveinput.y = 0.0f;
-			hook_idling_flag = true;
+			Player_state = P_H_IDLING;
 		}
 
 		if (m_InputState[HOOK_KEY] == PUSH_ENTER && m_Hook.GetDrawFlag())
@@ -182,7 +208,41 @@ void Scene::PlayerUpdate_Hanging()
 	for (int i = 0; i < moveMagnitude; i++)
 	{
 		m_Chara.AddTrans(out_Moveinput);
-		if(hook_idling_flag)m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+		if(Player_state == P_H_IDLING)m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+	}
+}
+
+
+void Scene::PlayerUpdate_Damaged() 
+{
+	if (Player_state == DAMAGED_LEFT) 
+	{
+		Moveinput.x = (Moveinput.x > 0 ? Moveinput.x - move_a_d : 0);
+	}
+	else if (Player_state == DAMAGED_RIGHT) 
+	{
+		Moveinput.x = (Moveinput.x < 0 ? Moveinput.x + move_a_d : 0);
+	}
+	Moveinput.y += gravity_s;
+
+	int moveMagnitude = pow(Moveinput.x, 2) + pow(Moveinput.y, 2);
+	moveMagnitude = (moveMagnitude == 0 ? 1 : moveMagnitude);
+	XMFLOAT2 out_Moveinput;
+	out_Moveinput.x = Moveinput.x / float(moveMagnitude);
+	out_Moveinput.y = Moveinput.y / float(moveMagnitude);
+
+
+
+	for (int i = 0; i < moveMagnitude; i++)
+	{
+		m_Chara.AddTrans(out_Moveinput);
+		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+		if (Player_Collision & Floor)
+		{
+			Player_state = IDLING;
+			Moveinput.x = 0.0f;
+			Moveinput.y = 0.0f;
+		}
 	}
 }
 
@@ -252,10 +312,11 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 		{
 			m_Hook.AddTrans(out_Moveinput);
 			if (Hook_state != RETURNING) {
-				m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), Hook_Collision));
+				m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), Hook_Collision, true));
 				if ((Hook_Collision & Celling) || (Hook_Collision & Wall))
 				{
-					Hook_state = HANGING;
+					if (Hook_Collision & Enemy_Hit_Left|| Hook_Collision & Enemy_Hit_Right)Hook_state = HANGING_ENEMY; else Hook_state = HANGING;
+					
 					Hook_Moveinput.x = 0.0f;
 					Hook_Moveinput.y = 0.0f;
 					Moveinput.x = 0.0f;
@@ -266,6 +327,14 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 		}
 
 
+	}
+}
+
+void Scene::Scroll() 
+{
+	if (m_Chara.GetTrans().y < m_height / 2) 
+	{
+		scrollPosY = m_height / 2 - m_Chara.GetTrans().y;
 	}
 }
 

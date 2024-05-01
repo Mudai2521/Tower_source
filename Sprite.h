@@ -56,8 +56,8 @@ public:
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(UINT TexID = 0) { return m_Texture[TexID]->GetHandleGPU(); };
     void Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID = 0, UINT TexID = 0);
     void SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans, UINT CBufferID = 0);
-    void SetSpriteSheet(int Tex_xmax,int Tex_ymax, int Tex_x, int Tex_y);
-    void turnX();
+    void SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y, UINT TexID = 0);
+    void turnX(UINT TexID=0);
     bool Isvalid();
     void SetWidth(UINT width) { m_width = width; };
     void SetHeight(UINT height) { m_width = height; };
@@ -65,11 +65,11 @@ public:
 private:
 
     bool m_Isvalid;
-    SpriteMeshData m_Meshdata;
+    std::vector <SpriteMeshData> m_Meshdata;
     std::vector<Texture*> m_Texture;
     std::vector<ConstantBuffer*> m_CBuffer;
 
-    VertexBuffer m_VB;
+    std::vector<VertexBuffer*> m_VB;
     IndexBuffer m_IB;
     UINT VertexBufferSize;
     UINT IndexBufferSize;
