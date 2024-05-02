@@ -8,7 +8,7 @@ Terrain::Terrain() :
 		0.0f,
 		XMFLOAT2(0.0f, 0.0f)),
 	map(MapY_MAX * 3 * MapX_MAX),
-	drawMapBuffer(m_CharactorState.Scale.y)
+	drawMapBuffer(m_CharactorState.Scale.y*2)
 {
 }
 
@@ -48,33 +48,47 @@ void Terrain::Term()
 
 void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
+	ScrollUpdate(Scroll);
+	Scroll -= m_CharactorState.Scale.y * float(TerrainScroll);
+
+	float tmpy = 0;
+
 	for (int x = 0; x < MapX_MAX; x++) 
 	{
 		for (int y = 0; y < MapY_MAX; y++)
 		{
-			if (map[MapX_MAX * y + x] == 1)
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 0)
 			{
-				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2 + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2 + m_CharactorState.Scale.y * y - drawMapBuffer + Scroll));
+				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
+					- drawMapBuffer + Scroll));
+				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
+			}
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 1)
+			{
+				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
+					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
 				m_spritedata.Draw(pCmdList, MapY_MAX * x + y);
 			}
-			if (map[MapX_MAX * y + x] == 9)
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
 			{
-				SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer + Scroll));
+				SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y 
+					- drawMapBuffer + Scroll));
 				m_spritedata.SetSpriteSheet(2, 1, 1, 1, 1);
 				m_spritedata.SetWorldMatrix(XMFLOAT2(m_CharactorState.Scale.x * 4, m_CharactorState.Scale.y * 4), m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
 				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 1);
 			}
-			if (map[MapX_MAX * y + x] == 8)
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 8)
 			{
-				SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer + Scroll));
+				SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y 
+					- drawMapBuffer + Scroll));
 				m_spritedata.SetSpriteSheet(2, 1, 2, 1, 1);
 				m_spritedata.SetWorldMatrix(XMFLOAT2(m_CharactorState.Scale.x * 4, m_CharactorState.Scale.y * 4), m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
 				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 1);
 			}
 		}
 	}
-	
+	m_spritedata.Setdrawcount();
 }
 
 //中央座標と大きさを入力、めり込みを補正するベクトルを返す
@@ -83,6 +97,7 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
 	Collision_ret = No_Collision;
+	Trans.y += m_CharactorState.Scale.y * TerrainScroll;
 
 	const int HitRange = 6;
 	int MIN_X = int((Trans.x - (Scale.x + m_CharactorState.Scale.x * HitRange)) / m_CharactorState.Scale.x);
@@ -90,9 +105,9 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 	int MAX_X = int((Trans.x + (Scale.x + m_CharactorState.Scale.x * HitRange)) / m_CharactorState.Scale.x) + 1;
 	int MAX_Y = int((Trans.y + (Scale.y + m_CharactorState.Scale.y * HitRange)) / m_CharactorState.Scale.y) + 1;
 	MIN_X = (MIN_X < 0 ? 0 : MIN_X);
-	MIN_Y = (MIN_Y < 0 ? 0 : MIN_Y);
+	MIN_Y = (MIN_Y < -int(MapY_MAX) ? -int(MapY_MAX) : MIN_Y);
 	MAX_X = (MAX_X > MapX_MAX ? MapX_MAX - 1 : MAX_X);
-	MAX_Y = (MAX_Y > MapY_MAX ? MapY_MAX - 1 : MAX_Y);
+	MAX_Y = (MAX_Y > MapY_MAX*2 ? MapY_MAX*2 - 1 : MAX_Y);
 
 	const float DIS_X = (Scale.x + m_CharactorState.Scale.x) / 2;
 	const float DIS_Y = (Scale.y + m_CharactorState.Scale.y) / 2;
@@ -103,7 +118,7 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 	{
 		for (int y = MIN_Y; y <= MAX_Y; y++)
 		{
-			if (map[MapX_MAX * y + x] == 1)
+			if (map[MapX_MAX* MapY_MAX+MapX_MAX * y + x] == 1)
 			{
 				float Map_X = m_CharactorState.Scale.x / 2 + m_CharactorState.Scale.x * x;
 				float Map_Y = m_CharactorState.Scale.y / 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
@@ -123,10 +138,10 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 				}
 			}
 
-			if (map[MapX_MAX * y + x] == 9)
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
 			{
 				float Map_X = m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x;
-				float Map_Y = m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
+				float Map_Y = -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
 
 				if (abs(Map_X - Trans.x) < ENEMY_DIS_X && abs(Map_Y - Trans.y) < ENEMY_DIS_Y)
 				{
@@ -152,18 +167,18 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 					
 					if (is_attack) 
 					{
-						map[MapX_MAX * y + x] = 8;
+						map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] = 8;
 					}
 				}
 			}
-			if (map[MapX_MAX * y + x] == 8)
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 8)
 			{
 				float Map_X = m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x;
-				float Map_Y = m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
+				float Map_Y = -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
 
 				if (abs(Map_X - Trans.x) > ENEMY_DIS_X && abs(Map_Y - Trans.y) > ENEMY_DIS_Y)
 				{
-					map[MapX_MAX * y + x] = 0;
+					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] = 0;
 				}
 			}
 		}
@@ -177,7 +192,24 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 	return returnVec;
 }
 
-void ScrollUpdate(float Scroll)
+void Terrain::ScrollUpdate(float Scroll)
 {
-
+	if (Scroll-(m_CharactorState.Scale.y* TerrainScroll) > m_CharactorState.Scale.y)
+	{
+		for (int i = 0; i < MapX_MAX; i++) 
+		{ 
+			map.pop_back(); 
+			map.insert(map.begin(), mapSource[MapY_MAX - (1 + TerrainScroll% MapY_MAX)][i]);
+		}
+		TerrainScroll++;
+	}
+	if ( (m_CharactorState.Scale.y * TerrainScroll)- Scroll > -m_CharactorState.Scale.y)
+	{
+		for (int i = 0; i < MapX_MAX; i++)
+		{
+			map.erase(map.begin());
+			map.push_back(mapSource[-TerrainScroll% MapY_MAX][i]);
+		}
+		TerrainScroll--;
+	}
 }

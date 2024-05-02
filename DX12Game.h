@@ -24,6 +24,10 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
 
+	LARGE_INTEGER mTimeFreq;
+	LARGE_INTEGER mTimeStart;
+	LARGE_INTEGER mTimeEnd;
+	float FRAME_TIME = 1.0 / 60.0;
 	
 	Scene m_Scene;
 

@@ -75,10 +75,12 @@ private:
 	const float xa = 0.7f;
 	const float xs_MAX = 6.0f;
 	const float gravity_s = 1.0f;
+	const float gravity_MAX = 20.0f;
 	const float jump_s = 20.0f;
 	const float ejump_s = 25.0f;
 	Terrain_Collision  Player_Collision = No_Collision;
 	const float move_s_h = 20.0f;
+	DirectX::XMFLOAT2 p_firstPos;
 
 	const float move_s_d = 4.0f;
 	const float move_a_d = 0.02f;
@@ -94,6 +96,9 @@ private:
 	Terrain_Collision Hook_Collision = No_Collision;
 
 	float scrollPosY = 0.0f;
+	const float default_scroll_s = 1.0f;
+	float scroll_s = default_scroll_s;
+	const float scroll_s_c = 0.1f;
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);

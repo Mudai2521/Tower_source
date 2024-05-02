@@ -1,5 +1,8 @@
 #include "DX12Game.h"
 
+
+#pragma comment(lib,"winmm.lib")
+
 using namespace DirectX;
 
 void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
@@ -15,6 +18,8 @@ void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
     m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 
     ThrowIfFailed(m_inputDevice->Acquire());
+
+    
 }
 
 // Load the sample assets.
@@ -99,7 +104,7 @@ void DX12Game::LoadAssets()
         psoDesc.SampleMask = UINT_MAX;
         psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
         psoDesc.NumRenderTargets = 1;
-        psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+        psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
         psoDesc.SampleDesc.Count = 1;
 
         // ブレンド状態の設定
@@ -173,20 +178,11 @@ void DX12Game::LoadSizeDependentResources()
 {
     UpdateViewAndScissor();
 
-    // Create frame resources.
+    // Create a RTV for each frame.
+    for (UINT n = 0; n < FrameCount; n++)
     {
-        // Create a RTV for each frame.
-        for (UINT n = 0; n < FrameCount; n++)
-        {
-            m_RenderTargetView[n].OnSizeChanged(m_device.Get(),m_swapChain.Get());
-        }
-
-        //DSV作成
-        //m_DSBuffer.OnSizeChanged(m_device.Get(), m_width, m_height);
+        m_RenderTargetView[n].OnSizeChanged(m_device.Get(), m_swapChain.Get());
     }
-
-    // This is where you would create/resize intermediate render targets, depth stencils, or other resources
-    // dependent on the window size.
 }
 
 
@@ -211,6 +207,9 @@ void DX12Game::OnDestroy()
 //フレーム毎の更新処理
 void DX12Game::OnUpdate()
 {
+    QueryPerformanceFrequency(&mTimeFreq);
+    QueryPerformanceCounter(&mTimeStart);
+
     unsigned char KeyState[0x100] = {0};
     HRESULT hr= m_inputDevice->GetDeviceState(sizeof(KeyState), KeyState);
     if (hr != S_OK) {
@@ -239,6 +238,18 @@ void DX12Game::OnRender(HWND hwnd)
     ThrowIfFailed(m_swapChain->Present((rate < 65 ? 1 : 2), 0));
 
     MoveToNextFrame();
+
+    QueryPerformanceCounter(&mTimeEnd);
+    auto mFrameTime = static_cast<double>(mTimeEnd.QuadPart - mTimeStart.QuadPart) / static_cast<double>(mTimeFreq.QuadPart);
+#ifdef _DEBUG
+#ifdef UNICODE
+    std::wstringstream stream;
+#else
+    std::stringstream stream;
+#endif
+    stream << (1 / mFrameTime) << " FPS" << std::endl;
+    OutputDebugString(stream.str().c_str());
+#endif // _DEBUG
 }
 
 void DX12Game::ChangeFullScreenState()
@@ -279,9 +290,6 @@ void DX12Game::PopulateCommandList()
     m_commandList->SetDescriptorHeaps(1, m_pPool[POOL_TYPE_RES]->GetHeapAddress());
     m_commandList->SetPipelineState(m_pipelineState.Get());
 
-    
-
-    
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
 

@@ -62,6 +62,10 @@ public:
     void SetWidth(UINT width) { m_width = width; };
     void SetHeight(UINT height) { m_width = height; };
     float GetSpriteSize() { return DefaultSpriteSize; };
+    void Setdrawcount() //‘å‹K–Í‚È•`‰æ‚ğs‚Á‚½Û‚ÉÀs‚·‚é‚±‚Æ
+    {
+        drawcount = !drawcount;
+    };
 private:
 
     bool m_Isvalid;
@@ -81,6 +85,8 @@ private:
     UINT m_height;
 
     float DefaultSpriteSize;
+
+    bool drawcount;
 
     Sprite(const Sprite&) = delete;
     Sprite& operator=(const Sprite&) = delete;

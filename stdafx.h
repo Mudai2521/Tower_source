@@ -20,7 +20,10 @@
 #include <string>
 #include <wrl.h>
 #include <shellapi.h>
+#include <tchar.h>
+#include <sstream>
 
+#include <mmsystem.h>
 
 
 #include <DirectXTex.h>

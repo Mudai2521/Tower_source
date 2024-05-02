@@ -20,6 +20,7 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_Hook.Init(pDevice, pQueue, pPool, width, height);
 
 	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 1.5f, m_height - 112.0f));
+	p_firstPos = m_Chara.GetTrans();
 	return true;
 }
 
@@ -98,6 +99,7 @@ void Scene::PlayerUpdate()
 	//—Ž‰º
 	if (!(Player_Collision & Floor)) {
 		Moveinput.y += gravity_s;
+		Moveinput.y = Moveinput.y > gravity_MAX ? gravity_MAX : Moveinput.y;
 	}
 	else
 	{
@@ -332,9 +334,24 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 
 void Scene::Scroll() 
 {
-	if (m_Chara.GetTrans().y < m_height / 2) 
+	if (m_Chara.GetTrans().y+ scrollPosY < m_height / 3)
 	{
-		scrollPosY = m_height / 2 - m_Chara.GetTrans().y;
+		scroll_s = (m_height / 3-(m_Chara.GetTrans().y + scrollPosY))* scroll_s_c;
+		scroll_s = (scroll_s < default_scroll_s ? default_scroll_s : scroll_s);
+		//scroll_s = (m_height / 3 - (m_Chara.GetTrans().y + scrollPosY)) < -m_height ? (m_height / 3 - (m_Chara.GetTrans().y + scrollPosY)) : scroll_s;
+		scrollPosY += scroll_s;
+	}
+	else if (m_Chara.GetTrans().y + scrollPosY > (m_height / 3)*2)
+	{
+		scroll_s = (m_Chara.GetTrans().y + scrollPosY- (m_height / 3) * 2) * scroll_s_c;
+		scroll_s = (scroll_s < default_scroll_s ? default_scroll_s : scroll_s);
+		scroll_s = (m_Chara.GetTrans().y + scrollPosY - (m_height / 3) * 2) > m_height*0.5f ? (m_Chara.GetTrans().y + scrollPosY - (m_height / 3) * 2): scroll_s;
+		scrollPosY -= scroll_s;
+		scrollPosY = scrollPosY < 0 ? 0 : scrollPosY;
+	}
+	else 
+	{
+		scroll_s = default_scroll_s;
 	}
 }
 

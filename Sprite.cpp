@@ -5,7 +5,8 @@ using namespace DirectX;
 
 Sprite::Sprite():
 	m_Isvalid(false),
-	DefaultSpriteSize(1.0f)
+	DefaultSpriteSize(1.0f),
+	drawcount(false)
 {
 }
 
@@ -71,7 +72,7 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 	IndexCount = m_Meshdata[0].Index.size();
 
 	CbufferCount = CBNum;
-	for (UINT i = 0; i < CBNum; i++) {
+	for (UINT i = 0; i < CBNum * 2; i++) {
 		auto pCB = new (std::nothrow) ConstantBuffer();
 		if (pCB == nullptr)
 		{
@@ -161,7 +162,7 @@ void Sprite::Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID, UINT TexI
 {
 	auto VBV = m_VB[TexID]->GetView();
 	auto IBV = m_IB.GetView();
-	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer[CBufferID]->GetAddress());
+	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer[CBufferID + (drawcount ? CbufferCount : 0)]->GetAddress());
 	pCmdList->SetGraphicsRootDescriptorTable(1, GetGPUHandle(TexID));
 	pCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	pCmdList->IASetVertexBuffers(0, 1, &VBV);
@@ -175,8 +176,8 @@ void Sprite::SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFL
 {
 	XMMATRIX World = XMMatrixScaling(Scale.x, Scale.y, 1.0f) *
 		XMMatrixRotationZ(Rotate) *
-		XMMatrixTranslation(Trans.x - m_width / 2, -Trans.y + m_height / 2, 0.0f);
-	m_CBuffer[CBufferID]->SetWorldMatrix(World);
+		XMMatrixTranslation(Trans.x - float(m_width) / 2.0f, -Trans.y + float(m_height) / 2.0f, 0.0f);
+	m_CBuffer[CBufferID+(drawcount ? CbufferCount : 0)]->SetWorldMatrix(World);
 };
 
 //スプライトシート上のスプライトの総数と、表示させたいスプライトが何枚目かを入力
@@ -233,7 +234,7 @@ void Sprite::Term()
 		}
 	}
 
-	for (UINT i = 0; i < CbufferCount; i++)
+	for (UINT i = 0; i < CbufferCount*2; i++)
 	{
 		if (m_CBuffer[i] != nullptr)
 		{
