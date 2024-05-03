@@ -7,9 +7,34 @@ Terrain::Terrain() :
 		XMFLOAT2(32.0f, 32.0f),
 		0.0f,
 		XMFLOAT2(0.0f, 0.0f)),
-	map(MapY_MAX * 3 * MapX_MAX),
 	drawMapBuffer(m_CharactorState.Scale.y*2)
 {
+	for (int y = 0; y < MapY_MAX; y++)
+	{
+		for (int x = 0; x < MapX_MAX; x++)
+		{
+			map.insert(map.begin(), 0);
+		}
+	}
+	for (int i = 0; i < (MapY_MAX * 2) / MapY_DIVISION; i++)
+	{
+		for (int y = 0; y < MapY_DIVISION; y++)
+		{
+			for (int x = 0; x < MapX_MAX; x++)
+			{
+				map.insert(map.begin(), mapChip[mapChipList[i]][(MapY_DIVISION - 1 - y)* MapX_MAX + (MapX_MAX - 1 - x)]);
+			}
+		}
+	}
+	for (int y = 0; y < (MapY_MAX * 2) % MapY_DIVISION; y++)
+	{
+		for (int x = 0; x < MapX_MAX; x++)
+		{
+			map.insert(map.begin(), mapChip[mapChipList[(MapY_MAX * 2) / MapY_DIVISION]][(MapY_DIVISION - 1 - y) * MapX_MAX + (MapX_MAX - 1 - x)]);
+		}
+	}
+	mapListCount = (MapY_MAX * 2) / MapY_DIVISION;
+	mapChipCount = (MapY_MAX * 2) % MapY_DIVISION-1;
 }
 
 Terrain::~Terrain()
@@ -29,14 +54,7 @@ bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descriptor
 
 	m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans);
 
-	for (int y = 0; y < MapY_MAX * 3; y++)
-	{
-		for (int x = 0; x < MapX_MAX; x++)
-		{
-			map[MapX_MAX * y + x] = mapSource[y % MapY_MAX][x];
-		}
-	}
-
+	
 
 	return true;
 }
@@ -196,19 +214,54 @@ void Terrain::ScrollUpdate(float Scroll)
 {
 	if (Scroll-(m_CharactorState.Scale.y* TerrainScroll) > m_CharactorState.Scale.y)
 	{
+		mapChipCount++;
+		if (mapChipCount >= MapY_DIVISION)
+		{
+			mapChipCount = 0;
+			mapListCount++;
+			if (mapChipList.size() - 1 < mapListCount) 
+			{
+				mapChipList.push_back(1);
+			}
+		}
 		for (int i = 0; i < MapX_MAX; i++) 
 		{ 
 			map.pop_back(); 
-			map.insert(map.begin(), mapSource[MapY_MAX - (1 + TerrainScroll% MapY_MAX)][i]);
+			map.insert(map.begin(), mapChip[mapChipList[mapListCount]][(MapY_DIVISION - mapChipCount - 1) * MapX_MAX + (MapX_MAX-i-1)]);
 		}
 		TerrainScroll++;
 	}
-	if ( (m_CharactorState.Scale.y * TerrainScroll)- Scroll > -m_CharactorState.Scale.y)
+	if ( (m_CharactorState.Scale.y * TerrainScroll)- Scroll > m_CharactorState.Scale.y)
 	{
-		for (int i = 0; i < MapX_MAX; i++)
+		mapChipCount--;
+		if (mapChipCount < 0)
 		{
-			map.erase(map.begin());
-			map.push_back(mapSource[-TerrainScroll% MapY_MAX][i]);
+			mapChipCount = MapY_DIVISION - 1;
+			mapListCount--;
+		}
+		int LCount = mapListCount - MapY_MAX * 3 / MapY_DIVISION - 1;
+		int CCount = mapChipCount + 1 + (MapY_DIVISION - (MapY_MAX * 3) % MapY_DIVISION);
+		if (CCount>= MapY_DIVISION)
+		{
+			LCount+= CCount/ MapY_DIVISION;
+			CCount = CCount% MapY_DIVISION;
+			
+		}
+		if (LCount < 0)
+		{
+			for (int i = 0; i < MapX_MAX; i++)
+			{
+				map.erase(map.begin());
+				map.push_back(0);
+			}
+		}
+		else 
+		{	
+			for (int i = 0; i < MapX_MAX; i++)
+			{
+				map.erase(map.begin());
+				map.push_back(mapChip[mapChipList[LCount]][(MapY_DIVISION - CCount-1) * MapX_MAX + i]);
+			}
 		}
 		TerrainScroll--;
 	}
