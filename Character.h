@@ -57,6 +57,14 @@ private:
 	UINT m_width;
 	UINT m_height;
 	bool direction;//‰EŒü‚«‚Åtrue
+	int fCount = 1;
+	const int idleAnimLength = 41;
+	int idleAnimLoopCount = 0;
+	const int idleAnimLoopFrame = 24;
+	const int idleAniLoopTimes = 5;
+
+	int animIdleFrameCount = 0;
+	const int animIdleFrame = 8;
 
 	std::vector<Sprite*> m_spritedata;
 
