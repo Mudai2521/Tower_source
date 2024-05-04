@@ -49,7 +49,8 @@ private:
 		SHOOTING=0,
 		RETURNING,
 		HANGING,
-		HANGING_ENEMY
+		HANGING_ENEMY,
+		H_IDLING
 	};
 
 	enum PLAYER_STATE
@@ -81,6 +82,7 @@ private:
 	Terrain_Collision  Player_Collision = No_Collision;
 	const float move_s_h = 20.0f;
 	DirectX::XMFLOAT2 p_firstPos;
+	DirectX::XMFLOAT2 h_move_pos;
 
 	const float move_s_d = 4.0f;
 	const float move_a_d = 0.02f;
@@ -92,8 +94,9 @@ private:
 	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
 	const float Hook_s = 10.0f;
 	const float Hook_length = 300.0f;
-	HOOK_STATE Hook_state = SHOOTING;
+	HOOK_STATE Hook_state = H_IDLING;
 	Terrain_Collision Hook_Collision = No_Collision;
+	bool hookAnimFlag = false;
 
 	float scrollPosY = 0.0f;
 	const float default_scroll_s = 1.0f;

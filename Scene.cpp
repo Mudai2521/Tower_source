@@ -64,6 +64,50 @@ void Scene::OnUpdate(unsigned char* key)
 
 	if (Hook_state != HANGING && Hook_state != HANGING_ENEMY)HookUpdate(tmp_CharaMoveLog);
 
+	if (hookAnimFlag)
+	{
+		m_Chara.SetPlayerAnimState(HOOK);
+		hookAnimFlag = !hookAnimFlag;
+	}
+	else if (Hook_state == HANGING|| Hook_state == HANGING_ENEMY)
+	{
+		if (Player_state != P_H_IDLING)
+		{
+			if (Moveinput.x != 0 && Moveinput.y != 0)
+			{
+				m_Chara.SetPlayerAnimState(TELEPOTING);
+			}
+			else
+			{
+				m_Chara.SetPlayerAnimState(TELEPORT_BEGIN);
+			}
+		}
+		else
+		{
+			m_Chara.SetPlayerAnimState(TELEPORT_END);
+		}
+	}
+	else if (Player_state == IDLING) 
+	{
+		if (Moveinput.y < 0) 
+		{
+			m_Chara.SetPlayerAnimState(JUMP);
+		}
+		else if (Moveinput.y > gravity_s) 
+		{
+			m_Chara.SetPlayerAnimState(FALL);
+		}
+		else if (Moveinput.x != 0) 
+		{
+			m_Chara.SetPlayerAnimState(RUN);
+		}
+		else 
+		{
+			m_Chara.SetPlayerAnimState(IDLE);
+		}
+	}
+	
+
 }
 
 void Scene::PlayerUpdate()
@@ -160,31 +204,32 @@ void Scene::PlayerUpdate_Hanging()
 		{
 			Moveinput.x = 0.0f;
 			if (Hook_state == HANGING_ENEMY)Moveinput.y = -ejump_s; else Moveinput.y = -jump_s;
-			Hook_state = SHOOTING;
+			Hook_state = H_IDLING;
 			Player_state = IDLING;
 		}
 		else if (m_InputState[LEFT_KEY] == PUSH_ENTER) 
 		{
 			Moveinput.x = -xa;
 			Moveinput.y = 0.0f;
-			Hook_state = SHOOTING;
+			Hook_state = H_IDLING;
 			Player_state = IDLING;
 		}
 		else if (m_InputState[RIHGT_KEY] == PUSH_ENTER)
 		{
 			Moveinput.x = xa;
 			Moveinput.y = 0.0f;
-			Hook_state = SHOOTING;
+			Hook_state = H_IDLING;
 			Player_state = IDLING;
 		}
 	}
 	else
 	{
 
-		if (abs(m_Hook.GetTrans().x - m_Chara.GetTrans().x) <= m_Chara.GetScaleX() / 2
-			&& abs(m_Hook.GetTrans().y - m_Chara.GetTrans().y) <= m_Chara.GetScaleY() / 2
+		if (abs(m_Hook.GetTrans().x - h_move_pos.x) <= m_Chara.GetScaleX() / 2
+			&& abs(m_Hook.GetTrans().y - h_move_pos.y) <= m_Chara.GetScaleY() / 2
 			)
 		{
+			m_Chara.SetTrans(h_move_pos);
 			m_Hook.turnDrawFlag();
 			Moveinput.x = 0.0f;
 			Moveinput.y = 0.0f;
@@ -205,12 +250,16 @@ void Scene::PlayerUpdate_Hanging()
 	out_Moveinput.x = Moveinput.x / float(moveMagnitude);
 	out_Moveinput.y = Moveinput.y / float(moveMagnitude);
 
-
-
-	for (int i = 0; i < moveMagnitude; i++)
+	if (Player_state == P_H_IDLING)
+		for (int i = 0; i < moveMagnitude; i++)
+		{
+			m_Chara.AddTrans(out_Moveinput);
+			m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+		}
+	else 
 	{
-		m_Chara.AddTrans(out_Moveinput);
-		if(Player_state == P_H_IDLING)m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision));
+		h_move_pos.x += Moveinput.x;
+		h_move_pos.y += Moveinput.y;
 	}
 }
 
@@ -274,6 +323,7 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 		m_Hook.SetTrans(m_Chara.GetTrans());
 		Hook_state = SHOOTING;
 		jump_hook_flag = false;
+		hookAnimFlag = true;
 
 		Hook_Moveinput = XMFLOAT2(0.0f, 0.0f);
 
@@ -323,6 +373,7 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 					Hook_Moveinput.y = 0.0f;
 					Moveinput.x = 0.0f;
 					Moveinput.y = 0.0f;
+					h_move_pos = m_Chara.GetTrans();
 					break;
 				}
 			}

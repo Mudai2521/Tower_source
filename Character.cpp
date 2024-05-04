@@ -28,7 +28,7 @@ bool Character::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descript
 	
 	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans);
 
-	m_spritedata[0]->SetSpriteSheet(idleAnimLength, 1, 1, 1);
+	m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, 1, 1);
 	return true;
 }
 
@@ -50,21 +50,120 @@ void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 	if (animIdleFrameCount == animIdleFrame)
 	{
 		fCount++;
-		if (fCount > idleAnimLoopFrame&& idleAnimLoopCount<idleAniLoopTimes) 
+		if (pl_anim_s == IDLE)
 		{
-			fCount = 1;
-			idleAnimLoopCount++;
+			if (fCount > idleAnimLoopFrame && idleAnimLoopCount < idleAniLoopTimes)
+			{
+				fCount = 1;
+				idleAnimLoopCount++;
+			}
+			if (fCount > idleAnimLength)
+			{
+				fCount = 1;
+				idleAnimLoopCount = 0;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 1);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
 		}
-		if (fCount > idleAnimLength) 
+		else if (pl_anim_s == RUN) 
 		{
-			fCount = 1; 
-			idleAnimLoopCount = 0;
-		};
-		m_spritedata[0]->SetSpriteSheet(idleAnimLength, 1, fCount, 1);
-		if (!direction) 
+			if (fCount > runAnimLength)
+			{
+				fCount = 1;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 2);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+		}
+		else if (pl_anim_s == JUMP)
 		{
-			turn();
-			direction = !direction;
+			if (fCount > jumpAnimLength)
+			{
+				fCount = 1;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 3);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+		}
+		else if (pl_anim_s == FALL)
+		{
+			if (fCount > fallAnimLength)
+			{
+				fCount = 1;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 4);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+		}
+		else if (pl_anim_s == HOOK)
+		{
+			if (fCount == hookAnimLength)
+			{
+				fCount = 1;
+				pl_anim_s = IDLE;
+			}else
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 5);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+		}
+		else if (pl_anim_s == TELEPORT_BEGIN)
+		{
+			if (fCount > teleAnimLength)
+			{
+				fCount = teleAnimLoopFrame;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 6);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+		}
+		else if (pl_anim_s == TELEPOTING)
+		{
+			int spriteNum = 0;
+			if (fCount > teleAnimLength)
+			{
+				fCount = teleAnimLength;
+			};
+			if (fCount == 1)spriteNum = 2;
+			if (fCount == 2)spriteNum = 1;
+			if (fCount == 3)spriteNum = teleAnimLength + 1;
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, spriteNum, 6);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+		}
+		else if (pl_anim_s == TELEPORT_END)
+		{
+			if (fCount > teleAnimLength)
+			{
+				fCount = teleAnimLoopFrame;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 6);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
 		}
 	}
 

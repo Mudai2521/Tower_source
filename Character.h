@@ -18,6 +18,18 @@ struct CharactorState
 	}
 };
 
+enum Player_Anim_State
+{
+	IDLE = 0,
+	RUN,
+	JUMP,
+	FALL,
+	HOOK,
+	TELEPORT_BEGIN,
+	TELEPORT_END,
+	TELEPOTING
+};
+
 class Character
 {
 public:
@@ -52,19 +64,38 @@ public:
 		direction = !direction;
 	}
 	bool GetDirection() { return direction; };
+	void SetPlayerAnimState(Player_Anim_State State)
+	{
+		if (pl_anim_s != HOOK|| State== TELEPORT_BEGIN) {
+			if (pl_anim_s != State)fCount = 1;
+			if (pl_anim_s != TELEPORT_BEGIN && State == TELEPORT_BEGIN)fCount = teleAnimLoopFrame;
+			pl_anim_s = State;
+		}
+	};
 private:
 	CharactorState m_CharactorState;
 	UINT m_width;
 	UINT m_height;
 	bool direction;//‰EŒü‚«‚Åtrue
+
 	int fCount = 1;
+
 	const int idleAnimLength = 41;
 	int idleAnimLoopCount = 0;
 	const int idleAnimLoopFrame = 24;
 	const int idleAniLoopTimes = 5;
 
+	const int runAnimLength = 8;
+	const int jumpAnimLength = 7;
+	const int fallAnimLength = 5;
+	const int hookAnimLength = 5;
+	const int teleAnimLength = 10;
+	const int teleAnimLoopFrame = 3;
+
 	int animIdleFrameCount = 0;
-	const int animIdleFrame = 8;
+	const int animIdleFrame = 4;
+	Player_Anim_State pl_anim_s = IDLE;
+	const int animNum = 6;
 
 	std::vector<Sprite*> m_spritedata;
 
