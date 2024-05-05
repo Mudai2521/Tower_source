@@ -49,6 +49,14 @@ private:
 	bool direction;//‰EŒü‚«‚Åtrue
 	bool drawFlag;
 
+	int fCount = 1;
+
+	const int idleAnimLength = 5;
+
+	int animIdleFrameCount = 0;
+	const int animIdleFrame = 4;
+	const int animNum = 1;
+
 	std::vector<Sprite*> m_spritedata;
 
 	Hook(const  Hook&) = delete;

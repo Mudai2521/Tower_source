@@ -19,7 +19,7 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
 	m_Hook.Init(pDevice, pQueue, pPool, width, height);
 
-	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 1.5f, m_height - 112.0f));
+	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 3.5f, m_height - 112.0f));
 	p_firstPos = m_Chara.GetTrans();
 	return true;
 }
@@ -330,15 +330,20 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 		if (m_InputState[LEFT_KEY] >= PUSH_ENTER)
 		{
 			Hook_Moveinput.x -= Hook_s;
+			if (m_InputState[JUMP_KEY] >= PUSH_ENTER)
+			{
+				Hook_Moveinput.y -= Hook_s;
+			}
 		}
 		if (m_InputState[RIHGT_KEY] >= PUSH_ENTER)
 		{
 			Hook_Moveinput.x += Hook_s;
+			if (m_InputState[JUMP_KEY] >= PUSH_ENTER)
+			{
+				Hook_Moveinput.y -= Hook_s;
+			}
 		}
-		if (m_InputState[JUMP_KEY] >= PUSH_ENTER)
-		{
-			Hook_Moveinput.y -= Hook_s;
-		}
+		
 
 		if (Hook_Moveinput.x == 0.0f && Hook_Moveinput.y == 0.0f)
 		{
@@ -354,6 +359,15 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 
 	if (m_Hook.GetDrawFlag())
 	{
+		if (Hook_Moveinput.x < 0 && m_Hook.GetDirection())
+		{
+			//m_Hook.turn();
+		}
+		if (Hook_Moveinput.x > 0 && !m_Hook.GetDirection())
+		{
+			//m_Hook.turn();
+		}
+
 		int moveMagnitude = pow(Hook_Moveinput.x + CharaMoveLog.x, 2) + pow(Hook_Moveinput.y + CharaMoveLog.y, 2);
 		moveMagnitude = (moveMagnitude == 0 ? 1 : moveMagnitude);
 		XMFLOAT2 out_Moveinput;
@@ -378,8 +392,15 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 				}
 			}
 		}
-
-
+		if (Hook_Moveinput.x != 0.0f || Hook_Moveinput.y != 0.0f)
+		{
+			XMVECTOR Rotate = XMVector2Normalize(XMLoadFloat2(&XMFLOAT2(Hook_Moveinput.x, -Hook_Moveinput.y)));
+			Rotate = XMVectorACos(XMVector2Dot(Rotate, XMVectorSetBinaryConstant(1, 0, 0, 0)));
+			float out_Rotate;
+			XMStoreFloat(&out_Rotate, Rotate);
+			if (Hook_Moveinput.y > 0)out_Rotate = -out_Rotate;
+			m_Hook.SetRotate(out_Rotate);
+		}
 	}
 }
 

@@ -114,12 +114,15 @@ void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 			{
 				fCount = 1;
 				pl_anim_s = IDLE;
-			}else
-			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 5);
-			if (!direction)
+			}
+			else
 			{
-				turn();
-				direction = !direction;
+				m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 5);
+				if (!direction)
+				{
+					turn();
+					direction = !direction;
+				}
 			}
 		}
 		else if (pl_anim_s == TELEPORT_BEGIN)

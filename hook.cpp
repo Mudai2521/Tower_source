@@ -21,14 +21,14 @@ bool Hook::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPoo
 {
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
-	if (!pSpritedata->Init(L"Sprite/Player.dds", pDevice, pQueue, pPool, width, height))throw std::exception();
+	if (!pSpritedata->Init(L"Sprite/Hook.dds", pDevice, pQueue, pPool, width, height))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;
 
 
 	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans);
-
+	m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, 1, 1);
 	return true;
 }
 
@@ -47,8 +47,31 @@ void Hook::Term()
 
 void Hook::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
+	if (animIdleFrameCount == animIdleFrame)
+	{
+		fCount++;
+
+		if (fCount > idleAnimLength)
+		{
+			fCount = 1;
+		};
+		m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 1);
+		if (!direction)
+		{
+			turn();
+			direction = !direction;
+		}
+
+	}
+
 	if (!drawFlag)return;
 
 	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, XMFLOAT2(m_CharactorState.Trans.x, m_CharactorState.Trans.y + Scroll));
 	m_spritedata[0]->Draw(pCmdList);
+
+	animIdleFrameCount++;
+	if (animIdleFrameCount > animIdleFrame)
+	{
+		animIdleFrameCount = 0;
+	}
 }

@@ -46,8 +46,9 @@ bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descriptor
 {
 	
 	
-	if (!m_spritedata.Init(L"Sprite/2024_03_29_3.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX))throw std::exception();
+	if (!m_spritedata.Init(L"Sprite/Terrain.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool))throw std::exception();
+	if (!m_spritedata.AddSprite(L"Sprite/BG.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_width = width;
 	m_height = height;
 
@@ -80,6 +81,7 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
+				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 2);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 1)
 			{
@@ -143,7 +145,7 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 
 				if (abs(Map_X - Trans.x) < DIS_X && abs(Map_Y - Trans.y) < DIS_Y)
 				{
-					if (abs(Map_X - Trans.x) >= abs(Map_Y - Trans.y))
+					if (abs(Map_X - Trans.x) >= abs(Map_Y - Trans.y)&& abs(returnVec.x)< m_CharactorState.Scale.x/2)
 					{
 						returnVec.x += (Map_X - Trans.x > 0) ? abs(Trans.x - Map_X) - DIS_X : DIS_X - abs(Trans.x - Map_X);
 						Trans.x += returnVec.x;
@@ -221,7 +223,7 @@ void Terrain::ScrollUpdate(float Scroll)
 			mapListCount++;
 			if (mapChipList.size() - 1 < mapListCount) 
 			{
-				mapChipList.push_back(1);
+				mapChipList.push_back(2);
 			}
 		}
 		for (int i = 0; i < MapX_MAX; i++) 
