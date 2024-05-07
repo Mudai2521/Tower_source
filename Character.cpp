@@ -47,6 +47,20 @@ void Character::Term()
 
 void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
+	AnimUpdate();
+
+	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, XMFLOAT2(m_CharactorState.Trans.x, m_CharactorState.Trans.y + Scroll));
+	m_spritedata[0]->Draw(pCmdList);
+}
+
+void Character::AnimUpdate() 
+{
+	animIdleFrameCount++;
+	if (animIdleFrameCount > animIdleFrame)
+	{
+		animIdleFrameCount = 0;
+	}
+
 	if (animIdleFrameCount == animIdleFrame)
 	{
 		fCount++;
@@ -69,7 +83,7 @@ void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 				direction = !direction;
 			}
 		}
-		else if (pl_anim_s == RUN) 
+		else if (pl_anim_s == RUN)
 		{
 			if (fCount > runAnimLength)
 			{
@@ -168,14 +182,5 @@ void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 				direction = !direction;
 			}
 		}
-	}
-
-	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, XMFLOAT2(m_CharactorState.Trans.x, m_CharactorState.Trans.y + Scroll));
-	m_spritedata[0]->Draw(pCmdList);
-
-	animIdleFrameCount++;
-	if (animIdleFrameCount > animIdleFrame) 
-	{
-		animIdleFrameCount = 0;
 	}
 }

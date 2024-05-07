@@ -1,35 +1,37 @@
-﻿  D3D12Application.cpp
+﻿  Character.cpp
+  D3D12Application.cpp
   DX12Game.cpp
-C:\Users\inaka\source\repos\DX12_test\DX12_test\DX12Game.h(30,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(30,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\DX12Game.cpp(51,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(51,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
   
+  Hook.cpp
   Scene.cpp
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(171,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(134,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(241,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(204,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(242,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(205,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(247,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(210,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(279,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(242,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(371,21): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(334,21): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
   Terrain.cpp
   Win32Application.cpp
   main.cpp
-C:\Users\inaka\source\repos\DX12_test\DX12_test\DX12Game.h(30,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(30,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   (ソース ファイル '/main.cpp' をコンパイルしています)
   
   コードを生成中...
-  DX12_test.vcxproj -> C:\Users\inaka\source\repos\DX12_test\DX12_test\Debug\DX12_test.exe
+  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

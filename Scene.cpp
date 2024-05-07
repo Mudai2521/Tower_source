@@ -15,10 +15,12 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 {
 	m_width = width;
 	m_height = height;
+	//各クラスの初期化
 	m_Chara.Init(pDevice, pQueue, pPool, width, height);
 	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
 	m_Hook.Init(pDevice, pQueue, pPool, width, height);
 
+	//自機の初期位置設定
 	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 3.5f, m_height - 112.0f));
 	p_firstPos = m_Chara.GetTrans();
 	return true;
@@ -33,7 +35,9 @@ void Scene::Term()
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 {
+	//スクロールの更新
 	Scroll();
+	//描画
 	m_Terrain.DrawMap(pCmdList, scrollPosY);
 	m_Hook.DrawSprite(pCmdList, scrollPosY);
 	m_Chara.DrawSprite(pCmdList, scrollPosY);
@@ -64,48 +68,7 @@ void Scene::OnUpdate(unsigned char* key)
 
 	if (Hook_state != HANGING && Hook_state != HANGING_ENEMY)HookUpdate(tmp_CharaMoveLog);
 
-	if (hookAnimFlag)
-	{
-		m_Chara.SetPlayerAnimState(HOOK);
-		hookAnimFlag = !hookAnimFlag;
-	}
-	else if (Hook_state == HANGING|| Hook_state == HANGING_ENEMY)
-	{
-		if (Player_state != P_H_IDLING)
-		{
-			if (Moveinput.x != 0 && Moveinput.y != 0)
-			{
-				m_Chara.SetPlayerAnimState(TELEPOTING);
-			}
-			else
-			{
-				m_Chara.SetPlayerAnimState(TELEPORT_BEGIN);
-			}
-		}
-		else
-		{
-			m_Chara.SetPlayerAnimState(TELEPORT_END);
-		}
-	}
-	else if (Player_state == IDLING) 
-	{
-		if (Moveinput.y < 0) 
-		{
-			m_Chara.SetPlayerAnimState(JUMP);
-		}
-		else if (Moveinput.y > gravity_s) 
-		{
-			m_Chara.SetPlayerAnimState(FALL);
-		}
-		else if (Moveinput.x != 0) 
-		{
-			m_Chara.SetPlayerAnimState(RUN);
-		}
-		else 
-		{
-			m_Chara.SetPlayerAnimState(IDLE);
-		}
-	}
+	PlayerAnimUpdate();
 	
 
 }
@@ -446,5 +409,51 @@ void Scene::keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo)
 	{
 		if (m_InputState[keyInfo] == NOT_PUSH || m_InputState[keyInfo] == PUSH_EXIT)m_InputState[keyInfo] = NOT_PUSH;
 		else m_InputState[keyInfo] = PUSH_EXIT;
+	}
+}
+
+void Scene::PlayerAnimUpdate()
+{
+	if (hookAnimFlag)
+	{
+		m_Chara.SetPlayerAnimState(HOOK);
+		hookAnimFlag = !hookAnimFlag;
+	}
+	else if (Hook_state == HANGING || Hook_state == HANGING_ENEMY)
+	{
+		if (Player_state != P_H_IDLING)
+		{
+			if (Moveinput.x != 0 && Moveinput.y != 0)
+			{
+				m_Chara.SetPlayerAnimState(TELEPOTING);
+			}
+			else
+			{
+				m_Chara.SetPlayerAnimState(TELEPORT_BEGIN);
+			}
+		}
+		else
+		{
+			m_Chara.SetPlayerAnimState(TELEPORT_END);
+		}
+	}
+	else if (Player_state == IDLING)
+	{
+		if (Moveinput.y < 0)
+		{
+			m_Chara.SetPlayerAnimState(JUMP);
+		}
+		else if (Moveinput.y > gravity_s)
+		{
+			m_Chara.SetPlayerAnimState(FALL);
+		}
+		else if (Moveinput.x != 0)
+		{
+			m_Chara.SetPlayerAnimState(RUN);
+		}
+		else
+		{
+			m_Chara.SetPlayerAnimState(IDLE);
+		}
 	}
 }

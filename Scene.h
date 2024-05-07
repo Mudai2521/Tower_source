@@ -17,6 +17,7 @@ public:
 	void OnUpdate(unsigned char* key);
 	
 private:
+	//キーの状態
 	enum INPUT_STATE
 	{
 		NOT_PUSH = 0,	// 押されてない
@@ -44,6 +45,7 @@ private:
 		DIK_D
 	};
 
+	//フックショット(仮)の状態
 	enum HOOK_STATE
 	{
 		SHOOTING=0,
@@ -53,6 +55,7 @@ private:
 		H_IDLING
 	};
 
+	//自機の状態
 	enum PLAYER_STATE
 	{
 		IDLING = 0,
@@ -68,6 +71,7 @@ private:
 	Terrain m_Terrain;
 	Hook m_Hook;
 
+	//ウィンドウの大きさ
 	UINT m_width;
 	UINT m_height;
 
@@ -110,6 +114,7 @@ private:
 	void PlayerUpdate_Damaged();
 	void HookUpdate(DirectX::XMFLOAT2 CharaMoveLog);
 	void Scroll();
+	void PlayerAnimUpdate();
 
 	Scene(const  Scene&) = delete;
 	Scene& operator=(const  Scene&) = delete;
