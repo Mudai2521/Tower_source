@@ -172,14 +172,14 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 			}
 
 			//Ç∑ÇËî≤ÇØè∞ÇÃèàóù
-			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 2)
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 2&& !is_attack)
 			{
 				float Map_X = m_CharactorState.Scale.x / 2 + m_CharactorState.Scale.x * x;
 				float Map_Y = 1.0f + m_CharactorState.Scale.y * y - drawMapBuffer;
 
-				if (abs(Map_X - Trans.x) < DIS_X && Map_Y - Trans.y < DIS_Y_2&& Move.y>0.0f)
+				if (abs(Map_X - Trans.x) < DIS_X && Map_Y - Trans.y < DIS_Y_2 && Move.y>0.0f)
 				{
-					
+
 					if (abs(returnVec.y) < m_CharactorState.Scale.y / 2)
 					{
 						returnVec.y += (Map_Y - Trans.y > 0) ? abs(Trans.y - Map_Y) - DIS_Y_2 : 0;
