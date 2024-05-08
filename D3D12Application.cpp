@@ -236,7 +236,6 @@ void D3D12Application::LoadPipeline()
             ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator[n])));
         }
     }
-
 }
 
 

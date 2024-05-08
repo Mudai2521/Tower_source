@@ -76,36 +76,36 @@ private:
 	UINT m_height;
 
 	//パラメータ
-	DirectX::XMFLOAT2 Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
-	const float xa = 0.7f;
-	const float xs_MAX = 6.0f;
-	const float gravity_s = 1.0f;
-	const float gravity_MAX = 20.0f;
-	const float jump_s = 20.0f;
-	const float ejump_s = 25.0f;
-	Terrain_Collision  Player_Collision = No_Collision;
-	const float move_s_h = 20.0f;
-	DirectX::XMFLOAT2 p_firstPos;
-	DirectX::XMFLOAT2 h_move_pos;
+	DirectX::XMFLOAT2 Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);	//移動速度の合計
+	const float xa = 0.7f;											//X軸方向の加速度
+	const float xs_MAX = 6.0f;										//X軸方向速度の最大値
+	const float gravity_s = 1.0f;									//重力加速度
+	const float gravity_MAX = 20.0f;								//落下速度の最大値
+	const float jump_s = 20.0f;										//ジャンプ時の初速度
+	const float ejump_s = 25.0f;									//敵へのフックショットからジャンプした時の初速度
+	Terrain_Collision  Player_Collision = No_Collision;				//自機と地形・敵との当たり判定の記録
+	const float move_s_h = 20.0f;									//ワープ時の移動速度
+	DirectX::XMFLOAT2 p_firstPos;									//自機の初期位置
+	DirectX::XMFLOAT2 h_move_pos;									//ワープ中の移動距離保存用
 
-	const float move_s_d = 4.0f;
-	const float move_a_d = 0.02f;
-	const float jump_s_d = 13.0f;
+	const float move_s_d = 4.0f;									//被ダメ時のX軸初速度
+	const float move_a_d = 0.02f;									//被ダメ時のX軸加速度
+	const float jump_s_d = 13.0f;									//被ダメ時のY軸初速度
 
-	bool jump_hook_flag = false;
-	PLAYER_STATE Player_state = IDLING;
+	bool jump_hook_flag = false;									//ジャンプ時のフックショットは一度ワープすると着地まで再発射不可　の判定用
+	PLAYER_STATE Player_state = IDLING;								//自機の状態を保存
 
-	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);
-	const float Hook_s = 10.0f;
-	const float Hook_length = 300.0f;
-	HOOK_STATE Hook_state = H_IDLING;
-	Terrain_Collision Hook_Collision = No_Collision;
-	bool hookAnimFlag = false;
+	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);//フックの移動速度合計
+	const float Hook_s = 10.0f;										//フックの初速度　加速しないのでそのまま
+	const float Hook_length = 300.0f;								//この距離まで離れたら反転
+	HOOK_STATE Hook_state = H_IDLING;								//フックの状態を保存
+	Terrain_Collision Hook_Collision = No_Collision;				//フックと地形・敵との当たり判定の記録
+	bool hookAnimFlag = false;										//自機のフック発射モーションの再生フラグ
 
-	float scrollPosY = 0.0f;
-	const float default_scroll_s = 1.0f;
-	float scroll_s = default_scroll_s;
-	const float scroll_s_c = 0.1f;
+	float scrollPosY = 0.0f;										//Y軸方向のスクロール距離
+	const float default_scroll_s = 1.0f;							//スクロール速度の最低値
+	float scroll_s = default_scroll_s;								//スクロール速度
+	const float scroll_s_c = 0.1f;									//この係数をスクロール距離にかけてスクロール速度とする
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);
@@ -114,7 +114,7 @@ private:
 	void PlayerUpdate_Damaged();
 	void HookUpdate(DirectX::XMFLOAT2 CharaMoveLog);
 	void Scroll();
-	void PlayerAnimUpdate();
+	void AnimUpdate();
 
 	Scene(const  Scene&) = delete;
 	Scene& operator=(const  Scene&) = delete;
