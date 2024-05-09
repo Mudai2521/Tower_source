@@ -83,6 +83,11 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 	}
 }
 
+void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State)
+{
+
+}
+
 void Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
 {
 	auto pEData = new (std::nothrow)EnemyData();
@@ -91,10 +96,9 @@ void Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
 	return;
 }
 
-XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, DirectX::XMFLOAT2 Move, bool is_attack)
+XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack)
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
-	Collision_ret = No_Collision;
 
 	for (auto& e : m_enemyData)
 	{
@@ -104,7 +108,7 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 
 		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y)
 		{
-			if (abs(e->GetTrans().x - Trans.x) >= abs(e->GetTrans().y - Trans.y) && abs(returnVec.x) < Scale.x / 2)
+			/*if (abs(e->GetTrans().x - Trans.x) >= abs(e->GetTrans().y - Trans.y) && abs(returnVec.x) < Scale.x / 2)
 			{
 				returnVec.x += (e->GetTrans().x - Trans.x > 0) ? abs(Trans.x - e->GetTrans().x) - DIS_X : DIS_X - abs(Trans.x - e->GetTrans().x);
 				Trans.x += returnVec.x;
@@ -113,7 +117,7 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 			{
 				returnVec.y += (e->GetTrans().y - Trans.y > 0) ? abs(Trans.y - e->GetTrans().y) - DIS_Y : DIS_Y - abs(Trans.y - e->GetTrans().y);
 				Trans.y += returnVec.y;
-			}
+			}*/
 
 			if (e->GetTrans().x - Trans.x > 0)
 			{
@@ -126,7 +130,7 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 
 			if (is_attack)
 			{
-				
+				e->SetEnemyState(ENEMY_DAMAGED);
 			}
 		}
 	}

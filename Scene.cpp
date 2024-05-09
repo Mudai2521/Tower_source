@@ -340,7 +340,7 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 			m_Hook.AddTrans(out_Moveinput);
 			if (Hook_state != RETURNING) {//‹AŠÒŽž‚Í”»’è‚ª–³‚­‚È‚é
 				m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), Hook_Collision, out_Moveinput, true));
-				if ((Hook_Collision & Celling) || (Hook_Collision & Wall))
+				if ((Hook_Collision & Celling) || (Hook_Collision & Wall)|| Hook_Collision & Enemy_Hit_Left || Hook_Collision & Enemy_Hit_Right)
 				{
 					if (Hook_Collision & Enemy_Hit_Left|| Hook_Collision & Enemy_Hit_Right)Hook_state = HANGING_ENEMY; else Hook_state = HANGING;
 					

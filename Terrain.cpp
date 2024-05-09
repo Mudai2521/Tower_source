@@ -103,12 +103,7 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
 			{
 				m_Enemy.AddEnemy(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y + m_CharactorState.Scale.y * y
-					- drawMapBuffer + Scroll), m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x < m_width / 2, ENEMY_IDLE);
-				/*SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y 
-					- drawMapBuffer + Scroll));
-				m_spritedata.SetSpriteSheet(2, 1, 1, 1, 1);
-				m_spritedata.SetWorldMatrix(XMFLOAT2(m_CharactorState.Scale.x * 4, m_CharactorState.Scale.y * 4), m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 1);*/
+					- drawMapBuffer + Scroll- Scroll_Enemy), m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x < m_width / 2, ENEMY_IDLE);
 				map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] = 0;
 			}
 		}
@@ -126,6 +121,9 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
 	Collision_ret = No_Collision;
+
+	m_Enemy.Collision(Trans, Scale,Collision_ret, is_attack);
+
 	Trans.y += m_CharactorState.Scale.y * TerrainScroll;//地形スクロールを反映
 
 	//判定を行う範囲の設定
@@ -185,50 +183,6 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 						returnVec.y += (Map_Y - Trans.y > 0) ? abs(Trans.y - Map_Y) - DIS_Y_2 : 0;
 						Trans.y += returnVec.y;
 					}
-				}
-			}
-
-			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
-			{
-				float Map_X = m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x;
-				float Map_Y = -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
-
-				if (abs(Map_X - Trans.x) < ENEMY_DIS_X && abs(Map_Y - Trans.y) < ENEMY_DIS_Y)
-				{
-					if (abs(Map_X - Trans.x) >= abs(Map_Y - Trans.y))
-					{
-						returnVec.x += (Map_X - Trans.x > 0) ? abs(Trans.x - Map_X) - ENEMY_DIS_X : ENEMY_DIS_X - abs(Trans.x - Map_X);
-						Trans.x += returnVec.x;
-					}
-					else
-					{
-						returnVec.y += (Map_Y - Trans.y > 0) ? abs(Trans.y - Map_Y) - ENEMY_DIS_Y : ENEMY_DIS_Y - abs(Trans.y - Map_Y);
-						Trans.y += returnVec.y;
-					}
-
-					if (Map_X - Trans.x > 0) 
-					{
-						Collision_ret |= Enemy_Hit_Right;
-					}
-					else 
-					{
-						Collision_ret |= Enemy_Hit_Left;
-					}
-					
-					if (is_attack) 
-					{
-						map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] = 8;
-					}
-				}
-			}
-			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 8)
-			{
-				float Map_X = m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x;
-				float Map_Y = -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
-
-				if (abs(Map_X - Trans.x) > ENEMY_DIS_X && abs(Map_Y - Trans.y) > ENEMY_DIS_Y)
-				{
-					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] = 0;
 				}
 			}
 		}

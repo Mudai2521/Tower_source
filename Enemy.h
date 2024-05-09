@@ -40,10 +40,12 @@ public:
 	}
 	bool GetDirection() { return direction; };
 	ENEMY_TYPE GetEnemyType() { return m_type; }
+	void SetEnemyState(ENEMY_STATE state) { m_state = state; };
 private:
 	CharactorState m_CharactorState;
 	bool direction;//‰EŒü‚«‚Åtrue
 	ENEMY_TYPE m_type;
+	ENEMY_STATE m_state= ENEMY_IDLING;
 };
 
 class Enemy
@@ -55,7 +57,8 @@ public:
 	void Term();
 	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
 	void AddEnemy(DirectX::XMFLOAT2 Trans,bool Direction,ENEMY_TYPE Type);
-	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, DirectX::XMFLOAT2 Move, bool is_attack);
+	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack);
+	void SetSprite(ENEMY_TYPE Type, ENEMY_STATE State);
 private:
 	UINT m_width;
 	UINT m_height;
