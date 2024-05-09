@@ -149,6 +149,7 @@
     <ClCompile Include="DepthStencilBuffer.cpp" />
     <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="DX12Game.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Hook.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -174,12 +175,14 @@
     <ClInclude Include="DescriptorPool.h" />
     <ClInclude Include="DX12Game.h" />
     <ClInclude Include="DXHelper.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Modeldata.h" />
     <ClInclude Include="RenderTargetView.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShareStruct.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Terrain.h" />

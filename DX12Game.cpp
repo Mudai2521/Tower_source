@@ -18,8 +18,6 @@ void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
     m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 
     ThrowIfFailed(m_inputDevice->Acquire());
-
-    
 }
 
 // Load the sample assets.
