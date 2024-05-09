@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "Terrain.h"
 #include "Hook.h"
+#include "Enemy.h"
 
 //シーン管理クラス
 class Scene

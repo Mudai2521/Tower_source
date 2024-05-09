@@ -43,6 +43,7 @@ Terrain::Terrain() :
 
 Terrain::~Terrain()
 {
+	m_Enemy.Term();
 	Term();
 }
 
@@ -54,6 +55,7 @@ bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, Descriptor
 	if (!m_spritedata.AddSprite(L"Sprite/Terrain2.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_width = width;
 	m_height = height;
+	m_Enemy.Init(pDevice, pQueue, pPool, width, height);
 
 	m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans);
 
@@ -67,6 +69,7 @@ void Terrain::Term()
 
 void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
+	float Scroll_Enemy = Scroll;
 	//スクロールの更新処理
 	ScrollUpdate(Scroll);
 	//更新処理を反映
@@ -99,24 +102,21 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
 			{
-				SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y 
+				m_Enemy.AddEnemy(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y + m_CharactorState.Scale.y * y
+					- drawMapBuffer + Scroll), m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x < m_width / 2, ENEMY_IDLE);
+				/*SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y 
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetSpriteSheet(2, 1, 1, 1, 1);
 				m_spritedata.SetWorldMatrix(XMFLOAT2(m_CharactorState.Scale.x * 4, m_CharactorState.Scale.y * 4), m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 1);
-			}
-			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 8)
-			{
-				SetTrans(XMFLOAT2(m_CharactorState.Scale.x * 2 + m_CharactorState.Scale.x * x, -m_CharactorState.Scale.y * 2 + m_CharactorState.Scale.y * y 
-					- drawMapBuffer + Scroll));
-				m_spritedata.SetSpriteSheet(2, 1, 2, 1, 1);
-				m_spritedata.SetWorldMatrix(XMFLOAT2(m_CharactorState.Scale.x * 4, m_CharactorState.Scale.y * 4), m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 1);
+				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 1);*/
+				map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] = 0;
 			}
 		}
 	}
 	//使用する定数バッファを入れ替えてデータ破損を防ぐ
 	m_spritedata.Setdrawcount();
+
+	m_Enemy.DrawSprite(pCmdList, Scroll_Enemy);
 }
 
 //中央座標と大きさを入力、めり込みを補正するベクトルを返す
@@ -177,7 +177,7 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 				float Map_X = m_CharactorState.Scale.x / 2 + m_CharactorState.Scale.x * x;
 				float Map_Y = 1.0f + m_CharactorState.Scale.y * y - drawMapBuffer;
 
-				if (abs(Map_X - Trans.x) < DIS_X && Map_Y - Trans.y < DIS_Y_2 && Move.y>0.0f)
+				if (abs(Map_X - Trans.x) < DIS_X && abs(Map_Y - Trans.y) < DIS_Y_2 && Move.y>0.0f)
 				{
 
 					if (abs(returnVec.y) < m_CharactorState.Scale.y / 2)

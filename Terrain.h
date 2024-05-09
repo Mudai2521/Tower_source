@@ -2,18 +2,11 @@
 #include "stdafx.h"
 #include "Sprite.h"
 #include "Character.h"
+#include "Enemy.h"
 
-enum Terrain_Collision
-{
-	No_Collision = 0,
-	Celling = 0x1,
-	Wall = 0x2,
-	Floor = 0x4,
-	Enemy_Hit_Left = 0x8,
-	Enemy_Hit_Right = 0x10
-};
 
-DEFINE_ENUM_FLAG_OPERATORS(Terrain_Collision);
+
+
 
 class Terrain
 {
@@ -45,6 +38,7 @@ private:
 	CharactorState m_CharactorState;//このクラスではマップチップ一枚あたりの大きさの管理に使う
 	UINT m_width;
 	UINT m_height;
+	Enemy m_Enemy;
 
 	Sprite m_spritedata;
 
@@ -127,7 +121,7 @@ private:
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 
 			1,1,1,1,1, 1,1,2,2,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,2,2,1,1, 1,1,1,1,1,
-			1,1,1,1,1, 1,1,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,1,1, 1,1,1,1,1,
+			1,1,1,1,1, 1,1,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 9,0,0,0,0,  0,0,0,1,1, 1,1,1,1,1,
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,2,2,2,  1,1,2,2,2, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  1,1,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 		},

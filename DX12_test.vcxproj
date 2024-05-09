@@ -182,6 +182,7 @@
     <ClInclude Include="Modeldata.h" />
     <ClInclude Include="RenderTargetView.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShareStruct.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Terrain.h" />

@@ -1,35 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "Sprite.h"
+#include "ShareStruct.h"
 
-struct CharactorState
-{
-	DirectX::XMFLOAT2 Scale;
-	float Rotate;
-	DirectX::XMFLOAT2 Trans;
-	CharactorState() = default;
-	CharactorState(DirectX::XMFLOAT2 Scale,
-		float Rotate,
-		DirectX::XMFLOAT2 Trans)
-		: Scale(Scale)
-		, Rotate(Rotate)
-		, Trans(Trans)
-	{
-	}
-};
 
-//プレイヤーのアニメーションの状態
-enum Player_Anim_State
-{
-	IDLE = 0,//待機
-	RUN,//左右移動
-	JUMP,//ジャンプ(上昇)
-	FALL,//落下
-	HOOK,//石投げ
-	TELEPORT_BEGIN,//ワープ開始までの待機
-	TELEPORT_END,//ワープ後の待機
-	TELEPOTING//ワープ中、前後
-};
 
 class Character
 {

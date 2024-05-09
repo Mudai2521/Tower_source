@@ -3,17 +3,19 @@
 #include "Sprite.h"
 #include "Character.h"
 
-class Enemy 
+
+
+class EnemyData 
 {
 public:
-	Enemy();
-	~Enemy();
-	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
+	EnemyData();
+	~EnemyData();
+	bool Init(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type);
 	void Term();
-	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
 
 	DirectX::XMFLOAT2 GetTrans() { return  m_CharactorState.Trans; };
 	DirectX::XMFLOAT2 GetScale() { return  m_CharactorState.Scale; };
+	float GetRotate() { return  m_CharactorState.Rotate; };
 	void SetScale(DirectX::XMFLOAT2 Scale) { m_CharactorState.Scale = Scale; };
 	float GetScaleX() { return m_CharactorState.Scale.x; };
 	float GetScaleY() { return m_CharactorState.Scale.y; };
@@ -33,17 +35,33 @@ public:
 	};
 	void turn(int spriteID = 0)
 	{
-		m_spritedata[spriteID]->turnX();
+		//m_spritedata[spriteID]->turnX();
 		direction = !direction;
 	}
 	bool GetDirection() { return direction; };
+	ENEMY_TYPE GetEnemyType() { return m_type; }
 private:
 	CharactorState m_CharactorState;
+	bool direction;//‰EŒü‚«‚Åtrue
+	ENEMY_TYPE m_type;
+};
+
+class Enemy
+{
+public:
+	Enemy();
+	~Enemy();
+	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
+	void Term();
+	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
+	void AddEnemy(DirectX::XMFLOAT2 Trans,bool Direction,ENEMY_TYPE Type);
+	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, DirectX::XMFLOAT2 Move, bool is_attack);
+private:
 	UINT m_width;
 	UINT m_height;
-	bool direction;//‰EŒü‚«‚Åtrue
 
 	std::vector<Sprite*> m_spritedata;
+	std::vector<EnemyData*> m_enemyData;
 
 	Enemy(const  Enemy&) = delete;
 	Enemy& operator=(const Enemy&) = delete;
