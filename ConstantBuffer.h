@@ -13,7 +13,7 @@ struct Transform
     DirectX::XMMATRIX World; // ワールド行列
     DirectX::XMMATRIX View; // ビュー行列
     DirectX::XMMATRIX Proj; // 投影行列
-    float padding[16]; // Padding so the constant buffer is 256-byte aligned.
+    float padding[16]; // 256バイトでアラインメント
 };
 static_assert((sizeof(Transform) % 256) == 0, "Constant Buffer size must be 256-byte aligned");
 
@@ -26,22 +26,12 @@ public:
         ID3D12Device* pDevice,
         DescriptorPool* pPool
     );
-
     void Term();
-
     
     D3D12_GPU_VIRTUAL_ADDRESS GetAddress() const;
-
-    
     D3D12_CPU_DESCRIPTOR_HANDLE GetHandleCPU() const;
-
-    
     D3D12_GPU_DESCRIPTOR_HANDLE GetHandleGPU() const;
-
-    
     void* GetPtr() const;
-
-   
     template<typename T>
     T* GetPtr()
     {
@@ -55,26 +45,22 @@ public:
         m_ConstantBufferData.Proj = Proj;
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
-
-    
-
     void SetWorldMatrix(DirectX::XMMATRIX World)
     {
         m_ConstantBufferData.World = DirectX::XMMatrixIdentity() * World;
         memcpy(m_pMappedPtr, &m_ConstantBufferData, sizeof(m_ConstantBufferData));
     }
-
 private:
     
-    ComPtr<ID3D12Resource>          m_pCB;          //定数バッファ
-    DescriptorHandle* m_pHandle;      //ディスクリプタハンドル
-    DescriptorPool* m_pPool;        //ディスクリプタプール
+    ComPtr<ID3D12Resource> m_pCB;                   //定数バッファ
+    DescriptorHandle* m_pHandle;                    //ディスクリプタハンドル
+    DescriptorPool* m_pPool;                        //ディスクリプタプール
     D3D12_CONSTANT_BUFFER_VIEW_DESC m_Desc;         //定数バッファビューの構成設定
-    void* m_pMappedPtr;   //マップ済みポインタ
+    void* m_pMappedPtr;                             //マップ済みポインタ
     Transform m_ConstantBufferData;
     UINT8* m_pCbvDataBegin;
 
     
-    ConstantBuffer(const ConstantBuffer&) = delete;       // アクセス禁止
-    void operator = (const ConstantBuffer&) = delete;       // アクセス禁止
+    ConstantBuffer(const ConstantBuffer&) = delete;      
+    void operator = (const ConstantBuffer&) = delete;       
 };

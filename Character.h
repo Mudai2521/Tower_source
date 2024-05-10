@@ -3,8 +3,6 @@
 #include "Sprite.h"
 #include "ShareStruct.h"
 
-
-
 class Character
 {
 public:

@@ -18,6 +18,6 @@ private:
 	DescriptorPool* m_pPool;        //ディスクリプタプール
 	ComPtr<ID3D12Resource> m_pDepthStencilBuffer;
 
-	DepthStencilBuffer(const DepthStencilBuffer&) = delete;       // アクセス禁止
-	void operator = (const DepthStencilBuffer&) = delete;       // アクセス禁止
+	DepthStencilBuffer(const DepthStencilBuffer&) = delete;      
+	void operator = (const DepthStencilBuffer&) = delete;       
 };

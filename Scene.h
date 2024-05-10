@@ -91,7 +91,7 @@ private:
 
 	const float move_s_d = 4.0f;									//被ダメ時のX軸初速度
 	const float move_a_d = 0.02f;									//被ダメ時のX軸加速度
-	const float jump_s_d = 13.0f;									//被ダメ時のY軸初速度
+	const float jump_s_d = 5.0f;									//被ダメ時のY軸初速度
 
 	bool jump_hook_flag = false;									//ジャンプ時のフックショットは一度ワープすると着地まで再発射不可　の判定用
 	PLAYER_STATE Player_state = IDLING;								//自機の状態を保存

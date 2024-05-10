@@ -59,35 +59,6 @@ bool DepthStencilBuffer::Init(ID3D12Device *pDevice, DescriptorPool* pPool, UINT
 
 void DepthStencilBuffer::OnSizeChanged(ID3D12Device* pDevice, UINT width, UINT height)
 {
-    //m_pDepthStencilBuffer.Reset();
-
-    /*D3D12_CLEAR_VALUE dsvClearValue;
-    dsvClearValue.Format = DXGI_FORMAT_D32_FLOAT;
-    dsvClearValue.DepthStencil.Depth = 1.0f;
-    dsvClearValue.DepthStencil.Stencil = 0;
-
-    CD3DX12_RESOURCE_DESC resourceDesc(
-        D3D12_RESOURCE_DIMENSION_TEXTURE2D,
-        0,
-        width,
-        height,
-        1,
-        1,
-        DXGI_FORMAT_D32_FLOAT,
-        1,
-        0,
-        D3D12_TEXTURE_LAYOUT_UNKNOWN,
-        D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL | D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE);
-
-    ThrowIfFailed(pDevice->CreateCommittedResource(
-        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-        D3D12_HEAP_FLAG_NONE,
-        &resourceDesc,
-        D3D12_RESOURCE_STATE_DEPTH_WRITE,
-        &dsvClearValue,
-        IID_PPV_ARGS(m_pDepthStencilBuffer.ReleaseAndGetAddressOf())));
-
-    pDevice->CreateRenderTargetView(m_pDepthStencilBuffer.Get(), nullptr, m_pHandle->HandleCPU);*/
 }
 
 void DepthStencilBuffer::Term()

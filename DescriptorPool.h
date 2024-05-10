@@ -76,8 +76,8 @@ private:
 class DescriptorHandle
 {
 public:
-	CD3DX12_CPU_DESCRIPTOR_HANDLE HandleCPU;  //!< CPUディスクリプタハンドル
-	CD3DX12_GPU_DESCRIPTOR_HANDLE HandleGPU;  //!< GPUディスクリプタハンドル
+	CD3DX12_CPU_DESCRIPTOR_HANDLE HandleCPU;  // CPUディスクリプタハンドル
+	CD3DX12_GPU_DESCRIPTOR_HANDLE HandleGPU;  // GPUディスクリプタハンドル
 	
 	bool HasCPU() const
 	{ return HandleCPU.ptr != 0; }
@@ -127,6 +127,6 @@ private:
 
 	~DescriptorPool();
 
-	DescriptorPool(const DescriptorPool&) = delete;   // アクセス禁止
-	void operator = (const DescriptorPool&) = delete;   // アクセス禁止
+	DescriptorPool(const DescriptorPool&) = delete;   
+	void operator = (const DescriptorPool&) = delete;   
 };

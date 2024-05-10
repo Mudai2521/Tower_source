@@ -41,6 +41,7 @@ public:
 	bool GetDirection() { return direction; };
 	ENEMY_TYPE GetEnemyType() { return m_type; }
 	void SetEnemyState(ENEMY_STATE state) { m_state = state; };
+	ENEMY_STATE GetEnemyState() { return m_state; }
 private:
 	CharactorState m_CharactorState;
 	bool direction;//‰EŒü‚«‚Åtrue

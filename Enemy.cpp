@@ -46,7 +46,6 @@ bool Enemy::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_width = width;
 	m_height = height;
 
-
 	m_spritedata[0]->SetSpriteSheet(2,1, 1, 1);
 	return true;
 }
@@ -77,6 +76,7 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
 	for (auto& e : m_enemyData) 
 	{
+		SetSprite(e->GetEnemyType(), e->GetEnemyState());
 		m_spritedata[e->GetEnemyType()]->SetWorldMatrix(e->GetScale(), e->GetRotate(), XMFLOAT2(e->GetTrans().x, e->GetTrans().y + Scroll));
 		m_spritedata[e->GetEnemyType()]->Draw(pCmdList);
 		m_spritedata[e->GetEnemyType()]->Setdrawcount();
@@ -85,7 +85,17 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 
 void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State)
 {
-
+	if (Type == ENEMY_IDLE) 
+	{
+		if (State == ENEMY_IDLING) 
+		{
+			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1);
+		}
+		else if (State == ENEMY_DAMAGED) 
+		{
+			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1);
+		}
+	}
 }
 
 void Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
@@ -106,19 +116,8 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		const float DIS_X = (Scale.x + e->GetScale().x) / 2;
 		const float DIS_Y = (Scale.y + e->GetScale().y) / 2;
 
-		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y)
+		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y&&e->GetEnemyState()== ENEMY_IDLING)
 		{
-			/*if (abs(e->GetTrans().x - Trans.x) >= abs(e->GetTrans().y - Trans.y) && abs(returnVec.x) < Scale.x / 2)
-			{
-				returnVec.x += (e->GetTrans().x - Trans.x > 0) ? abs(Trans.x - e->GetTrans().x) - DIS_X : DIS_X - abs(Trans.x - e->GetTrans().x);
-				Trans.x += returnVec.x;
-			}
-			else
-			{
-				returnVec.y += (e->GetTrans().y - Trans.y > 0) ? abs(Trans.y - e->GetTrans().y) - DIS_Y : DIS_Y - abs(Trans.y - e->GetTrans().y);
-				Trans.y += returnVec.y;
-			}*/
-
 			if (e->GetTrans().x - Trans.x > 0)
 			{
 				Collision_ret |= Enemy_Hit_Right;
@@ -132,6 +131,11 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 			{
 				e->SetEnemyState(ENEMY_DAMAGED);
 			}
+		}
+
+		if (abs(e->GetTrans().y - Trans.y) > m_height * 2) 
+		{
+			e->SetEnemyState(ENEMY_DELETED);
 		}
 	}
 	return returnVec;

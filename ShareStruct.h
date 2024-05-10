@@ -38,7 +38,8 @@ enum ENEMY_TYPE
 enum ENEMY_STATE
 {
 	ENEMY_IDLING,
-	ENEMY_DAMAGED
+	ENEMY_DAMAGED,
+	ENEMY_DELETED
 };
 
 enum Terrain_Collision
