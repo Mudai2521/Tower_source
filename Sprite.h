@@ -62,7 +62,7 @@ public:
     void SetWidth(UINT width) { m_width = width; };
     void SetHeight(UINT height) { m_width = height; };
     float GetSpriteSize() { return DefaultSpriteSize; };
-    void Setdrawcount() //大規模な描画を行った際に実行すること
+    void Setdrawcount() //大規模な描画を行った際に実行すること(定数バッファ入れ替えのフラグ)
     {
         drawcount = !drawcount;
     };

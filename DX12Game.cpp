@@ -18,11 +18,9 @@ void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
     m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 
     ThrowIfFailed(m_inputDevice->Acquire());
-
-    
 }
 
-// Load the sample assets.
+
 void DX12Game::LoadAssets()
 {
     {
@@ -63,7 +61,7 @@ void DX12Game::LoadAssets()
             pBlob.GetAddressOf(),
             pErrorBlob.GetAddressOf()));
         ThrowIfFailed(m_device->CreateRootSignature(
-            0, // GPUが複数ある場合のノードマスク（今回は1個しか無い想定なので0）
+            0, // GPUが複数ある場合のノードマスク
             pBlob->GetBufferPointer(), // シリアライズしたデータのポインタ
             pBlob->GetBufferSize(), // シリアライズしたデータのサイズ
             IID_PPV_ARGS(m_rootSignature.GetAddressOf()))); // ルートシグニチャ格納先のポインタ
@@ -275,17 +273,13 @@ void  DX12Game::OnKeyDown(UINT8 key)
 
 void DX12Game::PopulateCommandList()
 {
-    // Command list allocators can only be reset when the associated 
-    // command lists have finished execution on the GPU; apps should use 
-    // fences to determine GPU execution progress.
+    
     ThrowIfFailed(m_commandAllocator[m_frameIndex]->Reset());
 
-    // However, when ExecuteCommandList() is called on a particular command 
-    // list, that command list can then be reset at any time and must be before 
-    // re-recording.
+    
     ThrowIfFailed(m_commandList->Reset(m_commandAllocator[m_frameIndex].Get(), m_pipelineState.Get()));
 
-    // Set necessary state.
+    
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
     m_commandList->SetDescriptorHeaps(1, m_pPool[POOL_TYPE_RES]->GetHeapAddress());
     m_commandList->SetPipelineState(m_pipelineState.Get());
@@ -293,14 +287,14 @@ void DX12Game::PopulateCommandList()
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
 
-    // Indicate that the back buffer will be used as a render target.
+    
     m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetView[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 
 
     m_commandList->OMSetRenderTargets(1, &m_RenderTargetView[m_frameIndex].GetHandleCPU(), FALSE, &m_DSBuffer.GetHandleCPU());
 
-    // Record commands.
+    
     const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
     m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
@@ -308,7 +302,7 @@ void DX12Game::PopulateCommandList()
     m_Scene.DrawSprite(m_commandList.Get());
 
 
-    // Indicate that the back buffer will now be used to present.
+    
     m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RenderTargetView[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
     ThrowIfFailed(m_commandList->Close());

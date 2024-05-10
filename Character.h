@@ -1,34 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Sprite.h"
-
-struct CharactorState
-{
-	DirectX::XMFLOAT2 Scale;
-	float Rotate;
-	DirectX::XMFLOAT2 Trans;
-	CharactorState() = default;
-	CharactorState(DirectX::XMFLOAT2 Scale,
-		float Rotate,
-		DirectX::XMFLOAT2 Trans)
-		: Scale(Scale)
-		, Rotate(Rotate)
-		, Trans(Trans)
-	{
-	}
-};
-
-enum Player_Anim_State
-{
-	IDLE = 0,
-	RUN,
-	JUMP,
-	FALL,
-	HOOK,
-	TELEPORT_BEGIN,
-	TELEPORT_END,
-	TELEPOTING
-};
+#include "ShareStruct.h"
 
 class Character
 {
@@ -101,4 +74,6 @@ private:
 
 	Character(const  Character&) = delete;
 	Character& operator=(const Character&) = delete;
+
+	void AnimUpdate();
 };

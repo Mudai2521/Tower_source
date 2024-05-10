@@ -70,10 +70,10 @@ template<typename T> T* Pool<typename T>::Alloc(std::function<void(uint32_t, T*)
 	
 	m_Count++;
 	
-	// メモリ割り当て.
+	// メモリ割り当て
 	auto val = new ((void*)item) T();
 	
-	// 初期化の必要があれば呼び出す.
+	// 初期化の必要があれば呼び出す
 	if (func != nullptr)
 	{ func(item->m_Index, val); }
 	

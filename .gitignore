@@ -2,3 +2,4 @@
 *.ipch
 *.pdb
 *.pdb
+Debug/DX12_test.pdb

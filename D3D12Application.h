@@ -30,7 +30,6 @@ public:
     virtual void OnDestroy() = 0;
     virtual void OnKeyDown(UINT8 key) = 0;
 
-    // Accessors.
     UINT GetWidth() const { return m_width; }
     UINT GetHeight() const { return m_height; }
     const WCHAR* GetTitle() const { return m_title.c_str(); }
@@ -58,7 +57,7 @@ protected:
     // Root assets path.
     std::wstring m_assetsPath;
 
-    // Window title.
+    // ウィンドウタイトル
     std::wstring m_title;
 
     std::wstring GetAssetFullPath(LPCWSTR assetName);
@@ -70,7 +69,7 @@ protected:
 
     void SetCustomWindowText(LPCWSTR text);
 
-    // Viewport dimensions.
+    // ビューポート用変数
     UINT m_width;
     UINT m_height;
     float m_aspectRatio;
@@ -78,7 +77,7 @@ protected:
     // Adapter info.
     bool m_useWarpDevice;
 
-    // Pipeline objects.
+    // パイプライン
     CD3DX12_VIEWPORT m_viewport;
     CD3DX12_RECT m_scissorRect;
     ComPtr<IDXGISwapChain3> m_swapChain;
