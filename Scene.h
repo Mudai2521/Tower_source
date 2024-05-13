@@ -78,8 +78,8 @@ private:
 
 	//パラメータ
 	DirectX::XMFLOAT2 Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);	//移動速度の合計
-	const float xa = 0.7f;											//X軸方向の加速度
-	const float xs_MAX = 6.0f;										//X軸方向速度の最大値
+	const float xa = 0.5f;											//X軸方向の加速度
+	const float xs_MAX = 3.0f;										//X軸方向速度の最大値
 	const float gravity_s = 1.0f;									//重力加速度
 	const float gravity_MAX = 20.0f;								//落下速度の最大値
 	const float jump_s = 20.0f;										//ジャンプ時の初速度
@@ -98,7 +98,7 @@ private:
 
 	DirectX::XMFLOAT2 Hook_Moveinput = DirectX::XMFLOAT2(0.0f, 0.0f);//フックの移動速度合計
 	const float Hook_s = 10.0f;										//フックの初速度　加速しないのでそのまま
-	const float Hook_length = 300.0f;								//この距離まで離れたら反転
+	const float Hook_length = 200.0f;								//この距離まで離れたら反転
 	HOOK_STATE Hook_state = H_IDLING;								//フックの状態を保存
 	Terrain_Collision Hook_Collision = No_Collision;				//フックと地形・敵との当たり判定の記録
 	bool hookAnimFlag = false;										//自機のフック発射モーションの再生フラグ

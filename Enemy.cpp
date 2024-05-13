@@ -41,10 +41,11 @@ bool Enemy::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 {
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
-	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height))throw std::exception();
+	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;
+
 
 	m_spritedata[0]->SetSpriteSheet(2,1, 1, 1);
 	return true;
@@ -74,36 +75,51 @@ void Enemy::Term()
 
 void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
-	for (auto& e : m_enemyData) 
+	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
-		SetSprite(e->GetEnemyType(), e->GetEnemyState());
-		m_spritedata[e->GetEnemyType()]->SetWorldMatrix(e->GetScale(), e->GetRotate(), XMFLOAT2(e->GetTrans().x, e->GetTrans().y + Scroll));
-		m_spritedata[e->GetEnemyType()]->Draw(pCmdList);
-		m_spritedata[e->GetEnemyType()]->Setdrawcount();
+		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
+		{
+			m_enemyData[i]->Term();
+			delete m_enemyData[i];
+			m_enemyData[i] = nullptr;
+			m_enemyData.erase(m_enemyData.begin()+i);
+			continue;
+		}
+		SetSprite(m_enemyData[i]->GetEnemyType(), m_enemyData[i]->GetEnemyState(),i);
+		m_spritedata[0]->SetWorldMatrix(m_enemyData[i]->GetScale(), m_enemyData[i]->GetRotate(), XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), i);
+		m_spritedata[0]->Draw(pCmdList, i, 0, i);
+		m_spritedata[0]->Setdrawcount();
 	}
 }
 
-void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State)
+void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 {
 	if (Type == ENEMY_IDLE) 
 	{
 		if (State == ENEMY_IDLING) 
 		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1);
+			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1, EnemyID);
 		}
 		else if (State == ENEMY_DAMAGED) 
 		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1);
+			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1, EnemyID);
 		}
 	}
 }
 
-void Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
+bool Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
 {
-	auto pEData = new (std::nothrow)EnemyData();
-	pEData->Init(pEData->GetScale(), pEData->GetRotate(), Trans, Direction, Type);
-	m_enemyData.push_back(pEData);
-	return;
+	if (m_enemyData.size() < enemyNum) 
+	{
+		auto pEData = new (std::nothrow)EnemyData();
+		pEData->Init(pEData->GetScale(), pEData->GetRotate(), Trans, Direction, Type);
+		m_enemyData.push_back(pEData);
+	}
+	else 
+	{
+		return false;
+	}
+	return true;
 }
 
 XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack)

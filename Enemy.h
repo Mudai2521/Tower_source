@@ -3,8 +3,6 @@
 #include "Sprite.h"
 #include "Character.h"
 
-
-
 class EnemyData 
 {
 public:
@@ -57,12 +55,16 @@ public:
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
 	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
-	void AddEnemy(DirectX::XMFLOAT2 Trans,bool Direction,ENEMY_TYPE Type);
+	bool AddEnemy(DirectX::XMFLOAT2 Trans,bool Direction,ENEMY_TYPE Type);
 	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack);
-	void SetSprite(ENEMY_TYPE Type, ENEMY_STATE State);
+	void SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID);
 private:
 	UINT m_width;
 	UINT m_height;
+	const UINT enemyNum = 10;//ìØéûÇ…âÊñ è„Ç…èoÇπÇÈìGÇÃêîÇÃè„å¿
+	ID3D12Device* m_pDevice;
+	ID3D12CommandQueue* m_pQueue;
+	DescriptorPool* m_pPool;
 
 	std::vector<Sprite*> m_spritedata;
 	std::vector<EnemyData*> m_enemyData;

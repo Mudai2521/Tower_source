@@ -49,12 +49,12 @@ class Sprite
 public:
     Sprite();
     ~Sprite();
-    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height, UINT CBNum = 1);
+    bool Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height, UINT CBNum = 1, UINT VBNum = 1);
     bool AddSprite(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool);
     void Term();
     CD3DX12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(UINT TexID = 0) { return m_Texture[TexID]->GetHandleCPU(); };
     CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(UINT TexID = 0) { return m_Texture[TexID]->GetHandleGPU(); };
-    void Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID = 0, UINT TexID = 0);
+    void Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID = 0, UINT TexID = 0, int VBufferID = -1);
     void SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFLOAT2 Trans, UINT CBufferID = 0);
     void SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y, UINT TexID = 0);
     void turnX(UINT TexID=0);

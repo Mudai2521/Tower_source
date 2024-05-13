@@ -242,6 +242,7 @@ void Scene::PlayerUpdate_Damaged()
 		Moveinput.x = (Moveinput.x < 0 ? Moveinput.x + move_a_d : 0);
 	}
 	Moveinput.y += gravity_s;
+	Moveinput.y = Moveinput.y > gravity_MAX ? gravity_MAX : Moveinput.y;
 
 	//衝突判定　移動量を小分けにしてすりぬけ防止
 	//床に落ちたら通常モーションに復帰　それまで操作不可

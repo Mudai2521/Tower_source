@@ -49,7 +49,7 @@ Terrain::~Terrain()
 
 bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height)
 {
-	if (!m_spritedata.Init(L"Sprite/Terrain.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX))throw std::exception();
+	if (!m_spritedata.Init(L"Sprite/Terrain.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX,4))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/BG.dds", pDevice, pQueue, pPool))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/Terrain2.dds", pDevice, pQueue, pPool))throw std::exception();
@@ -213,7 +213,7 @@ void Terrain::ScrollUpdate(float Scroll)
 			mapListCount++;
 			if (mapChipList.size() - 1 < mapListCount) 
 			{
-				mapChipList.push_back(2);
+				mapChipList.push_back(1);
 			}
 		}
 		for (int i = 0; i < MapX_MAX; i++) 
