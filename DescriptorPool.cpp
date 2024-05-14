@@ -104,7 +104,7 @@ DescriptorPool::DescriptorPool()
 , m_Pool()
 , m_pHeap()
 , m_DescriptorSize(0)
-{ /* DO_NOTHING */ }
+{ }
 
 DescriptorPool::~DescriptorPool()
 {
@@ -190,16 +190,16 @@ const D3D12_DESCRIPTOR_HEAP_DESC * pDesc,
 DescriptorPool * *ppPool
 )
 {
-	// 引数チェック.
+	// 引数チェック
 	if (pDevice == nullptr || pDesc == nullptr || ppPool == nullptr)
 	{ return false; }
 	
-	// インスタンスを生成します.
+	// インスタンスを生成
 	auto instance = new (std::nothrow) DescriptorPool();
 	if (instance == nullptr)
 	{ return false; }
 	
-	// ディスクリプタヒープを生成.
+	// ディスクリプタヒープを生成
 	ThrowIfFailed(pDevice->CreateDescriptorHeap(
 	pDesc,
 	IID_PPV_ARGS(instance->m_pHeap.GetAddressOf())));
@@ -209,21 +209,20 @@ DescriptorPool * *ppPool
 	else if (pDesc->Type == D3D12_DESCRIPTOR_HEAP_TYPE_DSV) instance->m_pHeap->SetName(L"DSV");
 	else if (pDesc->Type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER) instance->m_pHeap->SetName(L"SAMPLER");
 	
-	// プールを初期化します.
+	// プールを初期化
 	if (!instance->m_Pool.Init(pDesc->NumDescriptors))
 	{
 		instance->Release();
 		return false;
 	}
 	
-	// ディスクリプタの加算サイズを取得します.
+	// ディスクリプタの加算サイズを取得
 	instance->m_DescriptorSize =
 	pDevice->GetDescriptorHandleIncrementSize(pDesc->Type);
 	
-	// インスタンスを設定.
+	// インスタンスを設定
 	 * ppPool = instance;
 	
-	// 正常終了.
 	return true;
 }
 

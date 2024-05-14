@@ -61,19 +61,17 @@ void DX12Game::LoadAssets()
             pBlob.GetAddressOf(),
             pErrorBlob.GetAddressOf()));
         ThrowIfFailed(m_device->CreateRootSignature(
-            0, // GPUが複数ある場合のノードマスク
-            pBlob->GetBufferPointer(), // シリアライズしたデータのポインタ
-            pBlob->GetBufferSize(), // シリアライズしたデータのサイズ
+            0,                                              // GPUが複数ある場合のノードマスク
+            pBlob->GetBufferPointer(),                      // シリアライズしたデータのポインタ
+            pBlob->GetBufferSize(),                         // シリアライズしたデータのサイズ
             IID_PPV_ARGS(m_rootSignature.GetAddressOf()))); // ルートシグニチャ格納先のポインタ
     }
 
-    // Create the pipeline state, which includes compiling and loading shaders.
     {
         ComPtr<ID3DBlob> vertexShader;
         ComPtr<ID3DBlob> pixelShader;
 
 #if defined(_DEBUG)
-        // Enable better shader debugging with the graphics debugging tools.
         UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
         UINT compileFlags = 0;
@@ -82,7 +80,6 @@ void DX12Game::LoadAssets()
         ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"SpriteShader.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr));
         ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"SpriteShader.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr));
 
-        // Define the vertex input layout.
         D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
         {
             { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
@@ -90,7 +87,6 @@ void DX12Game::LoadAssets()
             { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
         };
 
-        // Describe and create the graphics pipeline state object (PSO).
         D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
         psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
         psoDesc.pRootSignature = m_rootSignature.Get();
@@ -122,11 +118,7 @@ void DX12Game::LoadAssets()
 
         // ブレンドを有効にする
         psoDesc.BlendState.RenderTarget[0].BlendEnable = TRUE;
-
-        // ピクセルシェーダーが出力するRGB値に対してαを乗算する(SRCrgb ＊ SRCα)
         psoDesc.BlendState.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-
-        // レンダーターゲットの現在のRGB値に対して1-αを乗算する(DESTrgb ＊ (1 ー SRCα))
         psoDesc.BlendState.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 
 
@@ -144,20 +136,15 @@ void DX12Game::LoadAssets()
         if (!m_DSBuffer.Init(m_device.Get(), m_pPool[POOL_TYPE_DSV], m_width, m_height))throw std::exception();
     }
 
-    // Create the command list.
+    
     ThrowIfFailed(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator[m_frameIndex].Get(), m_pipelineState.Get(), IID_PPV_ARGS(&m_commandList)));
 
-    // Command lists are created in the recording state, but there is nothing
-    // to record yet. The main loop expects it to be closed, so close it now.
     ThrowIfFailed(m_commandList->Close());
 
-
-    // Create synchronization objects and wait until assets have been uploaded to the GPU.
     {
         ThrowIfFailed(m_device->CreateFence(m_fenceValue[m_frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
         m_fenceValue[m_frameIndex]++;
-
-        // Create an event handle to use for frame synchronization.
+        
         m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
         if (m_fenceEvent == nullptr)
         {
@@ -176,7 +163,6 @@ void DX12Game::LoadSizeDependentResources()
 {
     UpdateViewAndScissor();
 
-    // Create a RTV for each frame.
     for (UINT n = 0; n < FrameCount; n++)
     {
         m_RenderTargetView[n].OnSizeChanged(m_device.Get(), m_swapChain.Get());
@@ -191,7 +177,6 @@ void DX12Game::OnDestroy()
 
     if (!m_tearingSupport)
     {
-        // Fullscreen state should always be false before exiting the app.
         ThrowIfFailed(m_swapChain->SetFullscreenState(FALSE, nullptr));
     }
 
@@ -222,17 +207,14 @@ void DX12Game::OnUpdate()
 
 void DX12Game::OnRender(HWND hwnd)
 {
-    // Record all the commands we need to render the scene into the command list.
     PopulateCommandList();
 
-    // Execute the command list.
     ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };
     m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
     auto hdc = GetDC(hwnd);
     auto rate = GetDeviceCaps(hdc, VREFRESH);
 
-    // Present the frame.
     ThrowIfFailed(m_swapChain->Present((rate < 65 ? 1 : 2), 0));
 
     MoveToNextFrame();
@@ -247,7 +229,7 @@ void DX12Game::OnRender(HWND hwnd)
 #endif
     stream << (1 / mFrameTime) << " FPS" << std::endl;
     OutputDebugString(stream.str().c_str());
-#endif // _DEBUG
+#endif 
 }
 
 void DX12Game::ChangeFullScreenState()

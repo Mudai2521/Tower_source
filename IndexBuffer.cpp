@@ -38,7 +38,7 @@ bool IndexBuffer::Init(ID3D12Device* pDevice, size_t size, const uint32_t* pInit
     m_View.Format = DXGI_FORMAT_R32_UINT;
     m_View.SizeInBytes = UINT(size);
 
-    // 初期化データがあれば，書き込んでおく
+    // 初期化データがあれば書き込んでおく
     if (pInitData != nullptr)
     {
         void* ptr = Map();

@@ -35,7 +35,6 @@ bool RenderTargetView::Init(ID3D12Device* pDevice, DescriptorPool* pPool, IDXGIS
 
 void RenderTargetView::OnSizeChanged(ID3D12Device* pDevice, IDXGISwapChain3* pSwapChain)
 {
-	//m_pRenderTargetView.Reset();
 	ThrowIfFailed(pSwapChain->GetBuffer(rtvIndex, IID_PPV_ARGS(&m_pRenderTargetView)));
 	D3D12_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
 	renderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
@@ -47,14 +46,14 @@ void RenderTargetView::Term()
 {
 	m_pRenderTargetView.Reset();
 
-	// ビューを破棄.
+	// ビューを破棄
 	if (m_pPool != nullptr)
 	{
 		m_pPool->FreeHandle(m_pHandle);
 		m_pHandle = nullptr;
 	}
 
-	// ディスクリプタプールを解放.
+	// ディスクリプタプールを解放
 	if (m_pPool != nullptr)
 	{
 		m_pPool->Release();

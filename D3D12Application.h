@@ -54,7 +54,6 @@ protected:
         POOL_COUNT = 4,
     };
 
-    // Root assets path.
     std::wstring m_assetsPath;
 
     // ウィンドウタイトル
@@ -74,7 +73,6 @@ protected:
     UINT m_height;
     float m_aspectRatio;
 
-    // Adapter info.
     bool m_useWarpDevice;
 
     // パイプライン
@@ -95,7 +93,6 @@ protected:
     IDirectInput8* m_directInput;
     IDirectInputDevice8* m_inputDevice;
     
-    // Synchronization objects.
     UINT m_frameIndex;
     HANDLE m_fenceEvent;
     ComPtr<ID3D12Fence> m_fence;

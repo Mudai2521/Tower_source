@@ -44,39 +44,34 @@ bool ConstantBuffer::Init
         nullptr,
         IID_PPV_ARGS(m_pCB.GetAddressOf())));
 
-    // Describe and create a constant buffer view.
     m_Desc.BufferLocation = m_pCB->GetGPUVirtualAddress();
     m_Desc.SizeInBytes = sizeof(Transform);
     m_pHandle = pPool->AllocHandle();
     pDevice->CreateConstantBufferView(&m_Desc, m_pHandle->HandleCPU);
-
-    // Map and initialize the constant buffer. We don't unmap this until the
-    // app closes. Keeping things mapped for the lifetime of the resource is okay.
-    CD3DX12_RANGE readRange(0, 0);        // We do not intend to read from this resource on the CPU.
+    
+    CD3DX12_RANGE readRange(0, 0);        
     ThrowIfFailed(m_pCB->Map(0, &readRange, &m_pMappedPtr));
 
-    
-    // 正常終了.
     return true;
 }
 
 void ConstantBuffer::Term()
 {
-    // メモリマッピングを解除して，定数バッファを解放します.
+    // メモリマッピングを解除して定数バッファを解放
     if (m_pCB != nullptr)
     {
         m_pCB->Unmap(0, nullptr);
         m_pCB.Reset();
     }
 
-    // ビューを破棄.
+    // ビューを破棄
     if (m_pPool != nullptr)
     {
         m_pPool->FreeHandle(m_pHandle);
         m_pHandle = nullptr;
     }
 
-    // ディスクリプタプールを解放.
+    // ディスクリプタプールを解放
     if (m_pPool != nullptr)
     {
         m_pPool->Release();

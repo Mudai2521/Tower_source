@@ -3,12 +3,7 @@
 #include <cstdint>
 #include "stdafx.h"
 
-
-
-
 using Microsoft::WRL::ComPtr;
-
-
 
 class IndexBuffer
 {

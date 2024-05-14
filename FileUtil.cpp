@@ -15,7 +15,7 @@ bool SearchFilePath(const wchar_t* filename, std::wstring& result)
 
     wchar_t exePath[520] = {};
     GetModuleFileNameW(nullptr, exePath, 520);
-    exePath[519] = L'\0'; // null終端化.
+    exePath[519] = L'\0'; // null終端化
     PathRemoveFileSpecW(exePath);
 
     wchar_t dstPath[520] = {};

@@ -65,14 +65,14 @@ void DepthStencilBuffer::Term()
 {
     m_pDepthStencilBuffer.Reset();
     
-    // ビューを破棄.
+    // ビューを破棄
     if (m_pPool != nullptr)
     {
         m_pPool->FreeHandle(m_pHandle);
         m_pHandle = nullptr;
     }
 
-    // ディスクリプタプールを解放.
+    // ディスクリプタプールを解放
     if (m_pPool != nullptr)
     {
         m_pPool->Release();

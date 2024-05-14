@@ -180,32 +180,30 @@ bool ModelLoader::Load
 	flag |= aiProcess_RemoveRedundantMaterials;
 	flag |= aiProcess_OptimizeMeshes;
 
-	// ファイルを読み込み.
+	// ファイルを読み込み
 	auto pScene = importer.ReadFile(path, flag);
-	// チェック.
 	if (pScene == nullptr)
 	{ return false; }
 	
-	// メッシュのメモリを確保.
+	// メッシュのメモリを確保
 	meshes.clear();
 	meshes.resize(pScene->mNumMeshes);
 	
-	// メッシュデータを変換.
+	// メッシュデータを変換
 	for (size_t i = 0; i < meshes.size(); ++i)
 	{
 		const auto pMesh = pScene->mMeshes[i];
 		ParseMesh(meshes[i], pMesh);
 	}
-	// マテリアルのメモリを確保.
+	// マテリアルのメモリを確保
 	materials.clear();
 	materials.resize(pScene->mNumMaterials);
-	// マテリアルデータを変換.
+	// マテリアルデータを変換
 	for (size_t i = 0; i < materials.size(); ++i)
 	{
 		const auto pMaterial = pScene->mMaterials[i];
 		ParseMaterial(materials[i], pMaterial);
 	}
-	// 不要になったのでクリア.
 	pScene = nullptr;
 
 	
@@ -216,13 +214,13 @@ bool ModelLoader::Load
 
 void ModelLoader::ParseMesh(MeshData& dstMesh, const aiMesh* pSrcMesh)
 {
-	// マテリアル番号を設定.
+	// マテリアル番号を設定
 	dstMesh.MaterialId = pSrcMesh->mMaterialIndex;
 	
 	aiVector3D zero3D(0.0f, 0.0f, 0.0f);
 	aiColor4D zero4D(0.0f, 0.0f, 0.0f, 0.0f);
 	
-	// 頂点データのメモリを確保.
+	// 頂点データのメモリを確保
 	dstMesh.Vertices.resize(pSrcMesh->mNumVertices);
 	
 	for (auto i = 0u; i < pSrcMesh->mNumVertices; ++i)
@@ -242,13 +240,13 @@ void ModelLoader::ParseMesh(MeshData& dstMesh, const aiMesh* pSrcMesh)
 		);
 	}
 	
-	// 頂点インデックスのメモリを確保.
+	// 頂点インデックスのメモリを確保
 	dstMesh.Index.resize(pSrcMesh->mNumFaces * 3);
 	
 	for (auto i = 0u; i < pSrcMesh->mNumFaces; ++i)
 	{
 		const auto& face = pSrcMesh->mFaces[i];
-		assert(face.mNumIndices == 3);  // 三角形化しているので必ず3になっている.
+		assert(face.mNumIndices == 3);  
 	
 		dstMesh.Index[i * 3 + 0] = face.mIndices[0];
 		dstMesh.Index[i * 3 + 1] = face.mIndices[2];
@@ -260,7 +258,7 @@ void ModelLoader::ParseMesh(MeshData& dstMesh, const aiMesh* pSrcMesh)
 
 void ModelLoader::ParseMaterial(Material& dstMaterial, const aiMaterial* pSrcMaterial)
 {
-	// 拡散反射成分.
+	// 拡散反射成分
 	{
 		aiColor3D color(0.0f, 0.0f, 0.0f);
 	
@@ -280,7 +278,7 @@ void ModelLoader::ParseMaterial(Material& dstMaterial, const aiMaterial* pSrcMat
 		}
 	}
 	
-	// 鏡面反射成分.
+	// 鏡面反射成分
 	{
 		aiColor3D color(0.0f, 0.0f, 0.0f);
 		
@@ -298,7 +296,7 @@ void ModelLoader::ParseMaterial(Material& dstMaterial, const aiMaterial* pSrcMat
 		}
 	}
 	
-	// 鏡面反射強度.
+	// 鏡面反射強度
 	{
 		auto shininess = 0.0f;
 		if (pSrcMaterial->Get(AI_MATKEY_SHININESS, shininess) == AI_SUCCESS)
@@ -307,7 +305,7 @@ void ModelLoader::ParseMaterial(Material& dstMaterial, const aiMaterial* pSrcMat
 		{ dstMaterial.Shininess = 0.0f; }
 	}
 	
-	// ディフューズマップ.
+	// ディフューズマップ
 	{
 		aiString path;
 		if (pSrcMaterial->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), path) == AI_SUCCESS)

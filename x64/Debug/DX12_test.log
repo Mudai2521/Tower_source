@@ -1,22 +1,4 @@
-﻿  stdafx.cpp
-  Character.cpp
-  ConstantBuffer.cpp
-  D3D12Application.cpp
-  DX12Game.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(30,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(49,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
-  
-  DepthStencilBuffer.cpp
-  DescriptorPool.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
-  (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
-  
-  Enemy.cpp
-  FileUtil.cpp
-  Hook.cpp
+﻿  FileUtil.cpp
   IndexBuffer.cpp
   Modeldata.cpp
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(84,53): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
@@ -32,54 +14,8 @@ C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(86,41)
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\RenderTargetView.cpp(31,2): warning C4002: 関数に似たマクロ呼び出し 'NAME_D3D12_OBJECT' の引数が多すぎます
   (ソース ファイル '/RenderTargetView.cpp' をコンパイルしています)
   
-  Scene.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(136,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(204,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(205,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(213,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(248,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(332,21): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(372,25): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(373,29): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-  Sprite.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(70,51): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(71,47): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(72,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(88,34): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(88,27): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-  Terrain.cpp
   Texture.cpp
   VertexBuffer.cpp
   Win32Application.cpp
-  main.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(30,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  (ソース ファイル '/main.cpp' をコンパイルしています)
-  
   コードを生成中...
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

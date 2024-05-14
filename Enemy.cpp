@@ -41,10 +41,12 @@ bool Enemy::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 {
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
-	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height))throw std::exception();
+	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
+	if (!pSpritedata->AddSprite(L"Sprite/effect.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;
+
 
 	m_spritedata[0]->SetSpriteSheet(2,1, 1, 1);
 	return true;
@@ -74,36 +76,63 @@ void Enemy::Term()
 
 void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
-	for (auto& e : m_enemyData) 
+	int effectCount = 0;
+	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
-		SetSprite(e->GetEnemyType(), e->GetEnemyState());
-		m_spritedata[e->GetEnemyType()]->SetWorldMatrix(e->GetScale(), e->GetRotate(), XMFLOAT2(e->GetTrans().x, e->GetTrans().y + Scroll));
-		m_spritedata[e->GetEnemyType()]->Draw(pCmdList);
-		m_spritedata[e->GetEnemyType()]->Setdrawcount();
+		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
+		{
+			m_enemyData[i]->Term();
+			delete m_enemyData[i];
+			m_enemyData[i] = nullptr;
+			m_enemyData.erase(m_enemyData.begin()+i);
+			continue;
+		}
+
+		if (m_enemyData[i]->GetEnemyState() == ENEMY_ATTACKING) 
+		{
+			m_spritedata[0]->SetSpriteSheet(1, 1, 1, 1, m_enemyData.size() + effectCount);
+			m_spritedata[0]->SetWorldMatrix(XMFLOAT2(m_enemyData[i]->GetTimeCount()* m_enemyData[i]->GetEffectScale(), m_enemyData[i]->GetTimeCount() * m_enemyData[i]->GetEffectScale()), m_enemyData[i]->GetRotate(),
+				XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), m_enemyData.size()+ effectCount);
+			m_spritedata[0]->Draw(pCmdList, m_enemyData.size() + effectCount, 1, m_enemyData.size() + effectCount);
+			effectCount++;
+		}
+
+		SetSprite(m_enemyData[i]->GetEnemyType(), m_enemyData[i]->GetEnemyState(),i);
+		m_spritedata[0]->SetWorldMatrix(m_enemyData[i]->GetScale(), m_enemyData[i]->GetRotate(), XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), i);
+		m_spritedata[0]->Draw(pCmdList, i, 0, i);
+		m_enemyData[i]->TimeCount();
 	}
+	m_spritedata[0]->Setdrawcount();
 }
 
-void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State)
+void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 {
 	if (Type == ENEMY_IDLE) 
 	{
-		if (State == ENEMY_IDLING) 
+		if (State == ENEMY_IDLING|| State == ENEMY_ATTACKING)
 		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1);
+			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1, EnemyID);
 		}
 		else if (State == ENEMY_DAMAGED) 
 		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1);
+			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1, EnemyID);
 		}
 	}
 }
 
-void Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
+bool Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
 {
-	auto pEData = new (std::nothrow)EnemyData();
-	pEData->Init(pEData->GetScale(), pEData->GetRotate(), Trans, Direction, Type);
-	m_enemyData.push_back(pEData);
-	return;
+	if (m_enemyData.size() < enemyNum) 
+	{
+		auto pEData = new (std::nothrow)EnemyData();
+		pEData->Init(pEData->GetScale(), pEData->GetRotate(), Trans, Direction, Type);
+		m_enemyData.push_back(pEData);
+	}
+	else 
+	{
+		return false;
+	}
+	return true;
 }
 
 XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack)
@@ -116,7 +145,8 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		const float DIS_X = (Scale.x + e->GetScale().x) / 2;
 		const float DIS_Y = (Scale.y + e->GetScale().y) / 2;
 
-		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y&&e->GetEnemyState()== ENEMY_IDLING)
+		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y 
+			&& e->GetEnemyState() == ENEMY_IDLING)
 		{
 			if (e->GetTrans().x - Trans.x > 0)
 			{
@@ -136,6 +166,21 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		if (abs(e->GetTrans().y - Trans.y) > m_height * 2) 
 		{
 			e->SetEnemyState(ENEMY_DELETED);
+		}
+
+		const float A_DIS = (Scale.x + e->GetTimeCount()* e->GetEffectScale()) / 2;
+
+		if (pow(e->GetTrans().x - Trans.x, 2) + pow(e->GetTrans().y - Trans.y, 2) < pow(A_DIS, 2)
+			&& e->GetEnemyState() == ENEMY_ATTACKING && !is_attack)
+		{
+			if (e->GetTrans().x - Trans.x > 0)
+			{
+				Collision_ret |= Enemy_Hit_Right;
+			}
+			else
+			{
+				Collision_ret |= Enemy_Hit_Left;
+			}
 		}
 	}
 	return returnVec;

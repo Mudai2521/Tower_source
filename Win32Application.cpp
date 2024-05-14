@@ -12,13 +12,12 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
 #endif
 )
 {
-    // Parse the command line parameters
     int argc;
     LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
     pApp->ParseCommandLineArgs(argv, argc);
     LocalFree(argv);
 
-    // Initialize the window class.
+    // ウィンドウクラス初期化
     WNDCLASSEX windowClass = { 0 };
     windowClass.cbSize = sizeof(WNDCLASSEX);
     windowClass.style = CS_HREDRAW | CS_VREDRAW;
@@ -31,7 +30,6 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
     RECT windowRect = { 0, 0, static_cast<LONG>(pApp->GetWidth()), static_cast<LONG>(pApp->GetHeight()) };
     AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
-    // Create the window and store a handle to it.
     m_hwnd = CreateWindow(
         windowClass.lpszClassName,
         pApp->GetTitle(),
@@ -40,8 +38,8 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
         CW_USEDEFAULT,
         windowRect.right - windowRect.left,
         windowRect.bottom - windowRect.top,
-        nullptr,        // We have no parent window.
-        nullptr,        // We aren't using menus.
+        nullptr,        
+        nullptr,        
         hInstance,
         pApp);
 
@@ -55,11 +53,9 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
     pApp->GetDevice()->QueryInterface(debugDevice);
 #endif
 
-    // Main loop.
     MSG msg = {};
     while (msg.message != WM_QUIT)
     {
-        // Process any messages in the queue.
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
@@ -71,17 +67,13 @@ int Win32Application::Run(D3D12Application* pApp, HINSTANCE hInstance, int nCmdS
     pApp->OnDestroy();
 
 
-
-    // Return this part of the WM_QUIT message to Windows.
     return static_cast<char>(msg.wParam);
 }
 
-// Convert a styled window into a fullscreen borderless window and back again.
 void Win32Application::ToggleFullscreenWindow(IDXGISwapChain* pSwapChain)
 {
     if (m_fullscreenMode)
     {
-        // Restore the window's attributes and size.
         SetWindowLong(m_hwnd, GWL_STYLE, m_windowStyle);
 
         SetWindowPos(
@@ -97,10 +89,8 @@ void Win32Application::ToggleFullscreenWindow(IDXGISwapChain* pSwapChain)
     }
     else
     {
-        // Save the old window rect so we can restore it when exiting fullscreen mode.
         GetWindowRect(m_hwnd, &m_windowRect);
 
-        // Make the window borderless so that the client area can fill the screen.
         SetWindowLong(m_hwnd, GWL_STYLE, m_windowStyle & ~(WS_CAPTION | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_SYSMENU | WS_THICKFRAME));
 
         RECT fullscreenWindowRect;
@@ -108,7 +98,6 @@ void Win32Application::ToggleFullscreenWindow(IDXGISwapChain* pSwapChain)
         {
             if (pSwapChain)
             {
-                // Get the settings of the display on which the app's window is currently displayed
                 ComPtr<IDXGIOutput> pOutput;
                 ThrowIfFailed(pSwapChain->GetContainingOutput(&pOutput));
                 DXGI_OUTPUT_DESC Desc;
@@ -117,7 +106,6 @@ void Win32Application::ToggleFullscreenWindow(IDXGISwapChain* pSwapChain)
             }
             else
             {
-                // Fallback to EnumDisplaySettings implementation
                 throw HrException(S_FALSE);
             }
         }
@@ -125,7 +113,6 @@ void Win32Application::ToggleFullscreenWindow(IDXGISwapChain* pSwapChain)
         {
             UNREFERENCED_PARAMETER(e);
 
-            // Get the settings of the primary display
             DEVMODE devMode = {};
             devMode.dmSize = sizeof(DEVMODE);
             EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &devMode);
@@ -155,7 +142,6 @@ void Win32Application::ToggleFullscreenWindow(IDXGISwapChain* pSwapChain)
 }
 
 
-// Main message handler.
 LRESULT CALLBACK Win32Application::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     D3D12Application* pApp = reinterpret_cast<D3D12Application*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));

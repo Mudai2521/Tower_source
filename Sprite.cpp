@@ -16,7 +16,7 @@ Sprite::~Sprite()
 }
 
 //画像ファイル名、デバイス、コマンドキュー、ディスクリプタプール、画面横長さ、画面縦長さ、定数バッファの数(描画数)
-bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height, UINT CBNum)
+bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height, UINT CBNum, UINT VBNum)
 {
 	m_width = width;
 	m_height = height;
@@ -40,29 +40,31 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 
 	m_Texture.push_back(Tex);
 
-	m_Meshdata.resize(1);
-	m_Meshdata[0].Vertices.resize(4);
+	m_Meshdata.resize(VBNum);
+	for (UINT i = 0; i < VBNum; i++) {
+		m_Meshdata[i].Vertices.resize(4);
 
-	m_Meshdata[0].Vertices[0] = SpriteVertex(
-		XMFLOAT3(-DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(0.0f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-	m_Meshdata[0].Vertices[1] = SpriteVertex(
-		XMFLOAT3(-DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(0.0f, 1.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-	m_Meshdata[0].Vertices[2] = SpriteVertex(
-		XMFLOAT3(DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(1.0f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-	m_Meshdata[0].Vertices[3] = SpriteVertex(
-		XMFLOAT3(DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(1.0f, 1.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
+		m_Meshdata[i].Vertices[0] = SpriteVertex(
+			XMFLOAT3(-DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
+			XMFLOAT2(0.0f, 0.0f),
+			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		);
+		m_Meshdata[i].Vertices[1] = SpriteVertex(
+			XMFLOAT3(-DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
+			XMFLOAT2(0.0f, 1.0f),
+			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		);
+		m_Meshdata[i].Vertices[2] = SpriteVertex(
+			XMFLOAT3(DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
+			XMFLOAT2(1.0f, 0.0f),
+			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		);
+		m_Meshdata[i].Vertices[3] = SpriteVertex(
+			XMFLOAT3(DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
+			XMFLOAT2(1.0f, 1.0f),
+			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		);
+	}
 
 	m_Meshdata[0].Index.resize(6);
 	m_Meshdata[0].Index = { 0,2,1,2,3,1 };
@@ -89,13 +91,15 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 		m_CBuffer.push_back(pCB);
 	}
 
-	auto vb = new (std::nothrow) VertexBuffer();
-	if (!vb->Init(
-		pDevice, VertexBufferSize, m_Meshdata[0].Vertices.data()))
-	{
-		return false;
+	for (UINT i = 0; i < VBNum; i++) {
+		auto vb = new (std::nothrow) VertexBuffer();
+		if (!vb->Init(
+			pDevice, VertexBufferSize, m_Meshdata[i].Vertices.data()))
+		{
+			return false;
+		}
+		m_VB.push_back(vb);
 	}
-	m_VB.push_back(vb);
 
 	if (!m_IB.Init(
 		pDevice, IndexBufferSize, m_Meshdata[0].Index.data()))
@@ -120,47 +124,13 @@ bool Sprite::AddSprite(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQu
 
 	m_Texture.push_back(Tex);
 
-	m_Meshdata.resize(m_Meshdata.size() + 1);
-	m_Meshdata.back().Vertices.resize(4);
-
-	m_Meshdata.back().Vertices[0] = SpriteVertex(
-		XMFLOAT3(-DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(0.0f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-	m_Meshdata.back().Vertices[1] = SpriteVertex(
-		XMFLOAT3(-DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(0.0f, 1.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-	m_Meshdata.back().Vertices[2] = SpriteVertex(
-		XMFLOAT3(DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(1.0f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-	m_Meshdata.back().Vertices[3] = SpriteVertex(
-		XMFLOAT3(DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-		XMFLOAT2(1.0f, 1.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	);
-
-	m_Meshdata.back().Index.resize(6);
-	m_Meshdata.back().Index = { 0,2,1,2,3,1 };
-
-	auto vb = new (std::nothrow) VertexBuffer();
-	if (!vb->Init(
-		pDevice, VertexBufferSize, m_Meshdata.back().Vertices.data()))
-	{
-		return false;
-	}
-	m_VB.push_back(vb);
-
 	return true;
 }
 
-void Sprite::Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID, UINT TexID)
+void Sprite::Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID, UINT TexID, int VBufferID)
 {
-	auto VBV = m_VB[TexID]->GetView();
+
+	auto VBV = (VBufferID < 0) ? m_VB[TexID]->GetView() : m_VB[VBufferID]->GetView();
 	auto IBV = m_IB.GetView();
 	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer[CBufferID + (drawcount ? CbufferCount : 0)]->GetAddress());
 	pCmdList->SetGraphicsRootDescriptorTable(1, GetGPUHandle(TexID));
@@ -183,8 +153,8 @@ void Sprite::SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFL
 //スプライトシート上のスプライトの総数と、表示させたいスプライトが何枚目かを入力
 void Sprite::SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y, UINT TexID)
 {
-	float SpriteWidth = 1.0f / float(Tex_xmax);
-	float SpriteHeight = 1.0f / float(Tex_ymax);
+	double SpriteWidth = 1.0f / double(Tex_xmax);
+	double SpriteHeight = 1.0f / double(Tex_ymax);
 	m_Meshdata[TexID].Vertices[0].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y - 1));
 	m_Meshdata[TexID].Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y));
 	m_Meshdata[TexID].Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y - 1));

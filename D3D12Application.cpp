@@ -27,14 +27,11 @@ D3D12Application::~D3D12Application()
     }
 }
 
-// Helper function for resolving the full path of assets.
 std::wstring D3D12Application::GetAssetFullPath(LPCWSTR assetName)
 {
     return m_assetsPath + assetName;
 }
 
-// Helper function for acquiring the first available hardware adapter that supports Direct3D 12.
-// If no such adapter can be found, *ppAdapter will be set to nullptr.
 _Use_decl_annotations_
 void D3D12Application::GetHardwareAdapter(
     IDXGIFactory1* pFactory,
@@ -97,14 +94,12 @@ void D3D12Application::GetHardwareAdapter(
     *ppAdapter = adapter.Detach();
 }
 
-// Helper function for setting the window's title text.
 void D3D12Application::SetCustomWindowText(LPCWSTR text)
 {
     std::wstring windowText = m_title + L": " + text;
     SetWindowText(Win32Application::GetHwnd(), windowText.c_str());
 }
 
-// Helper function for parsing any supplied command line args.
 _Use_decl_annotations_
 void D3D12Application::ParseCommandLineArgs(WCHAR* argv[], int argc)
 {
@@ -119,7 +114,6 @@ void D3D12Application::ParseCommandLineArgs(WCHAR* argv[], int argc)
     }
 }
 
-// Load the rendering pipeline dependencies.
 void D3D12Application::LoadPipeline()
 {
     UINT dxgiFactoryFlags = 0;
@@ -132,7 +126,6 @@ void D3D12Application::LoadPipeline()
         {
             debugController->EnableDebugLayer();
 
-            // Enable additional debug layers.
             dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
         }
     }
@@ -164,16 +157,12 @@ void D3D12Application::LoadPipeline()
         ));
     }
 
-
-
-    // Describe and create the command queue.
     D3D12_COMMAND_QUEUE_DESC queueDesc = {};
     queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
     queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
     ThrowIfFailed(m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)));
 
-    // Describe and create the swap chain.
     DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
     swapChainDesc.BufferCount = FrameCount;
     swapChainDesc.Width = m_width;
@@ -203,10 +192,7 @@ void D3D12Application::LoadPipeline()
     ThrowIfFailed(swapChain.As(&m_swapChain));
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
-    // Create descriptor heaps.
     {
-        
-        // Describe and create a render target view (RTV) descriptor heap.
         D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
         rtvHeapDesc.NumDescriptors =256;
         rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
@@ -218,12 +204,9 @@ void D3D12Application::LoadPipeline()
         cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
         if (!DescriptorPool::Create(m_device.Get(), &cbvHeapDesc, &m_pPool[POOL_TYPE_RES]))throw std::exception();
-        
     }
 
-    // Create frame resources.
     {
-        // Create a RTV for each frame.
         for (UINT n = 0; n < FrameCount; n++)
         {
             if (!m_RenderTargetView[n].Init(m_device.Get(), m_pPool[POOL_TYPE_RTV], m_swapChain.Get(), n))throw std::exception();
@@ -235,38 +218,30 @@ void D3D12Application::LoadPipeline()
 
 
 
-// Wait for pending GPU work to complete.
+
 void D3D12Application::WaitForGpu()
 {
-    // Schedule a Signal command in the queue.
     ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), m_fenceValue[m_frameIndex]));
 
-    // Wait until the fence has been processed.
     ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValue[m_frameIndex], m_fenceEvent));
     WaitForSingleObjectEx(m_fenceEvent, INFINITE, FALSE);
 
-    // Increment the fence value for the current frame.
     m_fenceValue[m_frameIndex]++;
 }
 
-// Prepare to render the next frame.
 void D3D12Application::MoveToNextFrame()
 {
-    // Schedule a Signal command in the queue.
     const UINT64 currentFenceValue = m_fenceValue[m_frameIndex];
     ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), currentFenceValue));
 
-    // Update the frame index.
     m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 
-    // If the next frame is not ready to be rendered yet, wait until it is ready.
     if (m_fence->GetCompletedValue() < m_fenceValue[m_frameIndex])
     {
         ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValue[m_frameIndex], m_fenceEvent));
         WaitForSingleObjectEx(m_fenceEvent, INFINITE, FALSE);
     }
 
-    // Set the fence value for the next frame.
     m_fenceValue[m_frameIndex] = currentFenceValue + 1;
 }
 
