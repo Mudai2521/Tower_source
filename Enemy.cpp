@@ -42,6 +42,7 @@ bool Enemy::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
 	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
+	if (!pSpritedata->AddSprite(L"Sprite/effect.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;
@@ -75,6 +76,7 @@ void Enemy::Term()
 
 void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
+	int effectCount = 0;
 	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
 		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
@@ -85,18 +87,24 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 			m_enemyData.erase(m_enemyData.begin()+i);
 			continue;
 		}
+
+		if (m_enemyData[i]->GetEnemyState() == ENEMY_ATTACKING) 
+		{
+			
+		}
+
 		SetSprite(m_enemyData[i]->GetEnemyType(), m_enemyData[i]->GetEnemyState(),i);
 		m_spritedata[0]->SetWorldMatrix(m_enemyData[i]->GetScale(), m_enemyData[i]->GetRotate(), XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), i);
 		m_spritedata[0]->Draw(pCmdList, i, 0, i);
-		m_spritedata[0]->Setdrawcount();
 	}
+	m_spritedata[0]->Setdrawcount();
 }
 
 void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 {
 	if (Type == ENEMY_IDLE) 
 	{
-		if (State == ENEMY_IDLING) 
+		if (State == ENEMY_IDLING|| State == ENEMY_ATTACKING)
 		{
 			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1, EnemyID);
 		}
