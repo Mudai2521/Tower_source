@@ -41,7 +41,7 @@ bool VertexBuffer::Init(ID3D12Device* pDevice, size_t size, size_t stride, const
     m_View.StrideInBytes = UINT(stride);
     m_View.SizeInBytes = UINT(size);
 
-    // 初期化データがあれば，書き込んでおく
+    // 初期化データがあれば書き込んでおく
     if (pInitData != nullptr)
     {
         void* ptr = Map();
@@ -55,7 +55,6 @@ bool VertexBuffer::Init(ID3D12Device* pDevice, size_t size, size_t stride, const
         m_pVB->Unmap(0, nullptr);
     }
 
-    // 正常終了
     return true;
 }
 

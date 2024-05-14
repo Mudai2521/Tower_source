@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "D3D12Application.h"
 
-
 class DX12Game : public D3D12Application 
 {
 public:

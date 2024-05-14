@@ -23,7 +23,7 @@ private:
 	{
 		NOT_PUSH = 0,	// ‰Ÿ‚³‚ê‚Ä‚È‚¢
 		PUSH_ENTER,	// ‰Ÿ‚³‚ê‚½uŠÔ
-		PUSH,		// ‰Ÿ‚³‚ê‚Ä‚é
+		PUSH,		// ‰Ÿ‚³‚ê‚Ä‚¢‚é
 		PUSH_EXIT,	// —£‚³‚ê‚½uŠÔ
 	};
 

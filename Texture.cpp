@@ -20,7 +20,6 @@ bool Texture::Init
     DirectX::ResourceUploadBatch& batch
 )
 {
-    // 引数チェック.
     if (pDevice == nullptr || pPool == nullptr || filename == nullptr)
     {
         return false;
@@ -29,18 +28,18 @@ bool Texture::Init
     assert(m_pPool == nullptr);
     assert(m_pHandle == nullptr);
 
-    // ディスクリプタプールを設定.
+    // ディスクリプタプールを設定
     m_pPool = pPool;
     m_pPool->AddRef();
 
-    // ディスクリプタハンドルを取得.
+    // ディスクリプタハンドルを取得
     m_pHandle = pPool->AllocHandle();
     if (m_pHandle == nullptr)
     {
         return false;
     }
 
-    // ファイルからテクスチャを生成.
+    // ファイルからテクスチャを生成
     bool isCube = false;
     ThrowIfFailed(CreateDDSTextureFromFile(
         pDevice,
@@ -52,13 +51,10 @@ bool Texture::Init
         nullptr,
         &isCube));
 
-    // シェーダリソースビューの設定を求める.
     auto viewDesc = GetViewDesc(isCube);
 
-    // シェーダリソースビューを生成します.
     pDevice->CreateShaderResourceView(m_pTex.Get(), &viewDesc, m_pHandle->HandleCPU);
 
-    // 正常終了.
     return true;
 }
 
@@ -78,11 +74,11 @@ bool Texture::Init
     assert(m_pPool == nullptr);
     assert(m_pHandle == nullptr);
 
-    // ディスクリプタプールを設定.
+    // ディスクリプタプールを設定
     m_pPool = pPool;
     m_pPool->AddRef();
 
-    // ディスクリプタハンドルを取得.
+    // ディスクリプタハンドルを取得
     m_pHandle = pPool->AllocHandle();
     if (m_pHandle == nullptr)
     {
@@ -98,10 +94,8 @@ bool Texture::Init
         IID_PPV_ARGS(m_pTex.GetAddressOf()))
     );
 
-    // シェーダリソースビューの設定を求める.
     auto viewDesc = GetViewDesc(isCube);
 
-    // シェーダリソースビューを生成します.
     pDevice->CreateShaderResourceView(m_pTex.Get(), &viewDesc, m_pHandle->HandleCPU);
 
     return true;
@@ -111,14 +105,14 @@ void Texture::Term()
 {
     m_pTex.Reset();
 
-    // ディスクリプタハンドルを解放.
+    // ディスクリプタハンドルを解放
     if (m_pHandle != nullptr && m_pPool != nullptr)
     {
         m_pPool->FreeHandle(m_pHandle);
         m_pHandle = nullptr;
     }
 
-    // ディスクリプタプールを解放.
+    // ディスクリプタプールを解放
     if (m_pPool != nullptr)
     {
         m_pPool->Release();
@@ -158,8 +152,8 @@ D3D12_SHADER_RESOURCE_VIEW_DESC Texture::GetViewDesc(bool isCube)
     {
     case D3D12_RESOURCE_DIMENSION_BUFFER:
     {
-        // バッファは対象外とします.
-        abort();    // アプリを止める.
+        // バッファは対象外
+        abort();    
     }
     break;
 
@@ -265,7 +259,7 @@ D3D12_SHADER_RESOURCE_VIEW_DESC Texture::GetViewDesc(bool isCube)
     default:
     {
         // 想定外
-        abort();    // アプリを止める.
+        abort();   
     }
     break;
     }

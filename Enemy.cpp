@@ -90,12 +90,17 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 
 		if (m_enemyData[i]->GetEnemyState() == ENEMY_ATTACKING) 
 		{
-			
+			m_spritedata[0]->SetSpriteSheet(1, 1, 1, 1, m_enemyData.size() + effectCount);
+			m_spritedata[0]->SetWorldMatrix(XMFLOAT2(m_enemyData[i]->GetTimeCount()* m_enemyData[i]->GetEffectScale(), m_enemyData[i]->GetTimeCount() * m_enemyData[i]->GetEffectScale()), m_enemyData[i]->GetRotate(),
+				XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), m_enemyData.size()+ effectCount);
+			m_spritedata[0]->Draw(pCmdList, m_enemyData.size() + effectCount, 1, m_enemyData.size() + effectCount);
+			effectCount++;
 		}
 
 		SetSprite(m_enemyData[i]->GetEnemyType(), m_enemyData[i]->GetEnemyState(),i);
 		m_spritedata[0]->SetWorldMatrix(m_enemyData[i]->GetScale(), m_enemyData[i]->GetRotate(), XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), i);
 		m_spritedata[0]->Draw(pCmdList, i, 0, i);
+		m_enemyData[i]->TimeCount();
 	}
 	m_spritedata[0]->Setdrawcount();
 }
@@ -140,7 +145,8 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		const float DIS_X = (Scale.x + e->GetScale().x) / 2;
 		const float DIS_Y = (Scale.y + e->GetScale().y) / 2;
 
-		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y&&e->GetEnemyState()== ENEMY_IDLING)
+		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y 
+			&& e->GetEnemyState() == ENEMY_IDLING)
 		{
 			if (e->GetTrans().x - Trans.x > 0)
 			{
@@ -160,6 +166,21 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		if (abs(e->GetTrans().y - Trans.y) > m_height * 2) 
 		{
 			e->SetEnemyState(ENEMY_DELETED);
+		}
+
+		const float A_DIS = (Scale.x + e->GetTimeCount()* e->GetEffectScale()) / 2;
+
+		if (pow(e->GetTrans().x - Trans.x, 2) + pow(e->GetTrans().y - Trans.y, 2) < pow(A_DIS, 2)
+			&& e->GetEnemyState() == ENEMY_ATTACKING && !is_attack)
+		{
+			if (e->GetTrans().x - Trans.x > 0)
+			{
+				Collision_ret |= Enemy_Hit_Right;
+			}
+			else
+			{
+				Collision_ret |= Enemy_Hit_Left;
+			}
 		}
 	}
 	return returnVec;

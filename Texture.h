@@ -38,8 +38,8 @@ private:
     DescriptorHandle* m_pHandle;
     DescriptorPool* m_pPool;
 
-    Texture(const Texture&) = delete;      // アクセス禁止
-    void operator = (const Texture&) = delete;      // アクセス禁止
+    Texture(const Texture&) = delete;     
+    void operator = (const Texture&) = delete;     
 
     D3D12_SHADER_RESOURCE_VIEW_DESC GetViewDesc(bool isCube);
 };

@@ -33,7 +33,6 @@ public:
 	};
 	void turn(int spriteID = 0)
 	{
-		//m_spritedata[spriteID]->turnX();
 		direction = !direction;
 	}
 	bool GetDirection() { return direction; };
@@ -72,6 +71,7 @@ public:
 			return attackTimeCount;
 		}
 	}
+	float GetEffectScale() { return effectScale; }
 private:
 	CharactorState m_CharactorState;
 	bool direction;//‰EŒü‚«‚Åtrue
@@ -79,8 +79,9 @@ private:
 	ENEMY_STATE m_state= ENEMY_IDLING;
 
 	const float attackSpeed = 2.0f;
-	const int attackTime = 10;
-	const int attackIntervalTime = 30;
+	const int attackTime = 15;
+	const int attackIntervalTime = 120;
+	const float effectScale = 40.0f;
 	int attackTimeCount = 0;
 	int intervalTimeCount = 0;
 };

@@ -21,6 +21,6 @@ private:
 	ComPtr<ID3D12Resource> m_pRenderTargetView;
 	UINT rtvIndex;
 
-	RenderTargetView(const RenderTargetView&) = delete;       // アクセス禁止
-	void operator = (const RenderTargetView&) = delete;       // アクセス禁止
+	RenderTargetView(const RenderTargetView&) = delete;     
+	void operator = (const RenderTargetView&) = delete;      
 };
