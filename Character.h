@@ -68,7 +68,7 @@ private:
 	int animIdleFrameCount = 0;
 	const int animIdleFrame = 4;
 	Player_Anim_State pl_anim_s = IDLE;
-	const int animNum = 6;
+	const int animNum = 7;
 
 	std::vector<Sprite*> m_spritedata;
 

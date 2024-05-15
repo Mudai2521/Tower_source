@@ -153,8 +153,8 @@ void Sprite::SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFL
 //スプライトシート上のスプライトの総数と、表示させたいスプライトが何枚目かを入力
 void Sprite::SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y, UINT TexID)
 {
-	double SpriteWidth = 1.0f / double(Tex_xmax);
-	double SpriteHeight = 1.0f / double(Tex_ymax);
+	double SpriteWidth = 1.0f/ double(Tex_xmax);
+	double SpriteHeight = 1.0f/ double(Tex_ymax);
 	m_Meshdata[TexID].Vertices[0].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y - 1));
 	m_Meshdata[TexID].Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y));
 	m_Meshdata[TexID].Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y - 1));

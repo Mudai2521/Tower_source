@@ -80,7 +80,7 @@ private:
 
 	const float attackSpeed = 2.0f;
 	const int attackTime = 15;
-	const int attackIntervalTime = 120;
+	const int attackIntervalTime = 90;
 	const float effectScale = 40.0f;
 	int attackTimeCount = 0;
 	int intervalTimeCount = 0;
