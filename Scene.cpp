@@ -441,6 +441,10 @@ void Scene::AnimUpdate()
 			m_Chara.SetPlayerAnimState(TELEPORT_END);
 		}
 	}
+	else if (Player_state == DAMAGED_LEFT||Player_state==DAMAGED_RIGHT)
+	{
+		m_Chara.SetPlayerAnimState(DAMAGE);
+	}
 	else if (Player_state == IDLING)
 	{
 		if (Moveinput.y < 0)

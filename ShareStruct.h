@@ -27,7 +27,8 @@ enum Player_Anim_State
 	HOOK,//石投げ
 	TELEPORT_BEGIN,//ワープ開始までの待機
 	TELEPORT_END,//ワープ後の待機
-	TELEPOTING//ワープ中、前後
+	TELEPOTING,//ワープ中、前後
+	DAMAGE
 };
 
 enum ENEMY_TYPE

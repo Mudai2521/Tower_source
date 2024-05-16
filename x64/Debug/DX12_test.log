@@ -58,46 +58,6 @@ C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(373,25): w
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(374,29): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   
-  Sprite.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(72,51): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(73,47): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(74,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(90,34): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(90,27): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(158,91): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(158,58): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(159,91): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(159,58): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(160,87): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(160,58): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(161,87): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(161,58): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
-  
   Terrain.cpp
   Win32Application.cpp
   main.cpp

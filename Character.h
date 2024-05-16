@@ -64,6 +64,8 @@ private:
 	const int hookAnimLength = 5;
 	const int teleAnimLength = 10;
 	const int teleAnimLoopFrame = 3;
+	const int damageAnimLength = 8;
+	const int damageAnimLoopFrame = 5;
 
 	int animIdleFrameCount = 0;
 	const int animIdleFrame = 4;

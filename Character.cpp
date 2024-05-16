@@ -182,5 +182,18 @@ void Character::AnimUpdate()
 				direction = !direction;
 			}
 		}
+		else if (pl_anim_s == DAMAGE)
+		{
+			if (fCount > damageAnimLength)
+			{
+				fCount = damageAnimLoopFrame;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 7);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+			}
 	}
 }
