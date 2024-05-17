@@ -91,6 +91,11 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
+				SetFloorSpriteSheet(map[MapX_MAX * MapY_MAX + MapX_MAX * (y - 1) + x],
+					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x - 1],
+					map[MapX_MAX * MapY_MAX + MapX_MAX * (y + 1) + x],
+					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x + 1],
+					MapY_MAX * x + y);
 				m_spritedata.Draw(pCmdList, MapY_MAX * x + y,0, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 2)
@@ -112,6 +117,101 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 	m_spritedata.Setdrawcount();
 
 	m_Enemy.DrawSprite(pCmdList, Scroll_Enemy);
+}
+
+void Terrain::SetFloorSpriteSheet(int top, int left, int bottom, int right, int ID)
+{
+	if (top == 1) 
+	{
+		if (left == 1) 
+		{
+			if (bottom == 1) 
+			{
+				if (right == 1) 
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 1, 1, ID);
+				} else 
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 5, 1, ID);
+				}
+			} else 
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 7, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 6, 1, ID);
+				}
+			}
+		} else 
+		{
+			if (bottom == 1)
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 9, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 15, 1, ID);
+				}
+			} else
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 8, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 12, 1, ID);
+				}
+			}
+		}
+	} else 
+	{
+		if (left == 1)
+		{
+			if (bottom == 1)
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 3, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 4, 1, ID);
+				}
+			} else
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 16, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 11, 1, ID);
+				}
+			}
+		} else
+		{
+			if (bottom == 1)
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 2, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 10, 1, ID);
+				}
+			} else
+			{
+				if (right == 1)
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 13, 1, ID);
+				} else
+				{
+					m_spritedata.SetSpriteSheet(floorSpriteMax, 1, 14, 1, ID);
+				}
+			}
+		}
+	}
 }
 
 //中央座標と大きさを入力、めり込みを補正するベクトルを返す
