@@ -49,7 +49,7 @@ Terrain::~Terrain()
 
 bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height)
 {
-	if (!m_spritedata.Init(L"Sprite/Terrain.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX,4))throw std::exception();
+	if (!m_spritedata.Init(L"Sprite/Terrain.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX, MapX_MAX * MapY_MAX))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/BG.dds", pDevice, pQueue, pPool))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/Terrain2.dds", pDevice, pQueue, pPool))throw std::exception();
@@ -84,21 +84,21 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 2);
+				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 2, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 1)
 			{
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y);
+				m_spritedata.Draw(pCmdList, MapY_MAX * x + y,0, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 2)
 			{
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 3);
+				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 3, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
 			{

@@ -80,6 +80,7 @@ private:
     UINT IndexCount;
 
     UINT CbufferCount;
+    UINT VbufferCount;
 
     UINT m_width;
     UINT m_height;
