@@ -81,10 +81,10 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 		{
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 0)
 			{
-				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
-					- drawMapBuffer + Scroll));
-				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 2, MapY_MAX * x + y);
+				//SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
+				//	- drawMapBuffer + Scroll));
+				//m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
+				//m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 2, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 1)
 			{
@@ -95,7 +95,7 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x - 1],
 					map[MapX_MAX * MapY_MAX + MapX_MAX * (y + 1) + x],
 					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x + 1],
-					MapY_MAX * x + y);
+					MapY_MAX * x + y); 
 				m_spritedata.Draw(pCmdList, MapY_MAX * x + y,0, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 2)
