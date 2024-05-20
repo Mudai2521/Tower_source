@@ -58,6 +58,14 @@ public:
 				attackTimeCount = 0;
 				m_state = ENEMY_IDLING;
 			}
+		} else if (m_state == ENEMY_DAMAGED) 
+		{
+			ReviveTimeCount++;
+			if (ReviveTimeCount > ReviveTime) 
+			{
+				ReviveTimeCount = 0;
+				m_state = ENEMY_IDLING;
+			}
 		}
 	}
 	int GetTimeCount() 
@@ -84,6 +92,9 @@ private:
 	const float effectScale = 40.0f;
 	int attackTimeCount = 0;
 	int intervalTimeCount = 0;
+
+	int ReviveTimeCount = 0;
+	const int ReviveTime = 720;
 };
 
 class Enemy

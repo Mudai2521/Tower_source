@@ -22,6 +22,7 @@
 #include <shellapi.h>
 #include <tchar.h>
 #include <sstream>
+#include <random>
 
 #include <mmsystem.h>
 

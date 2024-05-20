@@ -7,8 +7,15 @@ Terrain::Terrain() :
 		XMFLOAT2(32.0f, 32.0f),
 		0.0f,
 		XMFLOAT2(0.0f, 0.0f)),
-	drawMapBuffer(m_CharactorState.Scale.y*2)
+	drawMapBuffer(m_CharactorState.Scale.y*2),
+	mapRnd(seed_gen())
 {
+	std::uniform_int_distribution<> rndDist(1, MapChipNum);
+	for (int i = 0; i < (MapY_MAX * 3) / MapY_DIVISION;i++)
+	{
+		mapChipList.push_back(rndDist(mapRnd));
+	}
+
 	//ƒ}ƒbƒv”z—ñ‚É‰Šú’l‚ðŠi”[
 	//‰ŠúˆÊ’u‚æ‚è‰º•û‚É‚Í0‚ðŠi”[
 	for (int y = 0; y < MapY_MAX; y++)
@@ -313,7 +320,8 @@ void Terrain::ScrollUpdate(float Scroll)
 			mapListCount++;
 			if (mapChipList.size() - 1 < mapListCount) 
 			{
-				mapChipList.push_back(1);
+				std::uniform_int_distribution<> rndDist(1, MapChipNum);
+				mapChipList.push_back(rndDist(mapRnd));
 			}
 		}
 		for (int i = 0; i < MapX_MAX; i++) 
