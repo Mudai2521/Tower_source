@@ -14,6 +14,7 @@ public:
 	void DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
 	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret,DirectX::XMFLOAT2 Move, bool is_attack=false);
 	void SetFloorSpriteSheet(int top, int left, int bottom, int right, int ID);
+	void SetFloor2SpriteSheet(int left, int right, int ID);
 
 	void SetScale(DirectX::XMFLOAT2 Scale) { m_CharactorState.Scale = Scale; };
 	float GetScaleX() { return m_CharactorState.Scale.x; };
@@ -48,6 +49,7 @@ private:
 	int TerrainScroll = 0;
 
 	const int floorSpriteMax = 16;
+	const int floor2SpriteMax = 3;
 
 	static const UINT MapX_MAX = 40;
 	static const UINT MapY_MAX = 26;
@@ -299,10 +301,10 @@ private:
 
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,1,1, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
-			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,9,0,0,  0,0,0,0,0, 0,1,1,1,1,
+			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,9,0,  0,0,0,0,0, 0,1,1,1,1,
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
-			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,1,1,1,  1,1,1,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
-			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,1,1,1,  1,1,1,2,2, 2,2,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
+			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,1,  1,1,1,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
+			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,1,  1,1,1,2,2, 2,2,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 			1,1,1,1,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,1,1,1,1,
 

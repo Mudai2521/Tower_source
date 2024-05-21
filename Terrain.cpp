@@ -221,6 +221,26 @@ void Terrain::SetFloorSpriteSheet(int top, int left, int bottom, int right, int 
 	}
 }
 
+void Terrain::SetFloor2SpriteSheet(int left, int right, int ID)
+{
+	if (left == 2) 
+	{
+		if (right == 2) 
+		{
+			m_spritedata.SetSpriteSheet(floor2SpriteMax, 1, 14, 1, ID);
+		} else 
+		{
+		}
+	} else 
+	{
+		if (right == 2)
+		{
+		} else
+		{
+		}
+	}
+}
+
 //中央座標と大きさを入力、めり込みを補正するベクトルを返す
 //めり込んでいない場合は 0ベクトルを返す
 //スクリーン座標系　スクロール分は補正されるので常に画面上の（見かけ上の）座標で判定
