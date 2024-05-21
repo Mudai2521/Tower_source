@@ -1,12 +1,12 @@
 ﻿  D3D12Application.cpp
   DX12Game.cpp
-  Scene.cpp
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
   
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(49,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
   
+  Scene.cpp
 C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(136,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル '/Scene.cpp' をコンパイルしています)
   

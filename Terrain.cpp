@@ -110,6 +110,9 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
 					- drawMapBuffer + Scroll));
 				m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
+				SetFloor2SpriteSheet(map[MapX_MAX * MapY_MAX + MapX_MAX * y + x - 1], 
+					map[MapX_MAX * MapY_MAX + MapX_MAX * y + x + 1],
+					MapY_MAX* x + y);
 				m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 3, MapY_MAX * x + y);
 			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 9)
@@ -227,16 +230,19 @@ void Terrain::SetFloor2SpriteSheet(int left, int right, int ID)
 	{
 		if (right == 2) 
 		{
-			m_spritedata.SetSpriteSheet(floor2SpriteMax, 1, 14, 1, ID);
+			m_spritedata.SetSpriteSheet(floor2SpriteMax, 1, 1, 1, ID);
 		} else 
 		{
+			m_spritedata.SetSpriteSheet(floor2SpriteMax, 1, 3, 1, ID);
 		}
 	} else 
 	{
 		if (right == 2)
 		{
+			m_spritedata.SetSpriteSheet(floor2SpriteMax, 1, 2, 1, ID);
 		} else
 		{
+			m_spritedata.SetSpriteSheet(floor2SpriteMax, 1, 4, 1, ID);
 		}
 	}
 }
