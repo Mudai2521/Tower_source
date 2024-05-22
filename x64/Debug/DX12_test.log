@@ -1,41 +1,27 @@
-﻿  D3D12Application.cpp
-  DX12Game.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+﻿  Enemy.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(93,67): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(49,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(95,102): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-  Scene.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(136,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(96,92): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(204,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(96,55): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(205,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(100,77): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(213,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(101,171): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(249,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(102,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(333,21): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(102,35): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(373,25): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(374,29): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
-  (ソース ファイル '/Scene.cpp' をコンパイルしています)
-  
-  Terrain.cpp
-  Win32Application.cpp
-  main.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  (ソース ファイル '/main.cpp' をコンパイルしています)
-  
-  コードを生成中...
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.h(81,1): warning C4715: 'EnemyData::GetTimeCount': 値を返さないコントロール パスがあります。
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

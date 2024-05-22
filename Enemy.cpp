@@ -167,7 +167,7 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		{
 			e->SetEnemyState(ENEMY_IDLING);
 		}
-		if (abs(e->GetTrans().y - Trans.y) > m_height * 2.0f)
+		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.5f)
 		{
 			e->SetEnemyState(ENEMY_DELETED);
 		}
