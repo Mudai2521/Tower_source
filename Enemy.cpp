@@ -41,14 +41,14 @@ bool Enemy::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 {
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
-	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
+	if (!pSpritedata->Init(L"Sprite/Enemy.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
 	if (!pSpritedata->AddSprite(L"Sprite/effect.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;
 
 
-	m_spritedata[0]->SetSpriteSheet(2,1, 1, 1);
+	m_spritedata[0]->SetSpriteSheet(3,1, 1, 1);
 	return true;
 }
 
@@ -111,11 +111,11 @@ void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 	{
 		if (State == ENEMY_IDLING|| State == ENEMY_ATTACKING)
 		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1, EnemyID);
+			m_spritedata[0]->SetSpriteSheet(3, 1, 1, 1, EnemyID);
 		}
 		else if (State == ENEMY_DAMAGED) 
 		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1, EnemyID);
+			m_spritedata[0]->SetSpriteSheet(3, 1, 2, 1, EnemyID);
 		}
 	}
 }

@@ -1,27 +1,7 @@
-﻿  Enemy.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(93,67): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+﻿  BackGround.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.h(14,17): error C3646: 'm_CharactorState': 不明なオーバーライド指定子です
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(95,102): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.h(14,33): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
   
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(96,92): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(96,55): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(100,77): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(101,171): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(102,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(102,35): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.h(81,1): warning C4715: 'EnemyData::GetTimeCount': 値を返さないコントロール パスがあります。
-  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

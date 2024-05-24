@@ -57,7 +57,7 @@ Terrain::~Terrain()
 bool Terrain::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height)
 {
 	if (!m_spritedata.Init(L"Sprite/Terrain.dds", pDevice, pQueue, pPool, width, height, MapX_MAX * MapY_MAX, MapX_MAX * MapY_MAX))throw std::exception();
-	if (!m_spritedata.AddSprite(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool))throw std::exception();
+	if (!m_spritedata.AddSprite(L"Sprite/Enemy.dds", pDevice, pQueue, pPool))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/BG.dds", pDevice, pQueue, pPool))throw std::exception();
 	if (!m_spritedata.AddSprite(L"Sprite/Terrain2.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_width = width;

@@ -130,7 +130,6 @@ bool Sprite::AddSprite(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQu
 
 void Sprite::Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID, UINT TexID, int VBufferID)
 {
-
 	auto VBV = (VBufferID < 0) ? m_VB[TexID + (drawcount ? VbufferCount : 0)]->GetView() : m_VB[VBufferID + (drawcount ? VbufferCount : 0)]->GetView();
 	auto IBV = m_IB.GetView();
 	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer[CBufferID + (drawcount ? CbufferCount : 0)]->GetAddress());

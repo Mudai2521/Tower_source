@@ -11,7 +11,7 @@
 #include "DXHelper.h"
 #include "DescriptorPool.h"
 #include "Texture.h"
-#include "Modeldata.h"
+#include "ConstantBuffer.h"
 
 #pragma comment( lib, "dxguid.lib" )
 

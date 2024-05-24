@@ -51,6 +51,7 @@ void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 
 	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, XMFLOAT2(m_CharactorState.Trans.x, m_CharactorState.Trans.y + Scroll));
 	m_spritedata[0]->Draw(pCmdList);
+	//m_spritedata[0]->Setdrawcount();
 }
 
 void Character::AnimUpdate() 
