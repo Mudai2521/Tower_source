@@ -250,12 +250,12 @@ void Terrain::SetFloor2SpriteSheet(int left, int right, int ID)
 //中央座標と大きさを入力、めり込みを補正するベクトルを返す
 //めり込んでいない場合は 0ベクトルを返す
 //スクリーン座標系　スクロール分は補正されるので常に画面上の（見かけ上の）座標で判定
-XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, DirectX::XMFLOAT2 Move, bool is_attack)
+XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, DirectX::XMFLOAT2 Move, Player_Anim_State PlayerAnimState, bool is_attack)
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
 	Collision_ret = No_Collision;
 
-	m_Enemy.Collision(Trans, Scale,Collision_ret, is_attack);
+	m_Enemy.Collision(Trans, Scale,Collision_ret, PlayerAnimState, is_attack);
 
 	Trans.y += m_CharactorState.Scale.y * TerrainScroll;//地形スクロールを反映
 

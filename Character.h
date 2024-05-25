@@ -45,6 +45,7 @@ public:
 			pl_anim_s = State;
 		}
 	};
+	Player_Anim_State GetPlayerAnimState() {return pl_anim_s;}
 private:
 	CharactorState m_CharactorState;
 	UINT m_width;

@@ -28,6 +28,27 @@ void EnemyData::Term()
 {
 }
 
+void EnemyData::AnimUpdate() 
+{
+	animIdleFrameCount++;
+	if (animIdleFrameCount > animIdleFrame)
+	{
+		animIdleFrameCount = 0;
+	}
+
+	if (animIdleFrameCount == animIdleFrame)
+	{
+		fCount++;
+		if (m_animState == IDLE)
+		{
+			if (fCount > idleAnimLength)
+			{
+				fCount = 1;
+			};
+		}
+	}
+}
+
 Enemy::Enemy() 
 {
 }
@@ -79,6 +100,7 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 	int effectCount = 0;
 	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
+
 		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
 		{
 			m_enemyData[i]->Term();
@@ -97,17 +119,26 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 			effectCount++;
 		}
 
+		
 		SetSprite(m_enemyData[i]->GetEnemyType(), m_enemyData[i]->GetEnemyState(),i);
+
+		if (m_enemyData[i]->GetDirection())
+		{
+			m_spritedata[0]->turnX(i);
+		}
+
 		m_spritedata[0]->SetWorldMatrix(m_enemyData[i]->GetScale(), m_enemyData[i]->GetRotate(), XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), i);
 		m_spritedata[0]->Draw(pCmdList, i, 0, i);
 		m_enemyData[i]->TimeCount();
 	}
+	
 	m_spritedata[0]->Setdrawcount();
 }
 
 void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 {
-	if (Type == ENEMY_IDLE) 
+	
+	if (Type == ENEMY_IDLE)
 	{
 		if (State == ENEMY_IDLING|| State == ENEMY_ATTACKING)
 		{
@@ -135,7 +166,7 @@ bool Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
 	return true;
 }
 
-XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack)
+XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, Player_Anim_State PlayerAnimState, bool is_attack)
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
 
@@ -148,26 +179,27 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y 
 			&& e->GetEnemyState() == ENEMY_IDLING)
 		{
-			if (e->GetTrans().x - Trans.x > 0)
-			{
-				Collision_ret |= Enemy_Hit_Right;
-			}
-			else
-			{
-				Collision_ret |= Enemy_Hit_Left;
-			}
+			if (e->GetEnemyState() == ENEMY_IDLING) {
+				if (e->GetTrans().x - Trans.x > 0)
+				{
+					Collision_ret |= Enemy_Hit_Right;
+				} else
+				{
+					Collision_ret |= Enemy_Hit_Left;
+				}
 
-			if (is_attack)
-			{
-				e->SetEnemyState(ENEMY_DAMAGED);
+				if (is_attack)
+				{
+					e->SetEnemyState(ENEMY_DAMAGED);
+				}
 			}
-		}
+		} 
 
-		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.1f) 
+		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.0f) 
 		{
 			e->SetEnemyState(ENEMY_IDLING);
 		}
-		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.5f)
+		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.7f)
 		{
 			e->SetEnemyState(ENEMY_DELETED);
 		}

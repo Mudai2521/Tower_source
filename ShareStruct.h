@@ -44,6 +44,13 @@ enum ENEMY_STATE
 	ENEMY_ATTACKING
 };
 
+enum ENEMY_ANIM_STATE
+{
+	ENEMY_ANIM_IDLE,
+	ENEMY_ANIM_DAMAGE,
+	ENEMY_ANIM_DAMAGE2
+};
+
 enum Terrain_Collision
 {
 	No_Collision = 0,

@@ -12,7 +12,7 @@ public:
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
 	void DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
-	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret,DirectX::XMFLOAT2 Move, bool is_attack=false);
+	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret,DirectX::XMFLOAT2 Move, Player_Anim_State PlayerAnimState, bool is_attack=false);
 	void SetFloorSpriteSheet(int top, int left, int bottom, int right, int ID);
 	void SetFloor2SpriteSheet(int left, int right, int ID);
 
