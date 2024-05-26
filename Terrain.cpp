@@ -124,7 +124,7 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 	//使用する定数バッファを入れ替えてデータ破損を防ぐ
 	m_spritedata.Setdrawcount();
 
-	m_Enemy.DrawSprite(pCmdList, Scroll_Enemy);
+	m_Enemy.DrawSprite(pCmdList, -m_CharactorState.Scale.y * float(MapY_MAX) - drawMapBuffer, m_CharactorState.Scale.y * float(MapY_MAX) * 2 - drawMapBuffer, Scroll_Enemy);
 
 	
 }

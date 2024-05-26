@@ -1,32 +1,30 @@
 ﻿  Enemy.cpp
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(127,67): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(133,67): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(129,102): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(135,102): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(130,92): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(136,92): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(130,55): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(136,55): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(135,77): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(141,77): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(139,27): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(145,27): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(142,171): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(148,171): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(143,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(149,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(143,35): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(149,35): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
   (ソース ファイル '/Enemy.cpp' をコンパイルしています)
   
-  Terrain.cpp
-  コードを生成中...
 C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.h(82): warning C4715: 'EnemyData::GetTimeCount': 値を返さないコントロール パスがあります。
   DX12_test.vcxproj -> C:\Users\inaka\source\repos\DX12_test\DX12_test\Debug\DX12_test.exe

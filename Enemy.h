@@ -133,7 +133,7 @@ public:
 	~Enemy();
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
-	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
+	void DrawSprite(ID3D12GraphicsCommandList* pCmdList,float mapYMin, float mapYMax, float Scroll = 0.0f);
 	
 	bool AddEnemy(DirectX::XMFLOAT2 Trans,bool Direction,ENEMY_TYPE Type);
 	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, Player_Anim_State PlayerAnimState, bool is_attack);

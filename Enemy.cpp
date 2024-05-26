@@ -107,11 +107,17 @@ void Enemy::Term()
 	}
 }
 
-void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
+void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float mapYMin, float mapYMax, float Scroll)
 {
 	int effectCount = 0;
 	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
+		if (m_enemyData[i]->GetTrans().y + Scroll <  mapYMin - m_enemyData[i]->GetScale().y / 2
+			|| m_enemyData[i]->GetTrans().y + Scroll > mapYMax - m_enemyData[i]->GetScale().y / 4)
+		{
+			m_enemyData[i]->SetEnemyState(ENEMY_DELETED);
+		}
+
 
 		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
 		{
@@ -205,7 +211,7 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 			}
 		} 
 
-		if (e->GetEnemyState() == ENEMY_DAMAGED && PlayerAnimState == TELEPORT_END) 
+		if (e->GetEnemyState() == ENEMY_DAMAGED && (PlayerAnimState == TELEPORT_END|| PlayerAnimState == TELEPORT_BEGIN || PlayerAnimState == TELEPOTING))
 		{
 			e->SetPlayerTeleFlag(true);
 		}
@@ -221,10 +227,7 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 			e->SetEnemyState(ENEMY_IDLING);
 			e->SetEnemyAnimState(ENEMY_ANIM_IDLE);
 		}
-		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.7f)
-		{
-			e->SetEnemyState(ENEMY_DELETED);
-		}
+		
 
 		const float A_DIS = (Scale.x + e->GetTimeCount()* e->GetEffectScale()) / 2;
 
