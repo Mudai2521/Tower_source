@@ -76,8 +76,10 @@ void Terrain::Term()
 
 void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
-	float Scroll_Enemy = Scroll;
+	float Temp_Scroll = Scroll;
 	Scroll += Scroll - preScroll;
+	float Scroll_Enemy = Scroll;
+	preScroll = Temp_Scroll;
 	//スクロールの更新処理
 	ScrollUpdate(Scroll);
 	//更新処理を反映
@@ -124,7 +126,7 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 
 	m_Enemy.DrawSprite(pCmdList, Scroll_Enemy);
 
-	preScroll = Scroll_Enemy;
+	
 }
 
 void Terrain::SetFloorSpriteSheet(int top, int left, int bottom, int right, int ID)
