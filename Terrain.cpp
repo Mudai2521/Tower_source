@@ -77,22 +77,18 @@ void Terrain::Term()
 void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 {
 	float Scroll_Enemy = Scroll;
+	Scroll += Scroll - preScroll;
 	//スクロールの更新処理
 	ScrollUpdate(Scroll);
 	//更新処理を反映
 	Scroll -= m_CharactorState.Scale.y * float(TerrainScroll);
 
+	
+
 	for (int x = 0; x < MapX_MAX; x++) 
 	{
 		for (int y = 0; y < MapY_MAX; y++)
 		{
-			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 0)
-			{
-				//SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
-				//	- drawMapBuffer + Scroll));
-				//m_spritedata.SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, m_CharactorState.Trans, MapY_MAX * x + y);
-				//m_spritedata.Draw(pCmdList, MapY_MAX * x + y, 2, MapY_MAX * x + y);
-			}
 			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 1)
 			{
 				SetTrans(XMFLOAT2(m_CharactorState.Scale.x / 2.0f + m_CharactorState.Scale.x * x, m_CharactorState.Scale.y / 2.0f + m_CharactorState.Scale.y * y
@@ -127,6 +123,8 @@ void Terrain::DrawMap(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 	m_spritedata.Setdrawcount();
 
 	m_Enemy.DrawSprite(pCmdList, Scroll_Enemy);
+
+	preScroll = Scroll_Enemy;
 }
 
 void Terrain::SetFloorSpriteSheet(int top, int left, int bottom, int right, int ID)
@@ -333,7 +331,7 @@ void Terrain::ScrollUpdate(float Scroll)
 {
 	//1マス分以下のスクロールはそのまま反映
 	//1マス分を超えたらマップデータ側を1マス分スクロールさせて、シーンクラスから入力されるスクロール距離から引いて使用する
-	//上方スクロール時にランダムなマップデータをpush_backすることでランダム生成マップとする（現在仮データとして固定マップのみ読み込み）
+	//上方スクロール時にランダムなマップデータをpush_backすることでランダム生成マップとする
 	//下方スクロールは初期位置より下がらない
 
 	//自機が上方へ移動した時のスクロール

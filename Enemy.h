@@ -65,6 +65,7 @@ public:
 			{
 				ReviveTimeCount = 0;
 				m_state = ENEMY_IDLING;
+				m_animState = ENEMY_ANIM_IDLE;
 			}
 		}
 	}
@@ -85,7 +86,13 @@ public:
 		if (m_animState != State)fCount = 1;
 		m_animState = State;
 	};
+	ENEMY_ANIM_STATE GetEnemyAnimState() { return m_animState; }
 	void AnimUpdate();
+	void SetPlayerTeleFlag(bool Flag) { isPlayerTeleFlag = Flag; }
+	bool GetPlayerTeleFlag() { return isPlayerTeleFlag; }
+	int GetAnimFrameMax() {return idleAnimLength;}
+	int GetAnimNum() { return animNum; }
+	int GetfCount() { return fCount; }
 private:
 	CharactorState m_CharactorState;
 	bool direction;//‰EŒü‚«‚Åtrue
@@ -106,10 +113,17 @@ private:
 	int fCount = 1;
 
 	const int idleAnimLength = 10;
+	const int damageAnimLength = 8;
+	const int damageAnimLoopFrame = 2;
+	const int damage2AnimLength = 6;
+	const int damage2AnimLoopFrame = 4;
+
 	const int animNum = 3;
 
 	int animIdleFrameCount = 0;
 	const int animIdleFrame = 4;
+
+	bool isPlayerTeleFlag = false;
 };
 
 class Enemy

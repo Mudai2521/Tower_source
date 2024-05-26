@@ -1,42 +1,145 @@
 ﻿  Performing Custom Build Tools
+  Performing Custom Build Tools
   stdafx.cpp
+  BackGround.cpp
+C:\Users\inaka\source\repos\DX12_test\DX12_test\BackGround.cpp(24,43): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\BackGround.cpp(24,36): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\BackGround.cpp(25,54): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\BackGround.cpp(25,42): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+  Character.cpp
   ConstantBuffer.cpp
   D3D12Application.cpp
   DepthStencilBuffer.cpp
   DescriptorPool.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
+C:\Users\inaka\source\repos\DX12_test\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
   (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
   
   DX12Game.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(46,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+C:\Users\inaka\source\repos\DX12_test\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
   
+C:\Users\inaka\source\repos\DX12_test\DX12_test\DX12Game.cpp(49,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+  
+  Enemy.cpp
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(127,67): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(129,102): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(130,92): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(130,55): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(135,77): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(139,27): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(142,171): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(143,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.cpp(143,35): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
   FileUtil.cpp
+  Hook.cpp
   IndexBuffer.cpp
   main.cpp
-  Modeldata.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(77,53): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(78,49): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.cpp(79,41): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
-  (ソース ファイル '/Modeldata.cpp' をコンパイルしています)
+C:\Users\inaka\source\repos\DX12_test\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+  (ソース ファイル '/main.cpp' をコンパイルしています)
   
   RenderTargetView.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\RenderTargetView.cpp(27,2): warning C4002: 関数に似たマクロ呼び出し 'NAME_D3D12_OBJECT' の引数が多すぎます
+C:\Users\inaka\source\repos\DX12_test\DX12_test\RenderTargetView.cpp(31,2): warning C4002: 関数に似たマクロ呼び出し 'NAME_D3D12_OBJECT' の引数が多すぎます
   (ソース ファイル '/RenderTargetView.cpp' をコンパイルしています)
   
+  Scene.cpp
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(139,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(207,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(208,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(216,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(252,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(336,21): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(376,25): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Scene.cpp(377,29): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+  Sprite.cpp
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(72,51): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(73,47): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(74,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(90,34): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(90,27): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(158,124): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(158,91): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(159,124): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(159,91): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(160,120): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(160,91): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(161,120): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Sprite.cpp(161,91): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+  Terrain.cpp
   Texture.cpp
   VertexBuffer.cpp
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.h(94,17): error C2143: 構文エラー: ';' が '*' の前にありません。
-  (ソース ファイル '/VertexBuffer.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.h(94,17): error C4430: 型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
-  (ソース ファイル '/VertexBuffer.cpp' をコンパイルしています)
-  
-C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Modeldata.h(94,23): error C2238: ';' の前に無効なトークンがあります。
-  (ソース ファイル '/VertexBuffer.cpp' をコンパイルしています)
-  
   Win32Application.cpp
+  コード生成しています。
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+C:\Users\inaka\source\repos\DX12_test\DX12_test\Enemy.h(82): warning C4715: 'EnemyData::GetTimeCount': 値を返さないコントロール パスがあります。
+  All 1174 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  DX12_test.vcxproj -> C:\Users\inaka\source\repos\DX12_test\x64\Release\DX12_test.exe

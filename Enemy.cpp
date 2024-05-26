@@ -39,12 +39,24 @@ void EnemyData::AnimUpdate()
 	if (animIdleFrameCount == animIdleFrame)
 	{
 		fCount++;
-		if (m_animState == IDLE)
+		if (m_animState == ENEMY_ANIM_IDLE)
 		{
 			if (fCount > idleAnimLength)
 			{
 				fCount = 1;
-			};
+			}
+		} else if (m_animState == ENEMY_ANIM_DAMAGE)
+		{
+			if (fCount > damageAnimLength)
+			{
+				fCount = damageAnimLoopFrame;
+			}
+		} else if (m_animState == ENEMY_ANIM_DAMAGE2)
+		{
+			if (fCount > damage2AnimLength)
+			{
+				fCount = damage2AnimLoopFrame;
+			}
 		}
 	}
 }
@@ -140,14 +152,11 @@ void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 	
 	if (Type == ENEMY_IDLE)
 	{
-		if (State == ENEMY_IDLING|| State == ENEMY_ATTACKING)
-		{
-			m_spritedata[0]->SetSpriteSheet(3, 1, 1, 1, EnemyID);
-		}
-		else if (State == ENEMY_DAMAGED) 
-		{
-			m_spritedata[0]->SetSpriteSheet(3, 1, 2, 1, EnemyID);
-		}
+		m_enemyData[EnemyID]->AnimUpdate();
+		m_spritedata[0]->SetSpriteSheet(m_enemyData[EnemyID]->GetAnimFrameMax(), 
+			m_enemyData[EnemyID]->GetAnimNum(), 
+			m_enemyData[EnemyID]->GetfCount(), 
+			m_enemyData[EnemyID]->GetEnemyAnimState(), EnemyID);
 	}
 }
 
@@ -191,13 +200,26 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 				if (is_attack)
 				{
 					e->SetEnemyState(ENEMY_DAMAGED);
+					e->SetEnemyAnimState(ENEMY_ANIM_DAMAGE);
 				}
 			}
 		} 
 
+		if (e->GetEnemyState() == ENEMY_DAMAGED && PlayerAnimState == TELEPORT_END) 
+		{
+			e->SetPlayerTeleFlag(true);
+		}
+
+		if (e->GetPlayerTeleFlag() && PlayerAnimState != TELEPORT_END)
+		{
+			e->SetEnemyAnimState(ENEMY_ANIM_DAMAGE2);
+			e->SetPlayerTeleFlag(false);
+		}
+
 		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.0f) 
 		{
 			e->SetEnemyState(ENEMY_IDLING);
+			e->SetEnemyAnimState(ENEMY_ANIM_IDLE);
 		}
 		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.7f)
 		{

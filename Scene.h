@@ -5,6 +5,7 @@
 #include "Terrain.h"
 #include "Hook.h"
 #include "Enemy.h"
+#include "BackGround.h"
 
 //シーン管理クラス
 class Scene
@@ -71,6 +72,7 @@ private:
 	Character m_Chara;
 	Terrain m_Terrain;
 	Hook m_Hook;
+	BackGround m_BG;
 
 	//ウィンドウの大きさ
 	UINT m_width;

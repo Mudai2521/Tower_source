@@ -19,6 +19,7 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_Chara.Init(pDevice, pQueue, pPool, width, height);
 	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
 	m_Hook.Init(pDevice, pQueue, pPool, width, height);
+	m_BG.Init(pDevice, pQueue, pPool, width, height);
 
 	//自機の初期位置設定
 	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 3.5f, m_height - 112.0f));
@@ -31,6 +32,7 @@ void Scene::Term()
 	m_Chara.Term();
 	m_Terrain.Term();
 	m_Hook.Term();
+	m_BG.Term();
 }
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
@@ -38,6 +40,7 @@ void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 	//スクロールの更新
 	Scroll();
 	//描画
+	m_BG.DrawSprite(pCmdList, scrollPosY);
 	m_Terrain.DrawMap(pCmdList, scrollPosY);
 	m_Hook.DrawSprite(pCmdList, scrollPosY);
 	m_Chara.DrawSprite(pCmdList, scrollPosY);
@@ -377,7 +380,6 @@ void Scene::Scroll()
 	{
 		scroll_s = (upScrollBoundary -(m_Chara.GetTrans().y + scrollPosY))* scroll_s_c;
 		scroll_s = (scroll_s < default_scroll_s ? default_scroll_s : scroll_s);
-		//scroll_s = (m_height / 3 - (m_Chara.GetTrans().y + scrollPosY)) < -m_height ? (m_height / 3 - (m_Chara.GetTrans().y + scrollPosY)) : scroll_s;
 		scrollPosY += scroll_s;
 	}
 	else if (m_Chara.GetTrans().y + scrollPosY > bottomScrollBoundary)//自機が下方へ行ったときのスクロール
