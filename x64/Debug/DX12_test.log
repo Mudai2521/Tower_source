@@ -1,2 +1,14 @@
-﻿  Score.cpp
+﻿  BackGround.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(25,43): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(25,36): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(26,54): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(26,42): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
   DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\DX12_test.exe

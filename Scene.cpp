@@ -20,6 +20,7 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
 	m_Hook.Init(pDevice, pQueue, pPool, width, height);
 	m_BG.Init(pDevice, pQueue, pPool, width, height);
+	m_scoreDraw.Init(pDevice, pQueue, pPool, width, height);
 
 	//自機の初期位置設定
 	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 3.5f, m_height - 112.0f));
@@ -33,6 +34,7 @@ void Scene::Term()
 	m_Terrain.Term();
 	m_Hook.Term();
 	m_BG.Term();
+	m_scoreDraw.Term();
 }
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
@@ -44,6 +46,7 @@ void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 	m_Terrain.DrawMap(pCmdList, scrollPosY);
 	m_Hook.DrawSprite(pCmdList, scrollPosY);
 	m_Chara.DrawSprite(pCmdList, scrollPosY);
+	m_scoreDraw.DrawSprite(pCmdList, UINT(playerHeight));
 }
 
 void Scene::OnUpdate(unsigned char* key)
@@ -76,6 +79,8 @@ void Scene::OnUpdate(unsigned char* key)
 
 	//アニメーション更新処理
 	AnimUpdate();
+
+	playerHeight = abs(m_Chara.GetTrans().y - p_firstPos.y)/m_Chara.GetScaleY()*1.4;
 }
 
 void Scene::PlayerUpdate()

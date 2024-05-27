@@ -20,6 +20,9 @@ private:
 
 	std::vector<UINT> ScoreNumArray;
 	const int ScoreDigitMax = 10;
+	const float charaInterval = 2.0f;
+	const float scoreMarginX = 100.0f;
+	float scoreMarginY = 0.0f;
 
 	void SetScore(UINT score);
 

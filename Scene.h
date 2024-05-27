@@ -6,6 +6,7 @@
 #include "Hook.h"
 #include "Enemy.h"
 #include "BackGround.h"
+#include "Score.h"
 
 //シーン管理クラス
 class Scene
@@ -73,6 +74,7 @@ private:
 	Terrain m_Terrain;
 	Hook m_Hook;
 	BackGround m_BG;
+	Score m_scoreDraw;
 
 	//ウィンドウの大きさ
 	UINT m_width;
@@ -109,6 +111,8 @@ private:
 	const float default_scroll_s = 1.0f;							//スクロール速度の最低値
 	float scroll_s = default_scroll_s;								//スクロール速度
 	const float scroll_s_c = 0.1f;									//この係数をスクロール距離にかけてスクロール速度とする
+
+	float playerHeight = 0.0f;										//プレイヤーが到達した高度(メートル プレイヤーを140cmとする)
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);
