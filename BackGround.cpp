@@ -2,6 +2,35 @@
 
 using namespace DirectX;
 
+Cloud::Cloud() 
+{
+}
+
+Cloud::~Cloud() 
+{
+	Term();
+}
+
+bool Cloud::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height)
+{
+	if (!m_spritedata.Init(L"Sprite/Cloud.dds", pDevice, pQueue, pPool, width, height, CloudMax, CloudMax))throw std::exception();
+	m_width = width;
+	m_height = height;
+
+
+	return true;
+}
+
+void Cloud::Term()
+{
+	m_spritedata.Term();
+}
+
+void Cloud::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f)
+{
+}
+
+
 BackGround::BackGround() :
 	m_CharactorState(
 		XMFLOAT2(0.0f, 0.0f),
