@@ -5,6 +5,10 @@
 #include "Terrain.h"
 #include "Hook.h"
 #include "Enemy.h"
+#include "BackGround.h"
+#include "Score.h"
+#include "EndEffect.h"
+#include "TitleEffect.h"
 
 //シーン管理クラス
 class Scene
@@ -15,7 +19,7 @@ public:
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
 	void DrawSprite(ID3D12GraphicsCommandList* pCmdList);
-	void OnUpdate(unsigned char* key);
+	int OnUpdate(unsigned char* key);
 	
 private:
 	//キーの状態
@@ -71,6 +75,10 @@ private:
 	Character m_Chara;
 	Terrain m_Terrain;
 	Hook m_Hook;
+	BackGround m_BG;
+	Score m_scoreDraw;
+	EndEffect m_EndEffect;
+	TitleEffect m_TitleEffect;
 
 	//ウィンドウの大きさ
 	UINT m_width;
@@ -89,9 +97,9 @@ private:
 	DirectX::XMFLOAT2 p_firstPos;									//自機の初期位置
 	DirectX::XMFLOAT2 h_move_pos;									//ワープ中の移動距離保存用
 
-	const float move_s_d = 4.0f;									//被ダメ時のX軸初速度
+	const float move_s_d = 8.0f;									//被ダメ時のX軸初速度
 	const float move_a_d = 0.02f;									//被ダメ時のX軸加速度
-	const float jump_s_d = 5.0f;									//被ダメ時のY軸初速度
+	const float jump_s_d = 10.0f;									//被ダメ時のY軸初速度
 
 	bool jump_hook_flag = false;									//ジャンプ時のフックショットは一度ワープすると着地まで再発射不可　の判定用
 	PLAYER_STATE Player_state = IDLING;								//自機の状態を保存
@@ -108,11 +116,16 @@ private:
 	float scroll_s = default_scroll_s;								//スクロール速度
 	const float scroll_s_c = 0.1f;									//この係数をスクロール距離にかけてスクロール速度とする
 
+	float playerHeight = 0.0f;										//プレイヤーが到達した高度(メートル プレイヤーを140cmとする)
+	const float playerGoalHeight = 500.0f;							//ゴールの高度
+	SCENE_STATE Scene_state = SCENE_TITLE;
+
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);
 	void PlayerUpdate();
 	void PlayerUpdate_Hanging();
 	void PlayerUpdate_Damaged();
+	void PlayerUpdate_Title_Ending();
 	void HookUpdate(DirectX::XMFLOAT2 CharaMoveLog);
 	void Scroll();
 	void AnimUpdate();

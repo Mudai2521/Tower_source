@@ -40,28 +40,28 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 
 	m_Texture.push_back(Tex);
 
-	m_Meshdata.resize(VBNum);
-	for (UINT i = 0; i < VBNum; i++) {
+	m_Meshdata.resize(VBNum*2);
+	for (UINT i = 0; i < VBNum*2; i++) {
 		m_Meshdata[i].Vertices.resize(4);
 
 		m_Meshdata[i].Vertices[0] = SpriteVertex(
 			XMFLOAT3(-DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(0.0f, 0.0f),
+			XMFLOAT2(0.0f+ SpriteMargin, 0.0f + SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 		m_Meshdata[i].Vertices[1] = SpriteVertex(
 			XMFLOAT3(-DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(0.0f, 1.0f),
+			XMFLOAT2(0.0f + SpriteMargin, 1.0f- SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 		m_Meshdata[i].Vertices[2] = SpriteVertex(
 			XMFLOAT3(DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(1.0f, 0.0f),
+			XMFLOAT2(1.0f - SpriteMargin, 0.0f + SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 		m_Meshdata[i].Vertices[3] = SpriteVertex(
 			XMFLOAT3(DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(1.0f, 1.0f),
+			XMFLOAT2(1.0f - SpriteMargin, 1.0f - SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 	}
@@ -91,7 +91,8 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 		m_CBuffer.push_back(pCB);
 	}
 
-	for (UINT i = 0; i < VBNum; i++) {
+	VbufferCount = VBNum;
+	for (UINT i = 0; i < VBNum * 2; i++) {
 		auto vb = new (std::nothrow) VertexBuffer();
 		if (!vb->Init(
 			pDevice, VertexBufferSize, m_Meshdata[i].Vertices.data()))
@@ -129,8 +130,7 @@ bool Sprite::AddSprite(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQu
 
 void Sprite::Draw(ID3D12GraphicsCommandList* pCmdList, UINT CBufferID, UINT TexID, int VBufferID)
 {
-
-	auto VBV = (VBufferID < 0) ? m_VB[TexID]->GetView() : m_VB[VBufferID]->GetView();
+	auto VBV = (VBufferID < 0) ? m_VB[TexID + (drawcount ? VbufferCount : 0)]->GetView() : m_VB[VBufferID + (drawcount ? VbufferCount : 0)]->GetView();
 	auto IBV = m_IB.GetView();
 	pCmdList->SetGraphicsRootConstantBufferView(0, m_CBuffer[CBufferID + (drawcount ? CbufferCount : 0)]->GetAddress());
 	pCmdList->SetGraphicsRootDescriptorTable(1, GetGPUHandle(TexID));
@@ -153,28 +153,28 @@ void Sprite::SetWorldMatrix(DirectX::XMFLOAT2 Scale, float Rotate, DirectX::XMFL
 //スプライトシート上のスプライトの総数と、表示させたいスプライトが何枚目かを入力
 void Sprite::SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y, UINT TexID)
 {
-	double SpriteWidth = 1.0f / double(Tex_xmax);
-	double SpriteHeight = 1.0f / double(Tex_ymax);
-	m_Meshdata[TexID].Vertices[0].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y - 1));
-	m_Meshdata[TexID].Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y));
-	m_Meshdata[TexID].Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y - 1));
-	m_Meshdata[TexID].Vertices[3].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y));
+	double SpriteWidth = 1.0f/ double(Tex_xmax);
+	double SpriteHeight = 1.0f/ double(Tex_ymax);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[0].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1) + SpriteMargin, SpriteHeight * float(Tex_y - 1) + SpriteMargin);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1) + SpriteMargin, SpriteHeight * float(Tex_y) - SpriteMargin);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x) - SpriteMargin, SpriteHeight * float(Tex_y - 1) + SpriteMargin);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[3].uv = XMFLOAT2(SpriteWidth * float(Tex_x) - SpriteMargin, SpriteHeight * float(Tex_y) - SpriteMargin);
 
-	memcpy(m_VB[TexID]->Map(), m_Meshdata[TexID].Vertices.data(), VertexBufferSize);
-	m_VB[TexID]->Unmap();
+	memcpy(m_VB[TexID + (drawcount ? VbufferCount : 0)]->Map(), m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices.data(), VertexBufferSize);
+	m_VB[TexID + (drawcount ? VbufferCount : 0)]->Unmap();
 }
 
 void Sprite::turnX(UINT TexID)
 {
-	XMFLOAT2 temp = m_Meshdata[TexID].Vertices[0].uv;
-	m_Meshdata[TexID].Vertices[0].uv = m_Meshdata[TexID].Vertices[2].uv;
-	m_Meshdata[TexID].Vertices[2].uv = temp;
-	temp = m_Meshdata[TexID].Vertices[1].uv;
-	m_Meshdata[TexID].Vertices[1].uv = m_Meshdata[TexID].Vertices[3].uv;
-	m_Meshdata[TexID].Vertices[3].uv = temp;
+	XMFLOAT2 temp = m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[0].uv;
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[0].uv = m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[2].uv;
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[2].uv = temp;
+	temp = m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[1].uv;
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[1].uv = m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[3].uv;
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[3].uv = temp;
 
-	memcpy(m_VB[TexID]->Map(), m_Meshdata[TexID].Vertices.data(), VertexBufferSize);
-	m_VB[TexID]->Unmap();
+	memcpy(m_VB[TexID + (drawcount ? VbufferCount : 0)]->Map(), m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices.data(), VertexBufferSize);
+	m_VB[TexID + (drawcount ? VbufferCount : 0)]->Unmap();
 }
 
 bool Sprite::Isvalid()

@@ -51,6 +51,7 @@ void Character::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 
 	m_spritedata[0]->SetWorldMatrix(m_CharactorState.Scale, m_CharactorState.Rotate, XMFLOAT2(m_CharactorState.Trans.x, m_CharactorState.Trans.y + Scroll));
 	m_spritedata[0]->Draw(pCmdList);
+	//m_spritedata[0]->Setdrawcount();
 }
 
 void Character::AnimUpdate() 
@@ -182,5 +183,18 @@ void Character::AnimUpdate()
 				direction = !direction;
 			}
 		}
+		else if (pl_anim_s == DAMAGE)
+		{
+			if (fCount > damageAnimLength)
+			{
+				fCount = damageAnimLoopFrame;
+			};
+			m_spritedata[0]->SetSpriteSheet(idleAnimLength, animNum, fCount, 7);
+			if (!direction)
+			{
+				turn();
+				direction = !direction;
+			}
+			}
 	}
 }

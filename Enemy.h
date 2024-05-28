@@ -58,6 +58,15 @@ public:
 				attackTimeCount = 0;
 				m_state = ENEMY_IDLING;
 			}
+		} else if (m_state == ENEMY_DAMAGED) 
+		{
+			ReviveTimeCount++;
+			if (ReviveTimeCount > ReviveTime) 
+			{
+				ReviveTimeCount = 0;
+				m_state = ENEMY_IDLING;
+				m_animState = ENEMY_ANIM_IDLE;
+			}
 		}
 	}
 	int GetTimeCount() 
@@ -72,18 +81,49 @@ public:
 		}
 	}
 	float GetEffectScale() { return effectScale; }
+	void SetEnemyAnimState(ENEMY_ANIM_STATE State)
+	{
+		if (m_animState != State)fCount = 1;
+		m_animState = State;
+	};
+	ENEMY_ANIM_STATE GetEnemyAnimState() { return m_animState; }
+	void AnimUpdate();
+	void SetPlayerTeleFlag(bool Flag) { isPlayerTeleFlag = Flag; }
+	bool GetPlayerTeleFlag() { return isPlayerTeleFlag; }
+	int GetAnimFrameMax() {return idleAnimLength;}
+	int GetAnimNum() { return animNum; }
+	int GetfCount() { return fCount; }
 private:
 	CharactorState m_CharactorState;
 	bool direction;//‰EŒü‚«‚Åtrue
 	ENEMY_TYPE m_type;
 	ENEMY_STATE m_state= ENEMY_IDLING;
+	ENEMY_ANIM_STATE m_animState = ENEMY_ANIM_IDLE;
 
 	const float attackSpeed = 2.0f;
 	const int attackTime = 15;
-	const int attackIntervalTime = 120;
+	const int attackIntervalTime = 90;
 	const float effectScale = 40.0f;
 	int attackTimeCount = 0;
 	int intervalTimeCount = 0;
+
+	int ReviveTimeCount = 0;
+	const int ReviveTime = 720;
+
+	int fCount = 1;
+
+	const int idleAnimLength = 10;
+	const int damageAnimLength = 8;
+	const int damageAnimLoopFrame = 2;
+	const int damage2AnimLength = 6;
+	const int damage2AnimLoopFrame = 4;
+
+	const int animNum = 3;
+
+	int animIdleFrameCount = 0;
+	const int animIdleFrame = 4;
+
+	bool isPlayerTeleFlag = false;
 };
 
 class Enemy
@@ -93,10 +133,10 @@ public:
 	~Enemy();
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
-	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll = 0.0f);
+	void DrawSprite(ID3D12GraphicsCommandList* pCmdList,float mapYMin, float mapYMax, float Scroll = 0.0f);
 	
 	bool AddEnemy(DirectX::XMFLOAT2 Trans,bool Direction,ENEMY_TYPE Type);
-	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack);
+	DirectX::XMFLOAT2 Collision(DirectX::XMFLOAT2 Trans, DirectX::XMFLOAT2 Scale, Terrain_Collision& Collision_ret, Player_Anim_State PlayerAnimState, bool is_attack);
 	void SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID);
 private:
 	UINT m_width;
@@ -106,9 +146,10 @@ private:
 	ID3D12CommandQueue* m_pQueue;
 	DescriptorPool* m_pPool;
 
+	
+
 	std::vector<Sprite*> m_spritedata;
 	std::vector<EnemyData*> m_enemyData;
-
 
 	Enemy(const  Enemy&) = delete;
 	Enemy& operator=(const Enemy&) = delete;

@@ -11,7 +11,7 @@
 #include "DXHelper.h"
 #include "DescriptorPool.h"
 #include "Texture.h"
-#include "Modeldata.h"
+#include "ConstantBuffer.h"
 
 #pragma comment( lib, "dxguid.lib" )
 
@@ -80,12 +80,13 @@ private:
     UINT IndexCount;
 
     UINT CbufferCount;
+    UINT VbufferCount;
 
     UINT m_width;
     UINT m_height;
 
     float DefaultSpriteSize;
-
+    const double SpriteMargin = 0.00001f;
     bool drawcount;
 
     Sprite(const Sprite&) = delete;

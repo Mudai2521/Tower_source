@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "DXHelper.h"
 #include "Win32Application.h"
-#include "Modeldata.h"
 #include "DescriptorPool.h"
 #include "ConstantBuffer.h"
 #include "DepthStencilBuffer.h"

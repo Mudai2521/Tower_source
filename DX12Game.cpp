@@ -14,8 +14,8 @@ void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
     //ChangeFullScreenState();
 
     LoadSizeDependentResources();
-
-    m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
+    m_Scene = new Scene();
+    m_Scene->Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 
     ThrowIfFailed(m_inputDevice->Acquire());
 }
@@ -44,6 +44,10 @@ void DX12Game::LoadAssets()
 
 
         D3D12_STATIC_SAMPLER_DESC sampler = CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_POINT);
+        sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+        sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+        sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+
 
         CD3DX12_ROOT_SIGNATURE_DESC desc = {};
         desc.NumParameters = std::size(rootParam);
@@ -172,6 +176,9 @@ void DX12Game::LoadSizeDependentResources()
 
 void DX12Game::OnDestroy()
 {
+    m_Scene->Term();
+    delete m_Scene;
+    m_Scene = nullptr;
 
     WaitForGpu();
 
@@ -200,9 +207,13 @@ void DX12Game::OnUpdate()
     }
     if (KeyState[DIK_RETURN] & 0x80)
     {
-        ChangeFullScreenState();
+        //ChangeFullScreenState();
     }
-    m_Scene.OnUpdate(KeyState);
+    int result= m_Scene->OnUpdate(KeyState);
+    if (result == 1) 
+    {
+        PostQuitMessage(0);
+    }
 }
 
 void DX12Game::OnRender(HWND hwnd)
@@ -281,7 +292,7 @@ void DX12Game::PopulateCommandList()
     m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-    m_Scene.DrawSprite(m_commandList.Get());
+    m_Scene->DrawSprite(m_commandList.Get());
 
 
     

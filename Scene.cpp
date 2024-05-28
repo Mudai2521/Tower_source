@@ -19,6 +19,10 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_Chara.Init(pDevice, pQueue, pPool, width, height);
 	m_Terrain.Init(pDevice, pQueue, pPool, width, height);
 	m_Hook.Init(pDevice, pQueue, pPool, width, height);
+	m_BG.Init(pDevice, pQueue, pPool, width, height);
+	m_scoreDraw.Init(pDevice, pQueue, pPool, width, height);
+	m_EndEffect.Init(pDevice, pQueue, pPool, width, height);
+	m_TitleEffect.Init(pDevice, pQueue, pPool, width, height);
 
 	//自機の初期位置設定
 	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 3.5f, m_height - 112.0f));
@@ -31,6 +35,10 @@ void Scene::Term()
 	m_Chara.Term();
 	m_Terrain.Term();
 	m_Hook.Term();
+	m_BG.Term();
+	m_scoreDraw.Term();
+	m_EndEffect.Term();
+	m_TitleEffect.Term();
 }
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
@@ -38,12 +46,16 @@ void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 	//スクロールの更新
 	Scroll();
 	//描画
+	m_BG.DrawSprite(pCmdList, scrollPosY);
 	m_Terrain.DrawMap(pCmdList, scrollPosY);
 	m_Hook.DrawSprite(pCmdList, scrollPosY);
 	m_Chara.DrawSprite(pCmdList, scrollPosY);
+	m_scoreDraw.DrawSprite(pCmdList, UINT(playerHeight));
+	m_EndEffect.DrawSprite(pCmdList, Scene_state);
+	m_TitleEffect.DrawSprite(pCmdList, Scene_state);
 }
 
-void Scene::OnUpdate(unsigned char* key)
+int Scene::OnUpdate(unsigned char* key)
 {
 	//キー情報の更新
 	KeyUpdate(key);
@@ -51,17 +63,26 @@ void Scene::OnUpdate(unsigned char* key)
 	XMFLOAT2 tmp_CharaMoveLog = m_Chara.GetTrans();
 	
 	//自機の移動処理
-	if (Hook_state == HANGING || Hook_state == HANGING_ENEMY)
+	if (Scene_state == SCENE_INGAME) 
 	{
-		PlayerUpdate_Hanging();		//フックショット着弾中
+		if (Hook_state == HANGING || Hook_state == HANGING_ENEMY)
+		{
+			PlayerUpdate_Hanging();		//フックショット着弾中
+		} else if (Player_state == DAMAGED_LEFT || Player_state == DAMAGED_RIGHT)
+		{
+			PlayerUpdate_Damaged();		//被ダメ時
+		} else
+		{
+			PlayerUpdate();				//通常時
+		}
+	} else if (Scene_state == SCENE_ENDING|| Scene_state == SCENE_TITLE)
+	{
+		PlayerUpdate_Title_Ending();
 	}
-	else if (Player_state == DAMAGED_LEFT || Player_state == DAMAGED_RIGHT) 
+
+	if (Player_Collision & Goal) 
 	{
-		PlayerUpdate_Damaged();		//被ダメ時
-	}
-	else 
-	{
-		PlayerUpdate();				//通常時
+		Scene_state = SCENE_ENDING;
 	}
 
 	//自機の移動量を記録
@@ -69,10 +90,27 @@ void Scene::OnUpdate(unsigned char* key)
 	tmp_CharaMoveLog.y = m_Chara.GetTrans().y - tmp_CharaMoveLog.y;
 
 	//フックショットの移動処理
-	if (Hook_state != HANGING && Hook_state != HANGING_ENEMY)HookUpdate(tmp_CharaMoveLog);
+	if (Hook_state != HANGING && Hook_state != HANGING_ENEMY&& Scene_state == SCENE_INGAME)HookUpdate(tmp_CharaMoveLog);
 
 	//アニメーション更新処理
 	AnimUpdate();
+
+	playerHeight = abs(m_Chara.GetTrans().y - p_firstPos.y)/m_Chara.GetScaleY()*1.4;
+	float mapHeight = m_height / m_Chara.GetScaleY() * 1.4;
+	if (playerHeight+ mapHeight > playerGoalHeight&& Scene_state==SCENE_INGAME)
+	{
+		m_Terrain.TurnIsGoalMapFlag();
+	}
+
+	if (Scene_state == SCENE_ENDING && m_EndEffect.GetState() == END_EFFECT_END)
+	{
+		return 1;
+	} else 
+	{
+		return 0;
+	}
+
+	
 }
 
 void Scene::PlayerUpdate()
@@ -142,7 +180,7 @@ void Scene::PlayerUpdate()
 	for (int i = 0; i < moveMagnitude; i++)
 	{
 		m_Chara.AddTrans(out_Moveinput);
-		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision,out_Moveinput));
+		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision,out_Moveinput,m_Chara.GetPlayerAnimState()));
 		
 		if (Player_Collision & Enemy_Hit_Left)
 		{
@@ -220,7 +258,7 @@ void Scene::PlayerUpdate_Hanging()
 		for (int i = 0; i < moveMagnitude; i++)
 		{
 			m_Chara.AddTrans(out_Moveinput);
-			m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision, out_Moveinput));
+			m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision, out_Moveinput, m_Chara.GetPlayerAnimState()));
 		}
 	else 
 	{
@@ -255,13 +293,69 @@ void Scene::PlayerUpdate_Damaged()
 	for (int i = 0; i < moveMagnitude; i++)
 	{
 		m_Chara.AddTrans(out_Moveinput);
-		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision, out_Moveinput));
+		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(), Player_Collision, out_Moveinput, m_Chara.GetPlayerAnimState()));
 		if (Player_Collision & Floor)
 		{
 			Player_state = IDLING;
 			Moveinput.x = 0.0f;
 			Moveinput.y = 0.0f;
 		}
+	}
+}
+
+void Scene::PlayerUpdate_Title_Ending()
+{
+	//左右移動
+	
+	if (Moveinput.x < 0)
+	{
+		Moveinput.x += xa;
+		if (Moveinput.x > 0)Moveinput.x = 0;
+	}
+	
+	if (Moveinput.x > 0)
+	{
+		Moveinput.x -= xa;
+		if (Moveinput.x < 0)Moveinput.x = 0;
+	}
+
+	//落下
+	if (!(Player_Collision & Floor)) {//空中
+		Moveinput.y += gravity_s;
+		Moveinput.y = Moveinput.y > gravity_MAX ? gravity_MAX : Moveinput.y;
+	} else
+	{//着地時 この処理が無いと接地判定不可
+		Moveinput.y = gravity_s;
+		jump_hook_flag = true;
+	}
+
+	//振り向き
+	if (Moveinput.x < 0 && m_Chara.GetDirection())
+	{
+		m_Chara.turn();
+	}
+	if (Moveinput.x > 0 && !m_Chara.GetDirection())
+	{
+		m_Chara.turn();
+	}
+
+	if (m_InputState[HOOK_KEY] >= PUSH_ENTER&&Scene_state==SCENE_TITLE) 
+	{
+		Scene_state = SCENE_INGAME;
+	}
+
+	//衝突判定　移動量を小分けにしてすりぬけ防止
+	int moveMagnitude = pow(Moveinput.x, 2) + pow(Moveinput.y, 2);
+	moveMagnitude = (moveMagnitude == 0 ? 1 : moveMagnitude);
+	XMFLOAT2 out_Moveinput;
+	out_Moveinput.x = Moveinput.x / float(moveMagnitude);
+	out_Moveinput.y = Moveinput.y / float(moveMagnitude);
+
+	for (int i = 0; i < moveMagnitude; i++)
+	{
+		m_Chara.AddTrans(out_Moveinput);
+		m_Chara.AddTrans(m_Terrain.Collision(m_Chara.GetTrans(), m_Chara.GetScale(),
+			Player_Collision, out_Moveinput, m_Chara.GetPlayerAnimState()));
 	}
 }
 
@@ -340,7 +434,7 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 		{
 			m_Hook.AddTrans(out_Moveinput);
 			if (Hook_state != RETURNING) {//帰還時は判定が無くなる
-				m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), Hook_Collision, out_Moveinput, true));
+				m_Hook.AddTrans(m_Terrain.Collision(m_Hook.GetTrans(), m_Hook.GetScale(), Hook_Collision, out_Moveinput, m_Chara.GetPlayerAnimState(), true));
 				if ((Hook_Collision & Celling) || (Hook_Collision & Wall)|| Hook_Collision & Enemy_Hit_Left || Hook_Collision & Enemy_Hit_Right)
 				{
 					if (Hook_Collision & Enemy_Hit_Left|| Hook_Collision & Enemy_Hit_Right)Hook_state = HANGING_ENEMY; else Hook_state = HANGING;
@@ -377,7 +471,6 @@ void Scene::Scroll()
 	{
 		scroll_s = (upScrollBoundary -(m_Chara.GetTrans().y + scrollPosY))* scroll_s_c;
 		scroll_s = (scroll_s < default_scroll_s ? default_scroll_s : scroll_s);
-		//scroll_s = (m_height / 3 - (m_Chara.GetTrans().y + scrollPosY)) < -m_height ? (m_height / 3 - (m_Chara.GetTrans().y + scrollPosY)) : scroll_s;
 		scrollPosY += scroll_s;
 	}
 	else if (m_Chara.GetTrans().y + scrollPosY > bottomScrollBoundary)//自機が下方へ行ったときのスクロール
@@ -440,6 +533,10 @@ void Scene::AnimUpdate()
 		{
 			m_Chara.SetPlayerAnimState(TELEPORT_END);
 		}
+	}
+	else if (Player_state == DAMAGED_LEFT||Player_state==DAMAGED_RIGHT)
+	{
+		m_Chara.SetPlayerAnimState(DAMAGE);
 	}
 	else if (Player_state == IDLING)
 	{

@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     ComPtr<ID3D12DebugDevice> debugDevice;
 #endif
     {
-        DX12Game App(1280, 720, L"DX12_Application");
+        DX12Game App(1280, 720, L"Tower");
         Win32Application::Run(&App, hInstance, nCmdShow
 #if defined(DEBUG) || defined(_DEBUG)
             , &debugDevice

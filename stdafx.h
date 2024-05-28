@@ -16,12 +16,12 @@
 #include <cassert>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-
 #include <string>
 #include <wrl.h>
 #include <shellapi.h>
 #include <tchar.h>
 #include <sstream>
+#include <random>
 
 #include <mmsystem.h>
 

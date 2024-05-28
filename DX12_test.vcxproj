@@ -24,6 +24,7 @@
     <ProjectGuid>{5e284b56-d3f2-47eb-9c3f-2dfe2a2d09bd}</ProjectGuid>
     <RootNamespace>DX12test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Tower</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -110,14 +111,14 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(DXTEX_DIR);packages\Assimp_native_4.1_v142.4.1.0\build\native\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXTEX_DIR)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <DelayLoadDLLs>d3d12.dll</DelayLoadDLLs>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Debug;packages\Assimp_native_4.1_v142.4.1.0\build\native\lib\x64-Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,7 +131,7 @@
       <ConformanceMode>Default</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>packages\Assimp_native_4.1_v142.4.1.0\build\native\include;$(DXTEX_DIR)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DXTEX_DIR)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,25 +139,27 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <DelayLoadDLLs>d3d12.dll</DelayLoadDLLs>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Release;packages\Assimp_native_4.1_v142.4.1.0\build\native\lib\x64-Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DXTEX_DIR)\Bin\Desktop_2022_Win10\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="D3D12Application.cpp" />
     <ClCompile Include="DepthStencilBuffer.cpp" />
     <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="DX12Game.cpp" />
+    <ClCompile Include="EndEffect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Hook.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Modeldata.cpp" />
     <ClCompile Include="RenderTargetView.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -164,10 +167,12 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TitleEffect.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Win32Application.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="D3D12Application.h" />
@@ -175,18 +180,20 @@
     <ClInclude Include="DescriptorPool.h" />
     <ClInclude Include="DX12Game.h" />
     <ClInclude Include="DXHelper.h" />
+    <ClInclude Include="EndEffect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="Modeldata.h" />
     <ClInclude Include="RenderTargetView.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="ShareStruct.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TitleEffect.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="Win32Application.h" />
   </ItemGroup>
@@ -229,14 +236,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets" Condition="Exists('..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets')" />
     <Import Project="..\packages\directxtk12_uwp.2024.2.22.1\build\native\directxtk12_uwp.targets" Condition="Exists('..\packages\directxtk12_uwp.2024.2.22.1\build\native\directxtk12_uwp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp_native_4.1_v142.4.1.0\build\native\Assimp_native_4.1_v142.targets'))" />
     <Error Condition="!Exists('..\packages\directxtk12_uwp.2024.2.22.1\build\native\directxtk12_uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk12_uwp.2024.2.22.1\build\native\directxtk12_uwp.targets'))" />
   </Target>
 </Project>

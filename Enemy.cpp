@@ -28,6 +28,39 @@ void EnemyData::Term()
 {
 }
 
+void EnemyData::AnimUpdate() 
+{
+	animIdleFrameCount++;
+	if (animIdleFrameCount > animIdleFrame)
+	{
+		animIdleFrameCount = 0;
+	}
+
+	if (animIdleFrameCount == animIdleFrame)
+	{
+		fCount++;
+		if (m_animState == ENEMY_ANIM_IDLE)
+		{
+			if (fCount > idleAnimLength)
+			{
+				fCount = 1;
+			}
+		} else if (m_animState == ENEMY_ANIM_DAMAGE)
+		{
+			if (fCount > damageAnimLength)
+			{
+				fCount = damageAnimLoopFrame;
+			}
+		} else if (m_animState == ENEMY_ANIM_DAMAGE2)
+		{
+			if (fCount > damage2AnimLength)
+			{
+				fCount = damage2AnimLoopFrame;
+			}
+		}
+	}
+}
+
 Enemy::Enemy() 
 {
 }
@@ -41,14 +74,14 @@ bool Enemy::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 {
 	m_spritedata.resize(1);
 	auto pSpritedata = new (std::nothrow) Sprite();
-	if (!pSpritedata->Init(L"Sprite/Enemy_temp.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
+	if (!pSpritedata->Init(L"Sprite/Enemy.dds", pDevice, pQueue, pPool, width, height, enemyNum, enemyNum))throw std::exception();
 	if (!pSpritedata->AddSprite(L"Sprite/effect.dds", pDevice, pQueue, pPool))throw std::exception();
 	m_spritedata[0] = pSpritedata;
 	m_width = width;
 	m_height = height;
 
 
-	m_spritedata[0]->SetSpriteSheet(2,1, 1, 1);
+	m_spritedata[0]->SetSpriteSheet(3,1, 1, 1);
 	return true;
 }
 
@@ -74,20 +107,29 @@ void Enemy::Term()
 	}
 }
 
-void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
+void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float mapYMin, float mapYMax, float Scroll)
 {
 	int effectCount = 0;
+
 	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
-		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
+		if (m_enemyData[i]->GetTrans().y + Scroll <  mapYMin - m_enemyData[i]->GetScale().y / 2
+			|| m_enemyData[i]->GetTrans().y + Scroll > mapYMax - m_enemyData[i]->GetScale().y / 4)
+		{
+			m_enemyData[i]->SetEnemyState(ENEMY_DELETED);
+		}
+
+		if (m_enemyData[i]->GetEnemyState() == ENEMY_DELETED)
 		{
 			m_enemyData[i]->Term();
 			delete m_enemyData[i];
 			m_enemyData[i] = nullptr;
-			m_enemyData.erase(m_enemyData.begin()+i);
-			continue;
+			m_enemyData.erase(m_enemyData.begin() + i);
 		}
+	}
 
+	for (size_t i = 0; i < m_enemyData.size(); ++i)
+	{
 		if (m_enemyData[i]->GetEnemyState() == ENEMY_ATTACKING) 
 		{
 			m_spritedata[0]->SetSpriteSheet(1, 1, 1, 1, m_enemyData.size() + effectCount);
@@ -97,26 +139,32 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float Scroll)
 			effectCount++;
 		}
 
+		
 		SetSprite(m_enemyData[i]->GetEnemyType(), m_enemyData[i]->GetEnemyState(),i);
+
+		if (m_enemyData[i]->GetDirection())
+		{
+			m_spritedata[0]->turnX(i);
+		}
+
 		m_spritedata[0]->SetWorldMatrix(m_enemyData[i]->GetScale(), m_enemyData[i]->GetRotate(), XMFLOAT2(m_enemyData[i]->GetTrans().x, m_enemyData[i]->GetTrans().y + Scroll), i);
 		m_spritedata[0]->Draw(pCmdList, i, 0, i);
 		m_enemyData[i]->TimeCount();
 	}
+	
 	m_spritedata[0]->Setdrawcount();
 }
 
 void Enemy::SetSprite(ENEMY_TYPE Type, ENEMY_STATE State, UINT EnemyID)
 {
-	if (Type == ENEMY_IDLE) 
+	
+	if (Type == ENEMY_IDLE)
 	{
-		if (State == ENEMY_IDLING|| State == ENEMY_ATTACKING)
-		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 1, 1, EnemyID);
-		}
-		else if (State == ENEMY_DAMAGED) 
-		{
-			m_spritedata[0]->SetSpriteSheet(2, 1, 2, 1, EnemyID);
-		}
+		m_enemyData[EnemyID]->AnimUpdate();
+		m_spritedata[0]->SetSpriteSheet(m_enemyData[EnemyID]->GetAnimFrameMax(), 
+			m_enemyData[EnemyID]->GetAnimNum(), 
+			m_enemyData[EnemyID]->GetfCount(), 
+			m_enemyData[EnemyID]->GetEnemyAnimState(), EnemyID);
 	}
 }
 
@@ -135,7 +183,7 @@ bool Enemy::AddEnemy(XMFLOAT2 Trans, bool Direction, ENEMY_TYPE Type)
 	return true;
 }
 
-XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, bool is_attack)
+XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Collision_ret, Player_Anim_State PlayerAnimState, bool is_attack)
 {
 	XMFLOAT2 returnVec = XMFLOAT2(0.0f, 0.0f);
 
@@ -148,25 +196,40 @@ XMFLOAT2 Enemy::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& Col
 		if (abs(e->GetTrans().x - Trans.x) < DIS_X && abs(e->GetTrans().y - Trans.y) < DIS_Y 
 			&& e->GetEnemyState() == ENEMY_IDLING)
 		{
-			if (e->GetTrans().x - Trans.x > 0)
-			{
-				Collision_ret |= Enemy_Hit_Right;
-			}
-			else
-			{
-				Collision_ret |= Enemy_Hit_Left;
-			}
+			if (e->GetEnemyState() == ENEMY_IDLING) {
+				if (e->GetTrans().x - Trans.x > 0)
+				{
+					Collision_ret |= Enemy_Hit_Right;
+				} else
+				{
+					Collision_ret |= Enemy_Hit_Left;
+				}
 
-			if (is_attack)
-			{
-				e->SetEnemyState(ENEMY_DAMAGED);
+				if (is_attack)
+				{
+					e->SetEnemyState(ENEMY_DAMAGED);
+					e->SetEnemyAnimState(ENEMY_ANIM_DAMAGE);
+				}
 			}
-		}
+		} 
 
-		if (abs(e->GetTrans().y - Trans.y) > m_height * 2) 
+		if (e->GetEnemyState() == ENEMY_DAMAGED && (PlayerAnimState == TELEPORT_END|| PlayerAnimState == TELEPORT_BEGIN || PlayerAnimState == TELEPOTING))
 		{
-			e->SetEnemyState(ENEMY_DELETED);
+			e->SetPlayerTeleFlag(true);
 		}
+
+		if (e->GetPlayerTeleFlag() && PlayerAnimState != TELEPORT_END)
+		{
+			e->SetEnemyAnimState(ENEMY_ANIM_DAMAGE2);
+			e->SetPlayerTeleFlag(false);
+		}
+
+		if (abs(e->GetTrans().y - Trans.y) > m_height * 1.0f) 
+		{
+			e->SetEnemyState(ENEMY_IDLING);
+			e->SetEnemyAnimState(ENEMY_ANIM_IDLE);
+		}
+		
 
 		const float A_DIS = (Scale.x + e->GetTimeCount()* e->GetEffectScale()) / 2;
 

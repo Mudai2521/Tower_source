@@ -45,6 +45,7 @@ public:
 			pl_anim_s = State;
 		}
 	};
+	Player_Anim_State GetPlayerAnimState() {return pl_anim_s;}
 private:
 	CharactorState m_CharactorState;
 	UINT m_width;
@@ -64,11 +65,13 @@ private:
 	const int hookAnimLength = 5;
 	const int teleAnimLength = 10;
 	const int teleAnimLoopFrame = 3;
+	const int damageAnimLength = 8;
+	const int damageAnimLoopFrame = 5;
 
 	int animIdleFrameCount = 0;
 	const int animIdleFrame = 4;
 	Player_Anim_State pl_anim_s = IDLE;
-	const int animNum = 6;
+	const int animNum = 7;
 
 	std::vector<Sprite*> m_spritedata;
 
