@@ -293,7 +293,6 @@ void D3D12Application::InitDirectInput(HINSTANCE hinst, HWND hwnd)
 
     ThrowIfFailed(m_inputDevice->SetDataFormat(&c_dfDIKeyboard));
     ThrowIfFailed(m_inputDevice->SetCooperativeLevel(hwnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE));
-    //ThrowIfFailed(m_inputDevice->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY));
 }
 
 

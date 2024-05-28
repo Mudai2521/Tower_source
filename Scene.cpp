@@ -102,7 +102,7 @@ int Scene::OnUpdate(unsigned char* key)
 		m_Terrain.TurnIsGoalMapFlag();
 	}
 
-	if (Scene_state == SCENE_INGAME||(Scene_state == SCENE_ENDING && m_EndEffect.GetState() == END_EFFECT_END))
+	if (Scene_state == SCENE_ENDING && m_EndEffect.GetState() == END_EFFECT_END)
 	{
 		return 1;
 	} else 
