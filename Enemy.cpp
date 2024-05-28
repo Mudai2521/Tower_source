@@ -110,6 +110,7 @@ void Enemy::Term()
 void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float mapYMin, float mapYMax, float Scroll)
 {
 	int effectCount = 0;
+
 	for (size_t i = 0; i < m_enemyData.size(); ++i)
 	{
 		if (m_enemyData[i]->GetTrans().y + Scroll <  mapYMin - m_enemyData[i]->GetScale().y / 2
@@ -118,16 +119,17 @@ void Enemy::DrawSprite(ID3D12GraphicsCommandList* pCmdList, float mapYMin, float
 			m_enemyData[i]->SetEnemyState(ENEMY_DELETED);
 		}
 
-
-		if (m_enemyData[i]->GetEnemyState()== ENEMY_DELETED)
+		if (m_enemyData[i]->GetEnemyState() == ENEMY_DELETED)
 		{
 			m_enemyData[i]->Term();
 			delete m_enemyData[i];
 			m_enemyData[i] = nullptr;
-			m_enemyData.erase(m_enemyData.begin()+i);
-			continue;
+			m_enemyData.erase(m_enemyData.begin() + i);
 		}
+	}
 
+	for (size_t i = 0; i < m_enemyData.size(); ++i)
+	{
 		if (m_enemyData[i]->GetEnemyState() == ENEMY_ATTACKING) 
 		{
 			m_spritedata[0]->SetSpriteSheet(1, 1, 1, 1, m_enemyData.size() + effectCount);
