@@ -150,6 +150,7 @@
     <ClCompile Include="DepthStencilBuffer.cpp" />
     <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="DX12Game.cpp" />
+    <ClCompile Include="EndEffect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Hook.cpp" />
@@ -165,6 +166,7 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TitleEffect.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Win32Application.cpp" />
   </ItemGroup>
@@ -177,6 +179,7 @@
     <ClInclude Include="DescriptorPool.h" />
     <ClInclude Include="DX12Game.h" />
     <ClInclude Include="DXHelper.h" />
+    <ClInclude Include="EndEffect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Hook.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TitleEffect.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="Win32Application.h" />
   </ItemGroup>

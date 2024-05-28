@@ -28,7 +28,7 @@ private:
 	LARGE_INTEGER mTimeEnd;
 	float FRAME_TIME = 1.0 / 60.0;
 	
-	Scene m_Scene;
+	Scene* m_Scene;
 
 	int Moveinput = 0;
 

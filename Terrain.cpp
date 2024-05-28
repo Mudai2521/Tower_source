@@ -318,6 +318,17 @@ XMFLOAT2 Terrain::Collision(XMFLOAT2 Trans, XMFLOAT2 Scale, Terrain_Collision& C
 					}
 				}
 			}
+
+			if (map[MapX_MAX * MapY_MAX + MapX_MAX * y + x] == 3)
+			{
+				float Map_X = m_CharactorState.Scale.x / 2 + m_CharactorState.Scale.x * x;
+				float Map_Y = m_CharactorState.Scale.y / 2 + m_CharactorState.Scale.y * y - drawMapBuffer;
+
+				if (abs(Map_X - Trans.x) < DIS_X && abs(Map_Y - Trans.y) < DIS_Y)
+				{
+					Collision_ret |= Goal;
+				}
+			}
 		}
 	}
 
@@ -346,8 +357,13 @@ void Terrain::ScrollUpdate(float Scroll)
 			mapListCount++;
 			if (mapChipList.size() - 1 < mapListCount) 
 			{
-				std::uniform_int_distribution<> rndDist(1, MapChipNum);
-				mapChipList.push_back(rndDist(mapRnd));
+				if (!isGoalMap) {
+					std::uniform_int_distribution<> rndDist(1, MapChipNum);
+					mapChipList.push_back(rndDist(mapRnd));
+				} else 
+				{
+					mapChipList.push_back(10);
+				}
 			}
 		}
 		for (int i = 0; i < MapX_MAX; i++) 

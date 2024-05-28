@@ -14,8 +14,8 @@ void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
     //ChangeFullScreenState();
 
     LoadSizeDependentResources();
-
-    m_Scene.Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
+    m_Scene = new Scene();
+    m_Scene->Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 
     ThrowIfFailed(m_inputDevice->Acquire());
 }
@@ -176,6 +176,9 @@ void DX12Game::LoadSizeDependentResources()
 
 void DX12Game::OnDestroy()
 {
+    m_Scene->Term();
+    delete m_Scene;
+    m_Scene = nullptr;
 
     WaitForGpu();
 
@@ -204,9 +207,9 @@ void DX12Game::OnUpdate()
     }
     if (KeyState[DIK_RETURN] & 0x80)
     {
-        ChangeFullScreenState();
+        //ChangeFullScreenState();
     }
-    m_Scene.OnUpdate(KeyState);
+    m_Scene->OnUpdate(KeyState);
 }
 
 void DX12Game::OnRender(HWND hwnd)
@@ -285,7 +288,7 @@ void DX12Game::PopulateCommandList()
     m_commandList->ClearRenderTargetView(m_RenderTargetView[m_frameIndex].GetHandleCPU(), clearColor, 0, nullptr);
     m_commandList->ClearDepthStencilView(m_DSBuffer.GetHandleCPU(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-    m_Scene.DrawSprite(m_commandList.Get());
+    m_Scene->DrawSprite(m_commandList.Get());
 
 
     

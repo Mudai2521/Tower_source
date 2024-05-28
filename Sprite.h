@@ -86,7 +86,7 @@ private:
     UINT m_height;
 
     float DefaultSpriteSize;
-
+    const double SpriteMargin = 0.00001f;
     bool drawcount;
 
     Sprite(const Sprite&) = delete;

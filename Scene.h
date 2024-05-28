@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "BackGround.h"
 #include "Score.h"
+#include "EndEffect.h"
 
 //シーン管理クラス
 class Scene
@@ -75,6 +76,7 @@ private:
 	Hook m_Hook;
 	BackGround m_BG;
 	Score m_scoreDraw;
+	EndEffect m_EndEffect;
 
 	//ウィンドウの大きさ
 	UINT m_width;
@@ -113,12 +115,15 @@ private:
 	const float scroll_s_c = 0.1f;									//この係数をスクロール距離にかけてスクロール速度とする
 
 	float playerHeight = 0.0f;										//プレイヤーが到達した高度(メートル プレイヤーを140cmとする)
+	const float playerGoalHeight = 500.0f;							//ゴールの高度
+	SCENE_STATE Scene_state = SCENE_INGAME;
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);
 	void PlayerUpdate();
 	void PlayerUpdate_Hanging();
 	void PlayerUpdate_Damaged();
+	void PlayerUpdate_Title_Ending();
 	void HookUpdate(DirectX::XMFLOAT2 CharaMoveLog);
 	void Scroll();
 	void AnimUpdate();

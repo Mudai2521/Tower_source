@@ -46,22 +46,22 @@ bool Sprite::Init(std::wstring path, ID3D12Device* pDevice, ID3D12CommandQueue* 
 
 		m_Meshdata[i].Vertices[0] = SpriteVertex(
 			XMFLOAT3(-DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(0.0f, 0.0f),
+			XMFLOAT2(0.0f+ SpriteMargin, 0.0f + SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 		m_Meshdata[i].Vertices[1] = SpriteVertex(
 			XMFLOAT3(-DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(0.0f, 1.0f),
+			XMFLOAT2(0.0f + SpriteMargin, 1.0f- SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 		m_Meshdata[i].Vertices[2] = SpriteVertex(
 			XMFLOAT3(DefaultSpriteSize / 2, DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(1.0f, 0.0f),
+			XMFLOAT2(1.0f - SpriteMargin, 0.0f + SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 		m_Meshdata[i].Vertices[3] = SpriteVertex(
 			XMFLOAT3(DefaultSpriteSize / 2, -DefaultSpriteSize / 2, 0.0f),
-			XMFLOAT2(1.0f, 1.0f),
+			XMFLOAT2(1.0f - SpriteMargin, 1.0f - SpriteMargin),
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 	}
@@ -155,10 +155,10 @@ void Sprite::SetSpriteSheet(int Tex_xmax, int Tex_ymax, int Tex_x, int Tex_y, UI
 {
 	double SpriteWidth = 1.0f/ double(Tex_xmax);
 	double SpriteHeight = 1.0f/ double(Tex_ymax);
-	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[0].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y - 1));
-	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1), SpriteHeight * float(Tex_y));
-	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y - 1));
-	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[3].uv = XMFLOAT2(SpriteWidth * float(Tex_x), SpriteHeight * float(Tex_y));
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[0].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1) + SpriteMargin, SpriteHeight * float(Tex_y - 1) + SpriteMargin);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[1].uv = XMFLOAT2(SpriteWidth * float(Tex_x - 1) + SpriteMargin, SpriteHeight * float(Tex_y) - SpriteMargin);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[2].uv = XMFLOAT2(SpriteWidth * float(Tex_x) - SpriteMargin, SpriteHeight * float(Tex_y - 1) + SpriteMargin);
+	m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices[3].uv = XMFLOAT2(SpriteWidth * float(Tex_x) - SpriteMargin, SpriteHeight * float(Tex_y) - SpriteMargin);
 
 	memcpy(m_VB[TexID + (drawcount ? VbufferCount : 0)]->Map(), m_Meshdata[TexID + (drawcount ? VbufferCount : 0)].Vertices.data(), VertexBufferSize);
 	m_VB[TexID + (drawcount ? VbufferCount : 0)]->Unmap();
