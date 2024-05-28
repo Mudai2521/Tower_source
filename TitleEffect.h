@@ -17,6 +17,15 @@ private:
 
 	int whiteSpriteNum = 1;
 	const int spriteNumMax = 16;
+	int frameCount = 0;
+	const int backChangeFrame = 5;
+	const float titleTextWidth = 58.0f;
+	const float titleTextHeight = 17.0f;
+	const float titleTextScale = 10.0f;
+	const float pressTextWidth = 56.0f;
+	const float pressTextHeight = 8.0f;
+	const float pressTextScale = 5.0f;
+	bool isWhiteDraw = true;
 
 	Sprite m_spritedata;
 

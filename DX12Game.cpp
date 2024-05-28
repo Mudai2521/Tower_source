@@ -209,7 +209,16 @@ void DX12Game::OnUpdate()
     {
         //ChangeFullScreenState();
     }
-    m_Scene->OnUpdate(KeyState);
+    int result= m_Scene->OnUpdate(KeyState);
+    if (result == 1) 
+    {
+        m_Scene->Term();
+        delete m_Scene;
+        m_Scene = nullptr;
+        m_Scene = new Scene();
+        m_Scene->Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
+        m_Scene->OnUpdate(KeyState);
+    }
 }
 
 void DX12Game::OnRender(HWND hwnd)

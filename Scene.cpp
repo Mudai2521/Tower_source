@@ -22,6 +22,7 @@ bool Scene::Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPo
 	m_BG.Init(pDevice, pQueue, pPool, width, height);
 	m_scoreDraw.Init(pDevice, pQueue, pPool, width, height);
 	m_EndEffect.Init(pDevice, pQueue, pPool, width, height);
+	m_TitleEffect.Init(pDevice, pQueue, pPool, width, height);
 
 	//自機の初期位置設定
 	m_Chara.SetTrans(XMFLOAT2(m_Chara.GetScale().x * 3.5f, m_height - 112.0f));
@@ -37,6 +38,7 @@ void Scene::Term()
 	m_BG.Term();
 	m_scoreDraw.Term();
 	m_EndEffect.Term();
+	m_TitleEffect.Term();
 }
 
 void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
@@ -50,9 +52,10 @@ void Scene::DrawSprite(ID3D12GraphicsCommandList* pCmdList)
 	m_Chara.DrawSprite(pCmdList, scrollPosY);
 	m_scoreDraw.DrawSprite(pCmdList, UINT(playerHeight));
 	m_EndEffect.DrawSprite(pCmdList, Scene_state);
+	m_TitleEffect.DrawSprite(pCmdList, Scene_state);
 }
 
-void Scene::OnUpdate(unsigned char* key)
+int Scene::OnUpdate(unsigned char* key)
 {
 	//キー情報の更新
 	KeyUpdate(key);
@@ -72,7 +75,7 @@ void Scene::OnUpdate(unsigned char* key)
 		{
 			PlayerUpdate();				//通常時
 		}
-	} else if (Scene_state == SCENE_ENDING) 
+	} else if (Scene_state == SCENE_ENDING|| Scene_state == SCENE_TITLE)
 	{
 		PlayerUpdate_Title_Ending();
 	}
@@ -98,6 +101,16 @@ void Scene::OnUpdate(unsigned char* key)
 	{
 		m_Terrain.TurnIsGoalMapFlag();
 	}
+
+	if (Scene_state == SCENE_INGAME||(Scene_state == SCENE_ENDING && m_EndEffect.GetState() == END_EFFECT_END))
+	{
+		return 1;
+	} else 
+	{
+		return 0;
+	}
+
+	
 }
 
 void Scene::PlayerUpdate()
@@ -324,6 +337,11 @@ void Scene::PlayerUpdate_Title_Ending()
 	if (Moveinput.x > 0 && !m_Chara.GetDirection())
 	{
 		m_Chara.turn();
+	}
+
+	if (m_InputState[HOOK_KEY] >= PUSH_ENTER&&Scene_state==SCENE_TITLE) 
+	{
+		Scene_state = SCENE_INGAME;
 	}
 
 	//衝突判定　移動量を小分けにしてすりぬけ防止

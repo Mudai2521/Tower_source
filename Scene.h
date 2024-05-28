@@ -8,6 +8,7 @@
 #include "BackGround.h"
 #include "Score.h"
 #include "EndEffect.h"
+#include "TitleEffect.h"
 
 //シーン管理クラス
 class Scene
@@ -18,7 +19,7 @@ public:
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
 	void DrawSprite(ID3D12GraphicsCommandList* pCmdList);
-	void OnUpdate(unsigned char* key);
+	int OnUpdate(unsigned char* key);
 	
 private:
 	//キーの状態
@@ -77,6 +78,7 @@ private:
 	BackGround m_BG;
 	Score m_scoreDraw;
 	EndEffect m_EndEffect;
+	TitleEffect m_TitleEffect;
 
 	//ウィンドウの大きさ
 	UINT m_width;
@@ -116,7 +118,7 @@ private:
 
 	float playerHeight = 0.0f;										//プレイヤーが到達した高度(メートル プレイヤーを140cmとする)
 	const float playerGoalHeight = 500.0f;							//ゴールの高度
-	SCENE_STATE Scene_state = SCENE_INGAME;
+	SCENE_STATE Scene_state = SCENE_TITLE;
 
 	void KeyUpdate(unsigned char* key);
 	void keyInfoUpdate(unsigned char* key, KEY_INFO keyInfo);

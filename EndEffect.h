@@ -11,6 +11,7 @@ public:
 	bool Init(ID3D12Device* pDevice, ID3D12CommandQueue* pQueue, DescriptorPool* pPool, UINT width, UINT height);
 	void Term();
 	void DrawSprite(ID3D12GraphicsCommandList* pCmdList, SCENE_STATE sceneState);
+	END_EFFECT_STATE GetState() { return m_state; }
 private:
 	UINT m_width;
 	UINT m_height;
