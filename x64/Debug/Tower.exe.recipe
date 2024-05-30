@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\Tower.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\shaders.hlsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\SpriteShader.hlsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\shaders.hlsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\SpriteShader.hlsl</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

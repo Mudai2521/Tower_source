@@ -1,0 +1,4 @@
+^C:\USERS\K024G\ONEDRIVE\ドキュメント\GITHUB\DX12_TEST\SHADERS.HLSL
+copy shaders.hlsl "C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\" > NUL
+^C:\USERS\K024G\ONEDRIVE\ドキュメント\GITHUB\DX12_TEST\SPRITESHADER.HLSL
+copy SpriteShader.hlsl "C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Debug\" > NUL

@@ -377,6 +377,13 @@ void Scene::HookUpdate(XMFLOAT2 CharaMoveLog)
 			m_Hook.turnDrawFlag();
 			Hook_state = H_IDLING;
 		}
+
+		if ((abs(m_Hook.GetTrans().x - m_Chara.GetTrans().x) > m_width
+			|| abs(m_Hook.GetTrans().y - m_Chara.GetTrans().y) > m_height)&& Hook_state != H_IDLING)
+		{
+			m_Hook.turnDrawFlag();
+			Hook_state = H_IDLING;
+		}
 	
 
 	//フックの発射処理　キー押された＋フックが既に存在しない＋ジャンプ中である時まだフックを撃っていない

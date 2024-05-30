@@ -1,8 +1,316 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: 中間ディレクトリ (x64\Release\) に別のプロジェクト (DX12_test.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+  Performing Custom Build Tools
+  Performing Custom Build Tools
+  stdafx.cpp
+  BackGround.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(36,53): warning C4244: '引数': 'const float' から '_Ty' への変換です。データが失われる可能性があります。
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(36,53): warning C4244:         with
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(36,53): warning C4244:         [
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(36,53): warning C4244:             _Ty=int
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(36,53): warning C4244:         ]
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(39,105): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(39,52): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(39,118): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(82,43): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(82,36): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(83,54): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\BackGround.cpp(83,42): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/BackGround.cpp' をコンパイルしています)
+  
+  Character.cpp
+  ConstantBuffer.cpp
   D3D12Application.cpp
+  DepthStencilBuffer.cpp
+  DescriptorPool.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DescriptorPool.cpp(56,90): warning C5037: 'Pool<T>::Alloc': クラス テンプレートのメンバーのアウトオブライン定義において既定の引数を使用することはできません
+  (ソース ファイル '/DescriptorPool.cpp' をコンパイルしています)
+  
+  DX12Game.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.cpp(53,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/DX12Game.cpp' をコンパイルしています)
+  
+  EndEffect.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(38,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(38,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(39,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(39,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(44,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(44,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(45,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(45,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(50,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(50,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(54,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(54,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(55,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(55,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(60,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(60,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(61,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(61,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(66,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(66,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(71,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(71,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(72,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(72,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(77,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(77,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(81,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(81,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(82,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\EndEffect.cpp(82,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/EndEffect.cpp' をコンパイルしています)
+  
+  Enemy.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(135,67): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(137,102): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(138,92): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(138,55): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(143,77): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(147,27): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(150,171): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(151,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.cpp(151,35): warning C4267: '引数': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Enemy.cpp' をコンパイルしています)
+  
+  FileUtil.cpp
+  Hook.cpp
+  IndexBuffer.cpp
+  main.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\DX12Game.h(29,25): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+  (ソース ファイル '/main.cpp' をコンパイルしています)
+  
+  RenderTargetView.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\RenderTargetView.cpp(31,2): warning C4002: 関数に似たマクロ呼び出し 'NAME_D3D12_OBJECT' の引数が多すぎます
+  (ソース ファイル '/RenderTargetView.cpp' をコンパイルしています)
+  
+  Scene.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(98,77): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(99,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(174,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(242,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(243,63): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(251,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(287,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(348,20): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(434,21): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(474,25): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Scene.cpp(475,29): warning C4244: '初期化中': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Scene.cpp' をコンパイルしています)
+  
+  Score.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Score.cpp(30,26): warning C4244: '=': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Score.cpp' をコンパイルしています)
+  
+  Sprite.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(49,38): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(49,17): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(54,38): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(54,18): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(59,39): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(59,18): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(64,39): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(64,18): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(72,51): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(73,47): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(74,39): warning C4267: '=': 'size_t' から 'UINT' に変換しました。データが失われているかもしれません。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(90,34): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(90,27): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(158,158): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(158,110): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(159,154): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(159,110): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(160,154): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(160,106): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(161,150): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Sprite.cpp(161,106): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/Sprite.cpp' をコンパイルしています)
+  
+  Terrain.cpp
+  Texture.cpp
+  TitleEffect.cpp
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(36,37): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(36,20): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(41,34): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(41,20): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(46,49): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(46,40): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(47,35): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\TitleEffect.cpp(47,21): warning C4244: '引数': 'UINT' から 'float' への変換です。データが失われる可能性があります。
+  (ソース ファイル '/TitleEffect.cpp' をコンパイルしています)
+  
+  コンパイル中...
+  VertexBuffer.cpp
+  Win32Application.cpp
   コード生成しています。
-  2 of 1246 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+C:\Users\k024g\OneDrive\ドキュメント\GitHub\DX12_test\Enemy.h(82): warning C4715: 'EnemyData::GetTimeCount': 値を返さないコントロール パスがあります。
+  All 1244 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   コード生成が終了しました。
-  DX12_test.vcxproj -> C:\Users\inaka\source\repos\DX12_test\x64\Release\Tower.exe
+  DX12_test.vcxproj -> C:\Users\k024g\OneDrive\ドキュメント\GitHub\x64\Release\Tower.exe
