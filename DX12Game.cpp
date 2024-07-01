@@ -14,7 +14,7 @@ void DX12Game::OnInit(HINSTANCE hinst, HWND hwnd)
     //ChangeFullScreenState();
 
     LoadSizeDependentResources();
-    m_Scene = new Scene();
+    m_Scene = std::make_unique<Scene>();
     m_Scene->Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
 
     ThrowIfFailed(m_inputDevice->Acquire());
@@ -177,8 +177,6 @@ void DX12Game::LoadSizeDependentResources()
 void DX12Game::OnDestroy()
 {
     m_Scene->Term();
-    delete m_Scene;
-    m_Scene = nullptr;
 
     WaitForGpu();
 
@@ -197,6 +195,8 @@ void DX12Game::OnDestroy()
 //フレーム毎の更新処理
 void DX12Game::OnUpdate()
 {
+    isAbleToRender = true;
+
     QueryPerformanceFrequency(&mTimeFreq);
     QueryPerformanceCounter(&mTimeStart);
 
@@ -212,12 +212,21 @@ void DX12Game::OnUpdate()
     int result= m_Scene->OnUpdate(KeyState);
     if (result == 1) 
     {
-        PostQuitMessage(0);
+        Sleep(100);
+        m_Scene->Term();
+        m_Scene = std::make_unique<Scene>();
+        m_Scene->Init(m_device.Get(), m_commandQueue.Get(), m_pPool[POOL_TYPE_RES], m_width, m_height);
+        isAbleToRender = false;
     }
 }
 
 void DX12Game::OnRender(HWND hwnd)
 {
+    if (!isAbleToRender) 
+    {
+        return; 
+    }
+
     PopulateCommandList();
 
     ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };

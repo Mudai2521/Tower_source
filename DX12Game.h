@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "D3D12Application.h"
+#include <memory>
 
 class DX12Game : public D3D12Application 
 {
@@ -28,7 +29,8 @@ private:
 	LARGE_INTEGER mTimeEnd;
 	float FRAME_TIME = 1.0 / 60.0;
 	
-	Scene* m_Scene;
+	std::unique_ptr<Scene> m_Scene;
+	bool isAbleToRender = false;
 
 	int Moveinput = 0;
 
